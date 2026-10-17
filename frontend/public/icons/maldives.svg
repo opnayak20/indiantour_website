@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <!-- Ocean waves surface -->
+  <line x1="4" y1="58" x2="60" y2="58" />
+  <path d="M8 54 C12 52 16 54 20 52 C24 50 28 52 32 50 C36 48 40 50 44 48 C48 46 52 48 56 46" stroke-width="1.5" />
+
+  <!-- Tropical Coconut Palm Tree (Left) -->
+  <!-- Curving slender trunk -->
+  <path d="M12 56 C14 44 13 32 18 20" stroke-width="2.5" />
+  <path d="M10 56 C12 44 11 32 16 20" stroke-width="1.5" />
+  <!-- Palm Fronds / Leaves spreading out -->
+  <path d="M17 20 C11 15 6 18 4 23" />
+  <path d="M17 20 C13 12 8 11 4 14" />
+  <path d="M17 20 C18 11 23 8 28 11" />
+  <path d="M17 20 C23 15 27 19 28 25" />
+  <path d="M17 20 C18 25 15 29 11 31" />
+  <!-- Coconuts cluster -->
+  <circle cx="15.5" cy="21.5" r="1.5" fill="currentColor" />
+  <circle cx="18.5" cy="22" r="1.5" fill="currentColor" />
+
+  <!-- Overwater Villa / Bungalow (Center Right) -->
+  <!-- Wooden Stilts / Pilings descending into sea -->
+  <line x1="28" y1="46" x2="28" y2="56" />
+  <line x1="36" y1="46" x2="36" y2="56" />
+  <line x1="48" y1="46" x2="48" y2="56" />
+  <line x1="56" y1="46" x2="56" y2="56" />
+
+  <!-- Wooden Deck Platform -->
+  <rect x="25" y="44" width="34" height="3" rx="0.5" />
+
+  <!-- Villa Main Walls & Window -->
+  <rect x="33" y="32" width="23" height="12" />
+  <!-- Glass Window with Panes -->
+  <rect x="36" y="35" width="8" height="6" />
+  <line x1="40" y1="35" x2="40" y2="41" stroke-width="1.5" />
+  <line x1="36" y1="38" x2="44" y2="38" stroke-width="1.5" />
+  <!-- Villa Entrance Door -->
+  <path d="M48 44 V36 H53 V44" />
+
+  <!-- Thatch Gable Roof with Overhang -->
+  <path d="M30 32 L44.5 19 L59 32 Z" />
+  <!-- Thatch texture lines -->
+  <line x1="37" y1="26" x2="52" y2="26" stroke-width="1.5" />
+
+  <!-- Private Sun Deck Railing & Swim Ladder (Left of Villa) -->
+  <line x1="26" y1="40" x2="33" y2="40" stroke-width="1.5" />
+  <line x1="26" y1="40" x2="26" y2="44" stroke-width="1.5" />
+  <line x1="29.5" y1="40" x2="29.5" y2="44" stroke-width="1.5" />
+  <!-- Swim ladder going down into sea -->
+  <line x1="26" y1="44" x2="26" y2="54" stroke-width="1.5" />
+  <line x1="29" y1="44" x2="29" y2="54" stroke-width="1.5" />
+  <line x1="26" y1="47" x2="29" y2="47" stroke-width="1.5" />
+  <line x1="26" y1="50" x2="29" y2="50" stroke-width="1.5" />
+</svg>

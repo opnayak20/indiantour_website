@@ -1,0 +1,18 @@
+{
+  "enabled": true,
+  "triggerOnGroupTrips": false,
+  "triggerOnCreatorTrips": false,
+  "triggerOnPackageClick": true,
+  "delaySeconds": 10,
+  "showFrequency": "always",
+  "defaultTitle": "Meghalaya Tour Package",
+  "defaultDuration": "6 Days 5 Nights",
+  "defaultSubtitle": "Krem Chympe, Waterfalls & Root Bridges",
+  "defaultImage": "/meghalaya_root_bridge.jpg",
+  "badgeText": "No Cost EMI options available ↗",
+  "badgeAction": "open_emi_modal",
+  "formHeading": "Plan Your Next Trip",
+  "buttonText": "Connect with Expert",
+  "buttonColor": "#e52b2b",
+  "whatsappNumber": "+919099599331"
+}

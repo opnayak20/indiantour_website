@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <!-- Water surface ripples -->
+  <line x1="4" y1="58" x2="60" y2="58" />
+  <path d="M12 55 C18 53 22 55 28 53" stroke-width="1.5" />
+  <path d="M38 55 C44 53 50 55 56 53" stroke-width="1.5" />
+
+  <!-- Ha Long Bay Karst Limestone Mountain Peak (Background Left) -->
+  <path d="M8 52 C8 40 10 26 14 18 C16 14 19 14 21 18 C24 24 25 38 27 52" />
+  <path d="M21 18 C24 28 26 36 29 48 C30 50 32 52 35 52" />
+  <!-- Vegetation crevice texture on karst -->
+  <path d="M14 28 C16 26 18 28 17 32" stroke-width="1.5" />
+  <path d="M18 36 C20 34 22 36 21 40" stroke-width="1.5" />
+
+  <!-- Traditional Vietnamese Junk Boat (Center Right) -->
+  <!-- Wooden boat hull -->
+  <path d="M22 50 C26 53 48 53 56 47 L58 45 L20 46 Z" />
+  
+  <!-- Boat cabin / canopy -->
+  <path d="M38 46 V42 H48 V46" />
+
+  <!-- Main Mast -->
+  <line x1="34" y1="46" x2="34" y2="14" />
+
+  <!-- Traditional Pleated Batten Fan Sail (Iconic Vietnamese Junk Sail) -->
+  <path d="M34 14 C42 16 52 24 50 42 L34 42" />
+  <!-- Horizontal bamboo battens / ribs across sail -->
+  <line x1="34" y1="21" x2="46" y2="21" stroke-width="1.5" />
+  <line x1="34" y1="28" x2="49" y2="28" stroke-width="1.5" />
+  <line x1="34" y1="35" x2="50" y2="35" stroke-width="1.5" />
+
+  <!-- Conical Hat (Nón Lá) Silhouette of Boatman standing at bow -->
+  <!-- Conical triangular hat -->
+  <path d="M24 43 L27 40 L30 43 Z" fill="currentColor" fill-opacity="0.2" />
+  <!-- Boatman figure & oar -->
+  <line x1="27" y1="43" x2="27" y2="46" />
+  <line x1="22" y1="44" x2="16" y2="54" />
+</svg>

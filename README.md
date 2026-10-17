@@ -1,16 +1,56 @@
-# React + Vite
+# Indian Tour & Travel Website
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Full-stack tourism website featuring a React + Vite frontend and a PHP REST API backend.
 
-Currently, two official plugins are available:
+## Project Structure
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+```text
+Indian Tour Website/
+├── frontend/               # React + Vite application
+│   ├── src/                # React components, pages, styles & assets
+│   ├── public/             # Static public assets and logos
+│   ├── index.html          # HTML entry point
+│   ├── vite.config.js      # Vite build configuration
+│   └── package.json        # Frontend scripts and dependencies
+│
+├── backend/                # PHP REST API
+│   ├── api/                # API endpoints (auth, admin, enquiries, user)
+│   ├── config/             # Database connection and credentials
+│   ├── helpers/            # JWT, CORS, and Auth helper utilities
+│   ├── schema.sql          # MySQL database schema
+│   └── index.php           # Central API status & endpoint guide
+│
+├── package.json            # Root convenience scripts
+└── README.md
+```
 
-## React Compiler
+## Getting Started
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### 1. Frontend Development
 
-## Expanding the Oxlint configuration
+You can run the frontend either from the root or inside the `frontend` folder:
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+```bash
+# Option A: From root directory
+npm run dev
+
+# Option B: From frontend directory
+cd frontend
+npm run dev
+```
+
+The frontend will run at `http://localhost:5173/`.
+
+### 2. Backend Development
+
+Make sure you have PHP installed. You can start the PHP built-in server:
+
+```bash
+# Option A: From root directory
+npm run backend
+
+# Option B: Direct PHP command
+php -S localhost:8000 -t backend
+```
+
+The backend API will run at `http://localhost:8000/`.

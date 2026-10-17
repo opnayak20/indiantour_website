@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <!-- Desert ground base line -->
+  <line x1="4" y1="58" x2="60" y2="58" />
+
+  <!-- Thar Desert Sweeping Sand Dunes (Sam Sand Dunes) -->
+  <path d="M4 52 C14 47 24 54 36 49 C46 44 54 50 60 48" />
+  <path d="M4 48 C16 43 28 50 40 45" stroke-width="1.5" />
+
+  <!-- Jaisalmer Golden Fort (Sonar Qila) on Trikuta Hill (Background) -->
+  <!-- Fort Hill contour -->
+  <path d="M12 44 C18 36 42 36 56 42" stroke-dasharray="0" />
+  
+  <!-- Left Rounded Sandstone Bastion -->
+  <path d="M18 40 V26 C18 24 24 24 24 26 V40" />
+  <!-- Bastion battlements / crenellations -->
+  <line x1="18" y1="26" x2="18" y2="23" stroke-width="1.5" />
+  <line x1="21" y1="26" x2="21" y2="23" stroke-width="1.5" />
+  <line x1="24" y1="26" x2="24" y2="23" stroke-width="1.5" />
+
+  <!-- Center Palace Fort Wall with Jharokha Balcony -->
+  <rect x="26" y="27" width="16" height="13" />
+  <!-- Jharokha ornate window -->
+  <path d="M31 35 V30 C31 28 37 28 37 30 V35" stroke-width="1.5" />
+  <path d="M29 35 H39" stroke-width="1.5" />
+  <!-- Palace Dome / Chattri Cupola atop fort -->
+  <path d="M30 27 C30 20 38 20 38 27" />
+  <line x1="34" y1="20" x2="34" y2="17" stroke-width="1.5" />
+
+  <!-- Right Rounded Sandstone Bastion -->
+  <path d="M44 40 V26 C44 24 50 24 50 26 V40" />
+  <line x1="44" y1="26" x2="44" y2="23" stroke-width="1.5" />
+  <line x1="47" y1="26" x2="47" y2="23" stroke-width="1.5" />
+  <line x1="50" y1="26" x2="50" y2="23" stroke-width="1.5" />
+
+  <!-- Desert Sun blazing over the Golden City -->
+  <circle cx="50" cy="14" r="4.5" />
+
+  <!-- Desert Camel Silhouette (Foreground Left) -->
+  <!-- Camel legs -->
+  <line x1="12" y1="50" x2="11" y2="58" stroke-width="1.5" />
+  <line x1="14" y1="50" x2="14" y2="58" stroke-width="1.5" />
+  <line x1="19" y1="50" x2="19" y2="58" stroke-width="1.5" />
+  <line x1="21" y1="50" x2="22" y2="58" stroke-width="1.5" />
+  <!-- Body with single proud hump -->
+  <path d="M11 50 C11 48 13 46 15 46 C16 43 19 43 20 46 C22 47 22 50 21 51 Z" fill="currentColor" fill-opacity="0.2" />
+  <!-- Curving long neck & camel head -->
+  <path d="M12 48 C11 44 9 42 7 42 L6 43" stroke-width="1.5" />
+</svg>

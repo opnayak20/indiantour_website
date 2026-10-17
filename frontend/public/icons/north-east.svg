@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <!-- Grassland base line -->
+  <line x1="4" y1="58" x2="60" y2="58" />
+
+  <!-- Eastern Himalayan mountain hills & rolling tea slopes (Background) -->
+  <path d="M4 42 C14 36 22 40 30 35 C38 30 46 32 60 26" />
+  <path d="M30 35 L38 22 L48 31" stroke-width="1.5" />
+  <path d="M48 31 L54 18 L60 26" stroke-width="1.5" />
+
+  <!-- Elephant Grass Tuft Accents along bottom -->
+  <path d="M6 58 L8 53 L10 58" stroke-width="1.5" />
+  <path d="M52 58 L54 52 L56 58" stroke-width="1.5" />
+
+  <!-- Kaziranga Great One-Horned Rhinoceros (Foreground) -->
+  <!-- Snout and Head with Iconic Single Horn -->
+  <path d="M12 47 C10 44 11 41 14 39" />
+  <!-- Single Sturdy Horn pointing forward-up -->
+  <path d="M11 41 L8 34 C10 35 12 37 13 38" fill="currentColor" fill-opacity="0.15" />
+  <!-- Forehead and Alert Ears -->
+  <path d="M13 38 C14 36 17 35 19 36" />
+  <!-- Pointed Ears -->
+  <path d="M19 36 L21 31 L23 35" />
+
+  <!-- Muscular Neck Fold (Armor-plated skin fold) -->
+  <path d="M23 35 C27 34 30 33 34 33" />
+  <path d="M22 36 C23 42 20 45 18 47" stroke-width="1.5" />
+
+  <!-- Powerful Arched Back & Rump -->
+  <path d="M34 33 C40 33 46 34 50 37 C54 40 55 45 54 48" />
+
+  <!-- Front Shoulder Skin Fold -->
+  <path d="M28 34 C27 40 28 44 30 47" stroke-width="1.5" />
+
+  <!-- Sturdy Forelegs -->
+  <!-- Front leg 1 -->
+  <path d="M22 46 V55 C22 56 24 57 26 57 H27 V47" />
+  <!-- Front leg 2 (offset) -->
+  <path d="M18 47 V53 C18 54 19 55 21 55 V47" stroke-width="1.5" />
+
+  <!-- Sturdy Hind Legs -->
+  <!-- Back leg 1 -->
+  <path d="M46 44 C47 48 48 52 48 57 H52 C53 56 53 53 52 47" />
+  <!-- Back leg 2 (offset) -->
+  <path d="M42 46 V54 H45 V46" stroke-width="1.5" />
+
+  <!-- Belly line & Rump armor fold -->
+  <path d="M27 47 C33 48 38 48 44 46" />
+  <path d="M46 39 C44 44 45 47 47 49" stroke-width="1.5" />
+
+  <!-- Short Tail with Tuft -->
+  <path d="M54 48 C55 51 54 53 54 54" stroke-width="1.5" />
+
+  <!-- Eye -->
+  <circle cx="15" cy="40.5" r="1" fill="currentColor" />
+</svg>

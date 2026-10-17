@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <!-- Ground terrace base -->
+  <line x1="6" y1="58" x2="58" y2="58" />
+  <rect x="10" y="54" width="44" height="4" rx="0.5" />
+
+  <!-- HAWA MAHAL (Palace of Winds, Jaipur) -->
+  <!-- Level 1: Ground Arch Portals -->
+  <path d="M12 54 V44 H52 V54" />
+  <path d="M16 54 V47 C16 45 20 45 20 47 V54" />
+  <path d="M26 54 V47 C26 45 30 45 30 47 V54" />
+  <path d="M34 54 V47 C34 45 38 45 38 47 V54" />
+  <path d="M44 54 V47 C44 45 48 45 48 47 V54" />
+
+  <!-- Level 2: First Tier of Jharokhas -->
+  <path d="M15 44 V35 H49 V44" />
+  <!-- Arched Jharokha casements -->
+  <path d="M19 44 V37 C19 36 23 36 23 37 V44" stroke-width="1.5" />
+  <path d="M27 44 V37 C27 36 31 36 31 37 V44" stroke-width="1.5" />
+  <path d="M35 44 V37 C35 36 39 36 39 37 V44" stroke-width="1.5" />
+  <path d="M43 44 V37 C43 36 47 36 47 37 V44" stroke-width="1.5" />
+
+  <!-- Level 3: Second Tier of Jharokhas (Stepped pyramid setback) -->
+  <path d="M20 35 V26 H44 V35" />
+  <path d="M24 35 V28 C24 27 28 27 28 28 V35" stroke-width="1.5" />
+  <path d="M30 35 V28 C30 27 34 27 34 28 V35" stroke-width="1.5" />
+  <path d="M36 35 V28 C36 27 40 27 40 28 V35" stroke-width="1.5" />
+
+  <!-- Level 4: Upper Tier of Jharokhas -->
+  <path d="M25 26 V18 H39 V26" />
+  <path d="M28 26 V20 C28 19 31 19 31 20 V26" stroke-width="1.5" />
+  <path d="M33 26 V20 C33 19 36 19 36 20 V26" stroke-width="1.5" />
+
+  <!-- Level 5: Crown Chattri Cupola Pavilion (Top of Pyramid) -->
+  <path d="M28 18 C28 11 36 11 36 18" />
+  <!-- Apex Kalash finial -->
+  <line x1="32" y1="11" x2="32" y2="7" stroke-width="2" />
+  <circle cx="32" cy="6" r="1" fill="currentColor" />
+
+  <!-- Flanking Royal Dome Finials on tiers -->
+  <path d="M16 35 C16 31 20 31 20 35" stroke-width="1.5" />
+  <path d="M44 35 C44 31 48 31 48 35" stroke-width="1.5" />
+  <path d="M21 26 C21 22 25 22 25 26" stroke-width="1.5" />
+  <path d="M39 26 C39 22 43 22 43 26" stroke-width="1.5" />
+</svg>

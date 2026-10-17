@@ -1,0 +1,1166 @@
+import React, { useState } from 'react';
+import {
+  FaBullhorn,
+  FaCheck,
+  FaArrowsRotate,
+  FaEye,
+  FaPhone,
+  FaWhatsapp,
+  FaImage,
+  FaSliders,
+  FaCircleCheck,
+  FaCircleXmark,
+  FaArrowUpRightFromSquare,
+  FaClock,
+  FaPalette,
+  FaWandMagicSparkles,
+  FaShieldHalved
+} from 'react-icons/fa6';
+import { API_BASE } from '../config/api';
+
+const PRESET_IMAGES = [
+  {
+    name: 'Meghalaya Root Bridge (Default)',
+    url: '/meghalaya_root_bridge.jpg',
+    thumb: '/meghalaya_root_bridge.jpg'
+  },
+  {
+    name: 'Leh Ladakh',
+    url: 'https://images.unsplash.com/photo-1581793745862-99fde7fa73d2?auto=format&fit=crop&w=800&q=80',
+    thumb: 'https://images.unsplash.com/photo-1581793745862-99fde7fa73d2?auto=format&fit=crop&w=200&q=80'
+  },
+  {
+    name: 'Spiti Valley',
+    url: 'https://images.unsplash.com/photo-1653844573020-71f77a0ccb8c?auto=format&fit=crop&w=800&q=80',
+    thumb: 'https://images.unsplash.com/photo-1653844573020-71f77a0ccb8c?auto=format&fit=crop&w=200&q=80'
+  },
+  {
+    name: 'Kedarnath Yatra',
+    url: 'https://images.unsplash.com/photo-1612438214708-f428a707dd4e?auto=format&fit=crop&w=800&q=80',
+    thumb: 'https://images.unsplash.com/photo-1612438214708-f428a707dd4e?auto=format&fit=crop&w=200&q=80'
+  },
+  {
+    name: 'Kerala Backwaters',
+    url: 'https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?auto=format&fit=crop&w=800&q=80',
+    thumb: 'https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?auto=format&fit=crop&w=200&q=80'
+  },
+  {
+    name: 'Kashmir Valley',
+    url: 'https://images.unsplash.com/photo-1595815771614-ade9d652a65d?auto=format&fit=crop&w=800&q=80',
+    thumb: 'https://images.unsplash.com/photo-1595815771614-ade9d652a65d?auto=format&fit=crop&w=200&q=80'
+  }
+];
+
+const COLOR_SWATCHES = [
+  { name: 'Avian Crimson Red', value: '#ec1d24' },
+  { name: 'Avian Vibrant Red', value: '#e52b2b' },
+  { name: 'Royal Blue', value: '#2563eb' },
+  { name: 'Emerald Green', value: '#059669' },
+  { name: 'Deep Violet', value: '#7c3aed' }
+];
+
+export default function AdminPopupManager({
+  popupSettings,
+  onSave,
+  saving,
+  enquiries = [],
+  showToast,
+  apiCall,
+  onOpenPreviewModal,
+  packages = []
+}) {
+  const [formState, setFormState] = useState({ ...popupSettings });
+  
+  // Section Navigation Tabs: 'triggers' | 'visuals' | 'form' | 'preview' | 'leads'
+  const [activeSection, setActiveSection] = useState('triggers');
+  
+  const [previewTab, setPreviewTab] = useState('default'); // 'default' | 'sample_tour'
+  const [uploadingImage, setUploadingImage] = useState(false);
+
+  // Sync when prop updates
+  React.useEffect(() => {
+    setFormState({ ...popupSettings });
+  }, [popupSettings]);
+
+  const handleChange = (field, value) => {
+    setFormState((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handleToggle = (field) => {
+    setFormState((prev) => ({ ...prev, [field]: !prev[field] }));
+  };
+
+  const handleSaveForm = (e) => {
+    if (e) e.preventDefault();
+    onSave(formState);
+  };
+
+  const handleResetDefaults = () => {
+    const defaults = {
+      enabled: true,
+      triggerOnGroupTrips: false,
+      triggerOnCreatorTrips: false,
+      triggerOnPackageClick: true,
+      delaySeconds: 10,
+      showFrequency: 'always',
+      defaultTitle: 'Meghalaya Tour Package',
+      defaultDuration: '6 Days 5 Nights',
+      defaultSubtitle: 'Krem Chympe, Waterfalls & Root Bridges',
+      defaultImage: '/meghalaya_root_bridge.jpg',
+      badgeText: 'No Cost EMI options available ↗',
+      badgeAction: 'open_emi_modal',
+      formHeading: 'Plan Your Next Trip',
+      buttonText: 'Connect with Expert',
+      buttonColor: '#e52b2b',
+      whatsappNumber: '+919099599331'
+    };
+    setFormState(defaults);
+    onSave(defaults);
+    showToast('Reset to default configuration (20s delay on package view).', 'success');
+  };
+
+  // Image Upload Handler
+  const handleFileUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append('image', file);
+
+    setUploadingImage(true);
+    try {
+      const res = await apiCall('/admin/upload_image.php', {
+        method: 'POST',
+        body: formData
+      });
+      if (res?.ok && res?.data?.data?.url) {
+        handleChange('defaultImage', res.data.data.url);
+        showToast('Image uploaded successfully!', 'success');
+      } else {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          handleChange('defaultImage', event.target.result);
+          showToast('Image loaded and stored locally.', 'success');
+        };
+        reader.readAsDataURL(file);
+      }
+    } catch {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        handleChange('defaultImage', event.target.result);
+        showToast('Image loaded locally.', 'success');
+      };
+      reader.readAsDataURL(file);
+    } finally {
+      setUploadingImage(false);
+    }
+  };
+
+  // Filter inquiries generated by the popup or latest leads
+  const popupLeads = enquiries.filter(
+    (enq) =>
+      enq.notes?.includes('Popup') ||
+      enq.message?.includes('[Trip Lead Popup') ||
+      enq.source === 'popup_lead'
+  );
+  const displayLeads = popupLeads.length > 0 ? popupLeads : enquiries.slice(0, 10);
+
+  // Sample package for preview
+  const sampleTour = {
+    title: 'Leh Ladakh 4x4 Expedition',
+    duration: '9 Days 8 Nights',
+    route: 'Khardung La, Pangong Tso & Nubra Valley',
+    image: 'https://images.unsplash.com/photo-1581793745862-99fde7fa73d2?auto=format&fit=crop&w=800&q=80'
+  };
+
+  const previewTitle = previewTab === 'default' ? formState.defaultTitle : sampleTour.title;
+  const previewDuration = previewTab === 'default' ? formState.defaultDuration : sampleTour.duration;
+  const previewSubtitle = previewTab === 'default' ? formState.defaultSubtitle : sampleTour.route;
+  const previewImage = previewTab === 'default' ? formState.defaultImage : sampleTour.image;
+
+  // Section Tabs Definition
+  const SECTIONS = [
+    {
+      id: 'triggers',
+      label: 'Triggers & Timing',
+      icon: FaSliders,
+      badge: `${formState.delaySeconds || 20}s delay`,
+      badgeColor: 'bg-orange-100 text-[#fd5b01]'
+    },
+    {
+      id: 'visuals',
+      label: 'Package Visuals',
+      icon: FaImage,
+      badge: 'Left Card'
+    },
+    {
+      id: 'form',
+      label: 'Lead Form & CTA',
+      icon: FaPalette,
+      badge: 'Right Form'
+    },
+    {
+      id: 'preview',
+      label: 'Live Preview',
+      icon: FaEye,
+      badge: 'Simulator'
+    },
+    {
+      id: 'leads',
+      label: 'Captured Leads',
+      icon: FaCheck,
+      badge: `${displayLeads.length} leads`,
+      badgeColor: displayLeads.length > 0 ? 'bg-emerald-100 text-emerald-700' : ''
+    }
+  ];
+
+  return (
+    <div className="adm-page-body animate-fadeIn space-y-5">
+      {/* 1. REDESIGNED TOP HEADER & GLOBAL ACTION BAR */}
+      <div
+        className="rounded-2xl border shadow-xs"
+        style={{
+          backgroundColor: '#ffffff',
+          borderColor: '#e2e8f0',
+          padding: '20px 24px'
+        }}
+      >
+        {/* Top Header Row */}
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4">
+          <div className="flex items-center gap-3.5">
+            {/* Brand Gradient Icon */}
+            <div
+              className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 shadow-xs"
+              style={{
+                background: 'linear-gradient(135deg, #fd5b01 0%, #ff7e33 100%)',
+                color: '#ffffff'
+              }}
+            >
+              <FaBullhorn size={18} />
+            </div>
+
+            <div>
+              <div className="flex items-center gap-2.5 flex-wrap">
+                <h2
+                  className="text-lg sm:text-xl font-bold font-display"
+                  style={{ color: '#0f172a', letterSpacing: '-0.02em', margin: 0 }}
+                >
+                  Trip Lead Pop-up Manager
+                </h2>
+                
+                {/* Status Indicator Pill */}
+                <div
+                  className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold"
+                  style={{
+                    backgroundColor: formState.enabled ? '#ecfdf5' : '#f1f5f9',
+                    color: formState.enabled ? '#059669' : '#64748b',
+                    border: `1px solid ${formState.enabled ? '#a7f3d0' : '#e2e8f0'}`
+                  }}
+                >
+                  <span
+                    className="w-2 h-2 rounded-full"
+                    style={{
+                      backgroundColor: formState.enabled ? '#10b981' : '#94a3b8',
+                      boxShadow: formState.enabled ? '0 0 0 2px rgba(16,185,129,0.2)' : 'none'
+                    }}
+                  />
+                  <span>{formState.enabled ? 'ACTIVE ON SITE' : 'PAUSED'}</span>
+                </div>
+              </div>
+              <p
+                className="text-xs mt-1"
+                style={{ color: '#64748b', margin: '4px 0 0 0' }}
+              >
+                Configure the pop-up modal that appears after 20 seconds on trip packages, customize visuals, and monitor leads.
+              </p>
+            </div>
+          </div>
+
+          {/* Action Buttons Cluster */}
+          <div className="flex flex-wrap items-center gap-2.5">
+            {/* Toggle Switch */}
+            <button
+              type="button"
+              onClick={() => handleToggle('enabled')}
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-semibold cursor-pointer transition-all"
+              style={{
+                backgroundColor: formState.enabled ? '#f0fdf4' : '#f8fafc',
+                color: formState.enabled ? '#166534' : '#475569',
+                border: `1px solid ${formState.enabled ? '#bbf7d0' : '#cbd5e1'}`
+              }}
+              title="Click to toggle pop-up visibility on public site"
+            >
+              <span
+                style={{
+                  display: 'inline-block',
+                  width: '32px',
+                  height: '18px',
+                  borderRadius: '9999px',
+                  backgroundColor: formState.enabled ? '#10b981' : '#cbd5e1',
+                  position: 'relative',
+                  transition: 'background-color 0.2s'
+                }}
+              >
+                <span
+                  style={{
+                    display: 'block',
+                    width: '14px',
+                    height: '14px',
+                    borderRadius: '9999px',
+                    backgroundColor: '#ffffff',
+                    position: 'absolute',
+                    top: '2px',
+                    left: formState.enabled ? '16px' : '2px',
+                    transition: 'left 0.2s',
+                    boxShadow: '0 1px 2px rgba(0,0,0,0.2)'
+                  }}
+                />
+              </span>
+              <span>{formState.enabled ? 'Enabled' : 'Disabled'}</span>
+            </button>
+
+            {/* Preview Fullscreen */}
+            <button
+              type="button"
+              onClick={() => onOpenPreviewModal(formState)}
+              className="px-3.5 py-1.5 rounded-xl text-xs font-semibold cursor-pointer transition-all flex items-center gap-1.5"
+              style={{
+                backgroundColor: '#f8fafc',
+                color: '#1e293b',
+                border: '1px solid #e2e8f0'
+              }}
+              title="Preview actual modal as travelers see it"
+            >
+              <FaEye size={12} style={{ color: '#0284c7' }} />
+              <span>Fullscreen Preview</span>
+            </button>
+
+            {/* Reset Defaults */}
+            <button
+              type="button"
+              onClick={handleResetDefaults}
+              className="px-3 py-1.5 rounded-xl text-xs font-medium cursor-pointer transition-all"
+              style={{
+                backgroundColor: 'transparent',
+                color: '#64748b',
+                border: 'none'
+              }}
+              title="Reset all settings to default"
+            >
+              Reset
+            </button>
+
+            {/* Save Changes Button */}
+            <button
+              type="button"
+              onClick={handleSaveForm}
+              disabled={saving}
+              className="px-5 py-2 rounded-xl text-xs font-bold text-white flex items-center gap-2 cursor-pointer transition-all shadow-xs"
+              style={{
+                backgroundColor: '#fd5b01',
+                border: 'none',
+                opacity: saving ? 0.7 : 1
+              }}
+            >
+              {saving ? (
+                <>
+                  <FaArrowsRotate className="animate-spin" size={12} />
+                  <span>Saving...</span>
+                </>
+              ) : (
+                <>
+                  <FaCheck size={12} />
+                  <span>Save Changes</span>
+                </>
+              )}
+            </button>
+          </div>
+        </div>
+
+        {/* 2. MODERN SEGMENTED TAB STRIP */}
+        <div
+          className="mt-3 pt-3 border-t"
+          style={{ borderColor: '#f1f5f9' }}
+        >
+          <div
+            className="grid grid-cols-2 sm:grid-cols-5 gap-1.5 p-1 rounded-xl"
+            style={{ backgroundColor: '#f1f5f9' }}
+          >
+            {SECTIONS.map((sec) => {
+              const Icon = sec.icon;
+              const isActive = activeSection === sec.id;
+              return (
+                <button
+                  key={sec.id}
+                  type="button"
+                  onClick={() => setActiveSection(sec.id)}
+                  className="flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg text-xs font-bold transition-all cursor-pointer"
+                  style={{
+                    backgroundColor: isActive ? '#ffffff' : 'transparent',
+                    color: isActive ? '#0f172a' : '#64748b',
+                    boxShadow: isActive ? '0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04)' : 'none',
+                    border: 'none',
+                    outline: 'none'
+                  }}
+                >
+                  <Icon
+                    size={13}
+                    style={{ color: isActive ? '#fd5b01' : '#94a3b8' }}
+                  />
+                  <span style={{ color: isActive ? '#0f172a' : '#475569' }}>
+                    {sec.label}
+                  </span>
+                  {sec.badge && (
+                    <span
+                      className="text-[10px] px-1.5 py-0.5 rounded-md font-semibold hidden md:inline-block"
+                      style={{
+                        backgroundColor: isActive ? '#fff5f6' : '#e2e8f0',
+                        color: isActive ? '#ec1d24' : '#64748b'
+                      }}
+                    >
+                      {sec.badge}
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+
+      {/* 3. SECTION CONTENT SWITCHER */}
+      
+      {/* ======================================================================
+          SECTION 1: TRIGGERS & TIMING
+          ====================================================================== */}
+      {activeSection === 'triggers' && (
+        <div className="bg-white rounded-2xl border border-gray-200 p-6 shadow-xs space-y-6 animate-fadeIn">
+          {/* Section Header */}
+          <div className="flex items-start justify-between border-b border-gray-100 pb-4">
+            <div>
+              <h3 className="text-base font-bold text-gray-900 flex items-center gap-2">
+                <FaClock className="text-[#fd5b01]" />
+                <span>Triggers & Appearance Timing</span>
+              </h3>
+              <p className="text-xs text-gray-500 mt-0.5">
+                Configure when and after how many seconds the pop-up opens for visitors.
+              </p>
+            </div>
+            <span className="text-xs font-semibold px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
+              Active Strategy: 20s on Opened Trip
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Left: Trigger Rules */}
+            <div className="space-y-4">
+              <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wider">
+                Trigger Rules
+              </h4>
+
+              {/* Feature 1: Particular Trip Package (Primary) */}
+              <div className="p-4 rounded-xl border-2 border-orange-200 bg-orange-50/40 relative">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="flex items-start gap-3">
+                    <input
+                      type="checkbox"
+                      id="trigger-package"
+                      checked={formState.triggerOnPackageClick}
+                      onChange={() => handleToggle('triggerOnPackageClick')}
+                      className="mt-1 w-4 h-4 text-[#fd5b01] rounded border-gray-300 focus:ring-[#fd5b01]"
+                    />
+                    <label htmlFor="trigger-package" className="cursor-pointer">
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm font-bold text-gray-900">
+                          Trigger on Particular Group Trip Package
+                        </span>
+                        <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#fd5b01] text-white">
+                          RECOMMENDED
+                        </span>
+                      </div>
+                      <p className="text-xs text-gray-600 mt-1 leading-relaxed">
+                        When the visitor clicks to open any particular group trip, the details modal opens first. After they spend <strong>{formState.delaySeconds} seconds</strong> viewing it, the pop-up opens specifically regarding <strong>that particular trip</strong>.
+                      </p>
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              {/* Feature 2: Group Page Visit (Secondary) */}
+              <div className="p-4 rounded-xl border border-gray-200 bg-gray-50/50">
+                <div className="flex items-start gap-3">
+                  <input
+                    type="checkbox"
+                    id="trigger-group-page"
+                    checked={formState.triggerOnGroupTrips}
+                    onChange={() => handleToggle('triggerOnGroupTrips')}
+                    className="mt-1 w-4 h-4 text-[#fd5b01] rounded border-gray-300 focus:ring-[#fd5b01]"
+                  />
+                  <label htmlFor="trigger-group-page" className="cursor-pointer">
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-bold text-gray-900">
+                        Trigger on simply visiting the Group Tours page
+                      </span>
+                      <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-gray-200 text-gray-700">
+                        OFF BY DEFAULT
+                      </span>
+                    </div>
+                    <p className="text-xs text-gray-500 mt-1 leading-relaxed">
+                      If enabled, visitors will see the featured tour pop-up immediately upon entering the Group Tours listing page. Keep this off so users can browse freely.
+                    </p>
+                  </label>
+                </div>
+              </div>
+
+              {/* Feature 3: Creator Trips Visit */}
+              <div className="p-4 rounded-xl border border-gray-200 bg-gray-50/50">
+                <div className="flex items-start gap-3">
+                  <input
+                    type="checkbox"
+                    id="trigger-creator"
+                    checked={formState.triggerOnCreatorTrips}
+                    onChange={() => handleToggle('triggerOnCreatorTrips')}
+                    className="mt-1 w-4 h-4 text-[#fd5b01] rounded border-gray-300 focus:ring-[#fd5b01]"
+                  />
+                  <label htmlFor="trigger-creator" className="cursor-pointer">
+                    <span className="text-sm font-bold text-gray-900">
+                      Trigger on Creator Trips page visit
+                    </span>
+                    <p className="text-xs text-gray-500 mt-1 leading-relaxed">
+                      Shows the expedition consultation modal when the visitor navigates to the Creator Trips tab.
+                    </p>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            {/* Right: Delay & Frequency Controls */}
+            <div className="space-y-5 bg-gray-50/70 p-5 rounded-xl border border-gray-200/80">
+              <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wider">
+                Timing & Frequency
+              </h4>
+
+              {/* Delay Slider */}
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <label className="text-xs font-bold text-gray-800">
+                    Package View Delay
+                  </label>
+                  <span className="text-sm font-extrabold text-[#fd5b01] bg-orange-100/80 px-2.5 py-0.5 rounded-lg">
+                    {formState.delaySeconds} seconds
+                  </span>
+                </div>
+                <input
+                  type="range"
+                  min="1"
+                  max="60"
+                  step="1"
+                  value={formState.delaySeconds}
+                  onChange={(e) => handleChange('delaySeconds', parseInt(e.target.value, 10) || 20)}
+                  className="w-full accent-[#fd5b01]"
+                />
+                
+                {/* Quick Presets */}
+                <div className="flex items-center gap-2 pt-1 flex-wrap">
+                  <span className="text-[11px] font-medium text-gray-400">Quick Presets:</span>
+                  {[5, 10, 15, 20, 30, 45].map((sec) => (
+                    <button
+                      key={sec}
+                      type="button"
+                      onClick={() => handleChange('delaySeconds', sec)}
+                      className={`px-2.5 py-1 text-xs rounded-lg border cursor-pointer transition ${
+                        formState.delaySeconds === sec
+                          ? 'bg-[#fd5b01] text-white border-[#fd5b01] font-bold shadow-xs'
+                          : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-100'
+                      }`}
+                    >
+                      {sec}s {sec === 20 ? '(Standard)' : ''}
+                    </button>
+                  ))}
+                </div>
+                <p className="text-[11px] text-gray-400 pt-1">
+                  💡 20 seconds is optimal: it gives travelers ample time to read the highlights before presenting the expert consultation modal.
+                </p>
+              </div>
+
+              {/* Display Frequency */}
+              <div className="space-y-2 pt-3 border-t border-gray-200/70">
+                <label className="block text-xs font-bold text-gray-800">
+                  Visitor Frequency Rule
+                </label>
+                <select
+                  value={formState.showFrequency}
+                  onChange={(e) => handleChange('showFrequency', e.target.value)}
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 text-xs text-gray-800 bg-white focus:outline-none focus:border-[#fd5b01]"
+                >
+                  <option value="always">Always on every trip package opened (Testing & Immediate Lead Mode)</option>
+                  <option value="session">Once per browser session (Prevents multiple pop-ups in one sitting)</option>
+                  <option value="once_daily">Once every 24 hours per traveler</option>
+                </select>
+                <p className="text-[11px] text-gray-400">
+                  Select how often a return traveler will see the pop-up.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ======================================================================
+          SECTION 2: PACKAGE VISUALS & MEDIA
+          ====================================================================== */}
+      {activeSection === 'visuals' && (
+        <div className="bg-white rounded-2xl border border-gray-200 p-6 shadow-xs space-y-6 animate-fadeIn">
+          <div className="flex items-start justify-between border-b border-gray-100 pb-4">
+            <div>
+              <h3 className="text-base font-bold text-gray-900 flex items-center gap-2">
+                <FaImage className="text-[#fd5b01]" />
+                <span>Left Visual Card (Featured Fallback & Group Tours)</span>
+              </h3>
+              <p className="text-xs text-gray-500 mt-0.5">
+                Customize the high-resolution photo, trip title, duration badge, and the No Cost EMI pill.
+              </p>
+            </div>
+            <span className="text-xs font-semibold px-3 py-1 rounded-full bg-blue-50 text-blue-700 border border-blue-200">
+              Dynamic Mode: Auto-adapts to opened package
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Form Fields */}
+            <div className="space-y-4">
+              <div>
+                <label className="block text-xs font-bold text-gray-700 mb-1">
+                  Default Package Title
+                </label>
+                <input
+                  type="text"
+                  value={formState.defaultTitle}
+                  onChange={(e) => handleChange('defaultTitle', e.target.value)}
+                  placeholder="e.g. Meghalaya Tour Package"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs sm:text-sm text-gray-900 focus:outline-none focus:border-[#fd5b01]"
+                />
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-bold text-gray-700 mb-1">
+                    Duration Badge
+                  </label>
+                  <input
+                    type="text"
+                    value={formState.defaultDuration}
+                    onChange={(e) => handleChange('defaultDuration', e.target.value)}
+                    placeholder="e.g. 6 Days 5 Nights"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs sm:text-sm text-gray-900 focus:outline-none focus:border-[#fd5b01]"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-gray-700 mb-1">
+                    Route / Highlights Subtitle
+                  </label>
+                  <input
+                    type="text"
+                    value={formState.defaultSubtitle}
+                    onChange={(e) => handleChange('defaultSubtitle', e.target.value)}
+                    placeholder="e.g. Krem Chympe, Waterfalls & Root Bridges"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs sm:text-sm text-gray-900 focus:outline-none focus:border-[#fd5b01]"
+                  />
+                </div>
+              </div>
+
+              {/* No Cost EMI Badge Text */}
+              <div>
+                <label className="block text-xs font-bold text-gray-700 mb-1">
+                  Offer Badge Pill Text
+                </label>
+                <input
+                  type="text"
+                  value={formState.badgeText}
+                  onChange={(e) => handleChange('badgeText', e.target.value)}
+                  placeholder="No Cost EMI options available ↗"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs sm:text-sm text-gray-900 focus:outline-none focus:border-[#fd5b01]"
+                />
+                <span className="text-[11px] text-gray-400 mt-1 block">
+                  Clicking this badge opens the Zero-Interest EMI calculation breakdown.
+                </span>
+              </div>
+
+              {/* Background Image URL and Upload */}
+              <div>
+                <label className="block text-xs font-bold text-gray-700 mb-1">
+                  Card Background Image
+                </label>
+                <div className="flex gap-2 mb-2">
+                  <input
+                    type="text"
+                    value={formState.defaultImage}
+                    onChange={(e) => handleChange('defaultImage', e.target.value)}
+                    placeholder="Image URL or local path"
+                    className="flex-1 px-3.5 py-2 rounded-xl border border-gray-200 text-xs sm:text-sm text-gray-900 focus:outline-none focus:border-[#fd5b01]"
+                  />
+                  <label className="px-3.5 py-2 rounded-xl border border-gray-200 bg-gray-50 hover:bg-gray-100 text-xs font-semibold text-gray-700 flex items-center gap-1.5 cursor-pointer">
+                    <FaImage size={12} />
+                    <span>{uploadingImage ? 'Uploading...' : 'Upload File'}</span>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleFileUpload}
+                      className="hidden"
+                      disabled={uploadingImage}
+                    />
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            {/* Right: Preset Destination Gallery */}
+            <div className="space-y-3 bg-gray-50/80 p-5 rounded-xl border border-gray-200/80">
+              <h4 className="text-xs font-bold text-gray-700">
+                Destination Image Presets
+              </h4>
+              <p className="text-xs text-gray-500">
+                Click any thumbnail to set it as the primary fallback background image:
+              </p>
+
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                {PRESET_IMAGES.map((preset, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => handleChange('defaultImage', preset.url)}
+                    className={`relative rounded-xl overflow-hidden border-2 h-24 cursor-pointer transition-all group ${
+                      formState.defaultImage === preset.url
+                        ? 'border-[#fd5b01] shadow-md scale-102 ring-2 ring-[#fd5b01]/20'
+                        : 'border-transparent hover:border-gray-300'
+                    }`}
+                  >
+                    <img
+                      src={preset.thumb}
+                      alt={preset.name}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                    />
+                    <div className="absolute inset-x-0 bottom-0 bg-black/75 p-1 text-center">
+                      <span className="text-[10px] text-white font-semibold block truncate">
+                        {preset.name}
+                      </span>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ======================================================================
+          SECTION 3: LEAD FORM & CTA
+          ====================================================================== */}
+      {activeSection === 'form' && (
+        <div className="bg-white rounded-2xl border border-gray-200 p-6 shadow-xs space-y-6 animate-fadeIn">
+          <div className="flex items-start justify-between border-b border-gray-100 pb-4">
+            <div>
+              <h3 className="text-base font-bold text-gray-900 flex items-center gap-2">
+                <FaPalette className="text-[#fd5b01]" />
+                <span>Right Lead Form & Action Button</span>
+              </h3>
+              <p className="text-xs text-gray-500 mt-0.5">
+                Customize the lead capture form title, CTA button text, brand colors, and WhatsApp routing.
+              </p>
+            </div>
+            <span className="text-xs font-semibold px-3 py-1 rounded-full bg-purple-50 text-purple-700 border border-purple-200">
+              Form Customizer
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="space-y-4">
+              <div>
+                <label className="block text-xs font-bold text-gray-700 mb-1">
+                  Form Heading
+                </label>
+                <input
+                  type="text"
+                  value={formState.formHeading}
+                  onChange={(e) => handleChange('formHeading', e.target.value)}
+                  placeholder="Plan Your Next Trip"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs sm:text-sm text-gray-900 focus:outline-none focus:border-[#fd5b01]"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-gray-700 mb-1">
+                  CTA Button Text
+                </label>
+                <input
+                  type="text"
+                  value={formState.buttonText}
+                  onChange={(e) => handleChange('buttonText', e.target.value)}
+                  placeholder="Connect with Expert"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs sm:text-sm text-gray-900 focus:outline-none focus:border-[#fd5b01]"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-gray-700 mb-1">
+                  Direct WhatsApp Routing Number
+                </label>
+                <input
+                  type="text"
+                  value={formState.whatsappNumber}
+                  onChange={(e) => handleChange('whatsappNumber', e.target.value)}
+                  placeholder="+919099599331"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs sm:text-sm text-gray-900 focus:outline-none focus:border-[#fd5b01]"
+                />
+                <span className="text-[11px] text-gray-400 mt-1 block">
+                  Lead inquiries will offer the traveler a 1-click WhatsApp connection directly to this phone number.
+                </span>
+              </div>
+            </div>
+
+            {/* Button Color Palette */}
+            <div className="space-y-4 bg-gray-50/80 p-5 rounded-xl border border-gray-200/80">
+              <label className="block text-xs font-bold text-gray-800">
+                CTA Button Theme Color
+              </label>
+
+              <div className="space-y-2.5">
+                {COLOR_SWATCHES.map((swatch) => (
+                  <button
+                    key={swatch.value}
+                    type="button"
+                    onClick={() => handleChange('buttonColor', swatch.value)}
+                    className={`w-full flex items-center justify-between p-3 rounded-xl border text-xs font-semibold cursor-pointer transition ${
+                      formState.buttonColor === swatch.value
+                        ? 'border-gray-900 bg-white ring-2 ring-gray-900/10 shadow-xs'
+                        : 'border-gray-200 bg-white/70 hover:bg-white'
+                    }`}
+                  >
+                    <div className="flex items-center gap-2.5">
+                      <span
+                        className="w-5 h-5 rounded-full shadow-inner flex-shrink-0"
+                        style={{ backgroundColor: swatch.value }}
+                      />
+                      <span>{swatch.name}</span>
+                    </div>
+                    {formState.buttonColor === swatch.value && (
+                      <FaCheck className="text-gray-900" size={12} />
+                    )}
+                  </button>
+                ))}
+
+                <div className="flex items-center justify-between p-3 bg-white rounded-xl border border-gray-200">
+                  <span className="text-xs font-semibold text-gray-700">Custom Color:</span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-mono text-gray-500">{formState.buttonColor}</span>
+                    <input
+                      type="color"
+                      value={formState.buttonColor}
+                      onChange={(e) => handleChange('buttonColor', e.target.value)}
+                      className="w-8 h-8 rounded border border-gray-300 cursor-pointer p-0"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ======================================================================
+          SECTION 4: LIVE PREVIEW & SIMULATOR
+          ====================================================================== */}
+      {activeSection === 'preview' && (
+        <div className="bg-white rounded-2xl border border-gray-200 p-6 shadow-xs space-y-6 animate-fadeIn">
+          <div className="flex items-start justify-between border-b border-gray-100 pb-4">
+            <div>
+              <h3 className="text-base font-bold text-gray-900 flex items-center gap-2">
+                <FaEye className="text-[#fd5b01]" />
+                <span>Interactive Pop-up Simulator</span>
+              </h3>
+              <p className="text-xs text-gray-500 mt-0.5">
+                Exact pixel-perfect representation of how the pop-up modal appears on desktop and mobile.
+              </p>
+            </div>
+
+            {/* Toggle Between Views */}
+            <div className="flex items-center gap-2 bg-gray-100 p-1 rounded-xl text-xs font-bold">
+              <button
+                type="button"
+                onClick={() => setPreviewTab('default')}
+                className={`px-3 py-1.5 rounded-lg transition ${
+                  previewTab === 'default'
+                    ? 'bg-white text-gray-900 shadow-xs'
+                    : 'text-gray-600 hover:text-gray-900'
+                }`}
+              >
+                Featured View
+              </button>
+              <button
+                type="button"
+                onClick={() => setPreviewTab('sample_tour')}
+                className={`px-3 py-1.5 rounded-lg transition ${
+                  previewTab === 'sample_tour'
+                    ? 'bg-white text-gray-900 shadow-xs'
+                    : 'text-gray-600 hover:text-gray-900'
+                }`}
+              >
+                Sample Trip View
+              </button>
+            </div>
+          </div>
+
+          {/* Centered Rendered Modal */}
+          <div className="bg-gray-100/80 p-4 sm:p-8 rounded-2xl flex items-center justify-center">
+            <div className="bg-white rounded-[24px] sm:rounded-[28px] overflow-hidden shadow-2xl w-full max-w-3xl flex flex-col md:flex-row relative border border-gray-200">
+              
+              {/* Left Column Preview */}
+              <div className="relative w-full md:w-[48%] min-h-[260px] md:min-h-[420px] flex flex-col justify-end p-6 bg-slate-900 overflow-hidden select-none">
+                <img
+                  src={previewImage}
+                  alt={previewTitle}
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/45 to-transparent pointer-events-none" />
+                
+                <div className="relative z-10 text-white">
+                  <p className="text-[12px] font-medium tracking-wide text-white/90 mb-1 drop-shadow-sm">
+                    {previewDuration}
+                  </p>
+                  <h4 className="text-xl sm:text-2xl font-extrabold text-white leading-tight mb-1.5 drop-shadow">
+                    {previewTitle}
+                  </h4>
+                  <p className="text-xs text-white/90 leading-snug mb-4 drop-shadow-sm line-clamp-2">
+                    {previewSubtitle}
+                  </p>
+
+                  <div
+                    style={{
+                      backgroundColor: '#ffffff',
+                      color: '#0f172a',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '6px',
+                      padding: '6px 14px',
+                      borderRadius: '9999px',
+                      fontSize: '12px',
+                      fontWeight: '600',
+                      boxShadow: '0 4px 14px rgba(0,0,0,0.25)'
+                    }}
+                  >
+                    <span style={{ textDecoration: 'underline', color: '#0f172a', fontWeight: '800' }}>
+                      No Cost EMI
+                    </span>
+                    <span style={{ color: '#334155', fontWeight: '600' }}>
+                      options available
+                    </span>
+                    <span style={{ color: '#0f172a', fontWeight: '800' }}>↗</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Right Column Preview */}
+              <div className="w-full md:w-[52%] p-6 flex flex-col justify-between bg-white">
+                <div className="flex items-center justify-between pb-3 border-b border-gray-100 mb-3">
+                  <h5 className="text-xl font-bold text-gray-900">
+                    {formState.formHeading}
+                  </h5>
+                  <span className="text-gray-900 font-bold text-xl cursor-default">✕</span>
+                </div>
+
+                <div className="space-y-2.5">
+                  <div className="px-3.5 py-2.5 rounded-xl border border-gray-300 text-sm text-gray-400 bg-gray-50/50">
+                    Your Name
+                  </div>
+
+                  <div className="flex">
+                    <span className="inline-flex items-center px-3 rounded-l-xl border border-r-0 border-gray-300 bg-gray-50 text-gray-700 text-xs font-medium">
+                      +91
+                    </span>
+                    <div className="flex-1 px-3.5 py-2.5 rounded-r-xl border border-gray-300 text-sm text-gray-400 bg-gray-50/50">
+                      Mobile No.
+                    </div>
+                  </div>
+
+                  <div className="px-3.5 py-2.5 rounded-xl border border-gray-300 text-sm text-gray-400 bg-gray-50/50">
+                    Email (optional)
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-2.5 text-xs text-gray-500">
+                    <div className="px-3 py-2 rounded-xl border border-gray-300 bg-gray-50/50 flex items-center justify-between">
+                      <span>Date of Travel</span>
+                      <span>📅</span>
+                    </div>
+                    <div className="px-3 py-2 rounded-xl border border-gray-300 bg-gray-50/50 flex items-center justify-between">
+                      <span>2 Travellers</span>
+                      <span>▾</span>
+                    </div>
+                  </div>
+
+                  <div className="px-3.5 py-2 rounded-xl border border-gray-300 text-xs text-gray-400 bg-gray-50/50 h-14">
+                    Message (optional)
+                  </div>
+
+                  <button
+                    type="button"
+                    style={{ backgroundColor: formState.buttonColor }}
+                    className="w-full py-3.5 rounded-xl font-bold text-white text-sm shadow-md text-center cursor-default"
+                  >
+                    {formState.buttonText}
+                  </button>
+                </div>
+
+                <div className="pt-2 text-center">
+                  <span className="text-[10px] text-gray-400">
+                    🔒 No spam. Instant consultation by certified mountain guides.
+                  </span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <div className="flex justify-end">
+            <button
+              type="button"
+              onClick={() => onOpenPreviewModal(formState)}
+              className="px-5 py-2.5 rounded-xl text-xs font-bold text-white bg-[#01132d] hover:bg-[#061e40] flex items-center gap-2 cursor-pointer transition shadow-xs"
+            >
+              <FaArrowUpRightFromSquare size={12} />
+              <span>Launch Live Interactive Modal</span>
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* ======================================================================
+          SECTION 5: RECENT POPUP INQUIRIES (LEADS)
+          ====================================================================== */}
+      {activeSection === 'leads' && (
+        <div className="bg-white rounded-2xl border border-gray-200 p-6 shadow-xs space-y-4 animate-fadeIn">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-gray-100 pb-4">
+            <div>
+              <h3 className="text-base font-bold text-gray-900 flex items-center gap-2">
+                <FaCheck className="text-emerald-500" />
+                <span>Trip Inquiries Generated by Pop-up</span>
+              </h3>
+              <p className="text-xs text-gray-500 mt-0.5">
+                Every inquiry submitted via the "Connect with Expert" pop-up modal is saved here in real time.
+              </p>
+            </div>
+            <span className="text-xs font-bold px-3 py-1 rounded-full bg-orange-100 text-[#fd5b01]">
+              {displayLeads.length} Total Pop-up Inquiries
+            </span>
+          </div>
+
+          {displayLeads.length === 0 ? (
+            <div className="text-center py-12 text-gray-400 text-xs">
+              No popup inquiries logged yet. Submissions will appear here instantly with direct WhatsApp and Call links!
+            </div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full text-left border-collapse text-xs">
+                <thead>
+                  <tr className="border-b border-gray-100 text-gray-400 uppercase text-[10px] tracking-wider">
+                    <th className="py-2.5 px-3">Lead / Traveler</th>
+                    <th className="py-2.5 px-3">Contact</th>
+                    <th className="py-2.5 px-3">Package Interested</th>
+                    <th className="py-2.5 px-3">Travel Date & Pax</th>
+                    <th className="py-2.5 px-3">Status</th>
+                    <th className="py-2.5 px-3 text-right">Instant Action</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-50">
+                  {displayLeads.map((enq) => {
+                    const whatsappMsg = encodeURIComponent(
+                      `Hello ${enq.name}! Regarding your inquiry for ${enq.destination} on India Tourism Live Travels, how may I assist you today?`
+                    );
+                    const cleanPhone = (enq.phone || '').replace(/\D/g, '');
+
+                    return (
+                      <tr key={enq.id} className="hover:bg-gray-50/70 transition">
+                        <td className="py-3 px-3">
+                          <div className="font-bold text-gray-900">{enq.name}</div>
+                          <div className="text-[10px] text-gray-400">
+                            {enq.created_at ? new Date(enq.created_at).toLocaleDateString() : 'Recent'}
+                          </div>
+                        </td>
+
+                        <td className="py-3 px-3">
+                          <div className="font-medium text-gray-800">{enq.phone}</div>
+                          {enq.email && (
+                            <div className="text-[11px] text-gray-500">{enq.email}</div>
+                          )}
+                        </td>
+
+                        <td className="py-3 px-3">
+                          <span className="font-semibold text-gray-900 bg-gray-100 px-2 py-0.5 rounded-md text-[11px] inline-block">
+                            {enq.destination}
+                          </span>
+                          {enq.message && (
+                            <p className="text-[10px] text-gray-500 line-clamp-1 mt-0.5 max-w-xs">
+                              {enq.message}
+                            </p>
+                          )}
+                        </td>
+
+                        <td className="py-3 px-3">
+                          <div className="text-gray-800 font-medium">
+                            {enq.date || 'Flexible Date'}
+                          </div>
+                          <div className="text-[10px] text-gray-400">
+                            {enq.travelers || 2} Travellers
+                          </div>
+                        </td>
+
+                        <td className="py-3 px-3">
+                          <span
+                            className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold ${
+                              enq.status === 'converted'
+                                ? 'bg-emerald-100 text-emerald-800'
+                                : enq.status === 'contacted'
+                                ? 'bg-blue-100 text-blue-800'
+                                : 'bg-amber-100 text-amber-800'
+                            }`}
+                          >
+                            {enq.status || 'new'}
+                          </span>
+                        </td>
+
+                        <td className="py-3 px-3 text-right">
+                          <div className="flex items-center justify-end gap-1.5">
+                            {cleanPhone && (
+                              <a
+                                href={`https://wa.me/${cleanPhone}?text=${whatsappMsg}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 hover:bg-emerald-500 hover:text-white flex items-center justify-center transition shadow-xs"
+                                title="Chat on WhatsApp"
+                              >
+                                <FaWhatsapp size={14} />
+                              </a>
+                            )}
+                            {cleanPhone && (
+                              <a
+                                href={`tel:${enq.phone}`}
+                                className="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-500 hover:text-white flex items-center justify-center transition shadow-xs"
+                                title="Call directly"
+                              >
+                                <FaPhone size={12} />
+                              </a>
+                            )}
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}

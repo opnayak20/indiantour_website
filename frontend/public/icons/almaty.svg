@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <!-- Mountain base line -->
+  <line x1="4" y1="58" x2="60" y2="58" />
+
+  <!-- Towering Tian Shan / Trans-Ili Alatau Jagged Snowy Mountain Peaks -->
+  <path d="M4 48 L18 20 L32 42 L46 16 L60 48" />
+  <!-- Snow crests on mountain summits -->
+  <path d="M14 28 L18 20 L22 27" stroke-width="1.5" />
+  <path d="M42 24 L46 16 L50 22" stroke-width="1.5" />
+  <!-- Mountain ridge relief lines -->
+  <line x1="18" y1="20" x2="18" y2="46" stroke-width="1.5" />
+  <line x1="46" y1="16" x2="46" y2="48" stroke-width="1.5" />
+
+  <!-- Shymbulak Alpine Cable Car System -->
+  <!-- Diagonal Cable Wire spanning the mountains -->
+  <line x1="4" y1="24" x2="60" y2="34" stroke-width="2" />
+
+  <!-- Cable Car Pylon / Tower on mountain ridge -->
+  <line x1="14" y1="26" x2="14" y2="38" stroke-width="1.5" />
+
+  <!-- Modern Ski Gondola / Cable Car Cabin (Center Foreground) -->
+  <!-- Cable grip arm connector to wire -->
+  <line x1="34" y1="30" x2="34" y2="35" stroke-width="2" />
+  <path d="M32 35 H36" stroke-width="2" />
+  <line x1="34" y1="35" x2="34" y2="38" stroke-width="1.5" />
+
+  <!-- Rounded Aerodynamic Gondola Cabin Body -->
+  <rect x="26" y="38" width="16" height="13" rx="3" fill="currentColor" fill-opacity="0.1" />
+  
+  <!-- Panoramic Glass Windows of Gondola -->
+  <rect x="28" y="40" width="12" height="6" rx="1.5" />
+  <line x1="34" y1="40" x2="34" y2="46" stroke-width="1.5" />
+
+  <!-- Tian Shan Alpine Spruce Pine Trees on slopes (Bottom Right) -->
+  <path d="M52 46 L48 52 H56 Z" stroke-width="1.5" />
+  <path d="M52 50 L47 56 H57 Z" stroke-width="1.5" />
+  <line x1="52" y1="56" x2="52" y2="58" stroke-width="1.5" />
+
+  <path d="M10 48 L7 53 H13 Z" stroke-width="1.5" />
+  <path d="M10 52 L6 57 H14 Z" stroke-width="1.5" />
+</svg>

@@ -1,0 +1,26 @@
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # Route /api/(.*) to backend/api/$1 if backend folder is present
+  RewriteCond %{REQUEST_URI} ^/api/ [NC]
+  RewriteCond %{DOCUMENT_ROOT}/backend/api/ -d
+  RewriteRule ^api/(.*)$ backend/api/$1 [L,QSA]
+
+  # Allow direct pass-through for backend API and upload requests
+  RewriteRule ^api/ - [L]
+  RewriteRule ^backend/ - [L]
+
+  # Serve existing static files and directories directly
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # Route all other URLs to index.html for Single Page Application routing
+  RewriteRule ^ index.html [L]
+</IfModule>
+
+# Enable Browser Compression for optimal page speed
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css application/javascript application/json image/svg+xml
+</IfModule>

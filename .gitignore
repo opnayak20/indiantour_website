@@ -8,9 +8,13 @@ pnpm-debug.log*
 lerna-debug.log*
 
 node_modules
+frontend/node_modules
 dist
+frontend/dist
 dist-ssr
 *.local
+.env
+.env.*.local
 
 # Editor directories and files
 .vscode/*
@@ -28,3 +32,9 @@ reference/
 *.zip
 temp_*
 *.png.bak
+hostinger_deploy/
+scratch/
+test_*.jpg
+*.cjs
+
+

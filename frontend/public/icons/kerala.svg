@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <!-- Backwaters tranquil water surface -->
+  <line x1="4" y1="58" x2="60" y2="58" />
+  <path d="M8 55 C14 53 20 55 26 53 C32 51 38 54 44 52 C50 51 54 53 58 52" stroke-width="1.5" />
+
+  <!-- Tropical Kerala Coconut Palm Tree (Left Bank) -->
+  <path d="M10 58 C12 46 11 34 16 22" stroke-width="2.5" />
+  <path d="M8 58 C10 46 9 34 14 22" stroke-width="1.5" />
+  <!-- Spreading palm leaves -->
+  <path d="M15 22 C9 18 5 21 3 27" />
+  <path d="M15 22 C11 14 6 14 3 18" />
+  <path d="M15 22 C17 13 23 11 27 15" />
+  <path d="M15 22 C22 17 26 22 26 28" />
+  <circle cx="14" cy="23.5" r="1.5" fill="currentColor" />
+
+  <!-- Kerala Kettuvallam Houseboat (Center Right) -->
+  <!-- Long curved wooden boat hull tied with coir ropes -->
+  <path d="M18 49 C24 53 50 54 58 46 L60 44 L16 45 Z" fill="currentColor" fill-opacity="0.1" />
+
+  <!-- Pointed Upward Curved Bow Finial (Prow) -->
+  <path d="M16 45 C14 42 16 39 18 38" />
+
+  <!-- Curved Thatched Bamboo Barrel Canopy Roof -->
+  <!-- Front arched opening / veranda -->
+  <path d="M22 45 V36 C22 30 26 28 32 28 H48 C54 28 56 32 56 45" />
+  <!-- Roof vault curvature line -->
+  <path d="M25 31 C32 28 44 28 52 31" stroke-width="1.5" />
+  <!-- Bamboo ties / rib lines across thatch roof -->
+  <path d="M29 29 C28 34 28 40 28 45" stroke-width="1.5" />
+  <path d="M36 28 C36 34 36 40 36 45" stroke-width="1.5" />
+  <path d="M43 28 C43 34 43 40 43 45" stroke-width="1.5" />
+  <path d="M50 29 C50 34 50 40 50 45" stroke-width="1.5" />
+
+  <!-- Houseboat Viewing Window & Balcony Veranda -->
+  <rect x="30" y="36" width="5" height="6" rx="0.5" stroke-width="1.5" />
+  <rect x="39" y="36" width="5" height="6" rx="0.5" stroke-width="1.5" />
+
+  <!-- Boatman with Long Steering Pole at Stern -->
+  <line x1="56" y1="38" x2="60" y2="56" stroke-width="2" />
+  <circle cx="56" cy="36" r="1.5" fill="currentColor" />
+
+  <!-- Water lily / lotus floating on backwaters -->
+  <path d="M22 55 C23 53 25 53 26 55" stroke-width="1.5" />
+</svg>

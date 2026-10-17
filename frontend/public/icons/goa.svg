@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <!-- Sandy shoreline and gentle ocean waves -->
+  <line x1="4" y1="58" x2="60" y2="58" />
+  <path d="M4 54 C12 52 18 55 26 53 C34 51 42 54 50 52 C54 51 58 52 60 51" stroke-width="1.5" />
+
+  <!-- Tropical Leaning Coconut Palm Tree (Left) -->
+  <!-- Slender curved trunk with bark segments -->
+  <path d="M12 58 C16 46 14 34 22 22" stroke-width="2.5" />
+  <path d="M10 58 C14 46 12 34 20 22" stroke-width="1.5" />
+  <!-- Spreading tropical palm fronds -->
+  <path d="M21 22 C13 18 8 21 6 27" />
+  <path d="M21 22 C15 13 9 13 5 17" />
+  <path d="M21 22 C22 13 28 10 33 13" />
+  <path d="M21 22 C27 16 33 21 34 27" />
+  <path d="M21 22 C21 28 17 32 13 33" />
+  <!-- Coconuts cluster -->
+  <circle cx="19.5" cy="23.5" r="1.5" fill="currentColor" />
+  <circle cx="22.5" cy="24" r="1.5" fill="currentColor" />
+
+  <!-- Tropical Coastal Sun in sky -->
+  <circle cx="50" cy="14" r="5" />
+  <line x1="50" y1="6" x2="50" y2="4" stroke-width="1.5" />
+  <line x1="57" y1="14" x2="59" y2="14" stroke-width="1.5" />
+  <line x1="43" y1="14" x2="41" y2="14" stroke-width="1.5" />
+  <line x1="55" y1="9" x2="57" y2="7" stroke-width="1.5" />
+
+  <!-- Striped Beach Parasol / Umbrella (Center Right) -->
+  <!-- Parasol Pole tilted slightly -->
+  <line x1="42" y1="36" x2="38" y2="56" stroke-width="2" />
+  <!-- Parasol Canopy -->
+  <path d="M28 38 C28 29 54 27 56 36 Z" />
+  <!-- Canopy stripes / scallops -->
+  <path d="M28 38 Q34 40 40 37 Q46 40 52 36 Q55 38 56 36" stroke-width="1.5" />
+  <path d="M42 28 C42 32 40 37 40 37" stroke-width="1.5" />
+  <path d="M42 28 C46 32 46 37 46 37" stroke-width="1.5" />
+  <!-- Umbrella top tip -->
+  <line x1="42" y1="28" x2="42" y2="26" stroke-width="2" />
+
+  <!-- Beach Sun Lounger / Chair under parasol -->
+  <path d="M42 52 L54 48 L58 41" stroke-width="2" />
+  <!-- Lounger legs -->
+  <line x1="44" y1="52" x2="44" y2="57" stroke-width="1.5" />
+  <line x1="52" y1="49" x2="52" y2="57" stroke-width="1.5" />
+</svg>

@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <!-- Symmetrical marble plinth terrace base -->
+  <line x1="4" y1="58" x2="60" y2="58" />
+  <rect x="8" y="54" width="48" height="4" rx="0.5" />
+
+  <!-- LEFT MINARET (Three-tiered tapering tower with cupola) -->
+  <path d="M10 54 L11 26 H13 L14 54" stroke-width="1.5" />
+  <line x1="9.5" y1="44" x2="14.5" y2="44" stroke-width="1.5" />
+  <line x1="10" y1="35" x2="14" y2="35" stroke-width="1.5" />
+  <!-- Left Minaret Domed Chattri Cupola -->
+  <path d="M10 26 C10 22 14 22 14 26 Z" stroke-width="1.5" />
+  <line x1="12" y1="22" x2="12" y2="19" stroke-width="1.5" />
+
+  <!-- RIGHT MINARET (Three-tiered tapering tower with cupola) -->
+  <path d="M50 54 L51 26 H53 L54 54" stroke-width="1.5" />
+  <line x1="49.5" y1="44" x2="54.5" y2="44" stroke-width="1.5" />
+  <line x1="50" y1="35" x2="54" y2="35" stroke-width="1.5" />
+  <!-- Right Minaret Domed Chattri Cupola -->
+  <path d="M50 26 C50 22 54 22 54 26 Z" stroke-width="1.5" />
+  <line x1="52" y1="22" x2="52" y2="19" stroke-width="1.5" />
+
+  <!-- TAJ MAHAL MAIN MAUSOLEUM BUILDING -->
+  <!-- Marble facade walls -->
+  <rect x="18" y="34" width="28" height="20" rx="0.5" />
+
+  <!-- Grand Central Arched Iwan Portal (Pishtaq) -->
+  <rect x="25" y="34" width="14" height="20" />
+  <path d="M27 54 V42 C27 38 37 38 37 42 V54" />
+  <path d="M29 54 V46 C29 43 35 43 35 46 V54" stroke-width="1.5" />
+
+  <!-- Flanking Recessed Arched Alcoves -->
+  <path d="M20 42 V38 C20 36 23 36 23 38 V42" stroke-width="1.5" />
+  <path d="M20 50 V46 C20 44 23 44 23 46 V50" stroke-width="1.5" />
+  <path d="M41 42 V38 C41 36 44 36 44 38 V42" stroke-width="1.5" />
+  <path d="M41 50 V46 C41 44 44 44 44 46 V50" stroke-width="1.5" />
+
+  <!-- Iconic Bulbous Central Onion Dome -->
+  <path d="M25 34 C23 26 26 14 32 12 C38 14 41 26 39 34 Z" fill="currentColor" fill-opacity="0.1" />
+  <!-- Golden Finial at dome summit -->
+  <line x1="32" y1="12" x2="32" y2="5" stroke-width="2" />
+  <circle cx="32" cy="4.5" r="1" fill="currentColor" />
+
+  <!-- Left Flanking Domed Chattri Pavilion -->
+  <path d="M20 34 C20 28 24 28 24 34" stroke-width="1.5" />
+  <line x1="22" y1="28" x2="22" y2="25" stroke-width="1.5" />
+
+  <!-- Right Flanking Domed Chattri Pavilion -->
+  <path d="M40 34 C40 28 44 28 44 34" stroke-width="1.5" />
+  <line x1="42" y1="28" x2="42" y2="25" stroke-width="1.5" />
+</svg>

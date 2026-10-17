@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <!-- Ground base line / ridge -->
+  <line x1="6" y1="58" x2="58" y2="58" />
+
+  <!-- Trans-Himalayan Spiti Mountain Peaks (Background) -->
+  <path d="M4 52 L16 30 L28 46 L38 24 L50 42 L60 52" />
+  <!-- Snow crests on mountain summits -->
+  <path d="M13 36 L16 30 L19 35" stroke-width="1.5" />
+  <path d="M35 30 L38 24 L42 29" stroke-width="1.5" />
+
+  <!-- Sacred Lotus Throne Pedestal (Foreground Center) -->
+  <rect x="22" y="52" width="20" height="4" rx="1" />
+  <!-- Double lotus petals -->
+  <path d="M22 52 C24 49 28 49 30 52" stroke-width="1.5" />
+  <path d="M30 52 C32 49 36 49 38 52" stroke-width="1.5" />
+  <path d="M38 52 C40 49 42 49 42 52" stroke-width="1.5" />
+
+  <!-- Seated Buddha in Meditation (Dhyana Mudra) -->
+  <!-- Crossed legs / base -->
+  <path d="M22 49 C22 46 26 44 32 44 C38 44 42 46 42 49 Z" />
+  <!-- Meditating hands in lap -->
+  <path d="M28 44 C31 46 33 46 36 44" stroke-width="1.5" />
+
+  <!-- Robe & Torso -->
+  <path d="M25 44 C25 35 28 32 32 32 C36 32 39 35 39 44" />
+  <!-- Sanghati robe sash drape across chest -->
+  <path d="M27 34 C31 38 35 40 37 44" stroke-width="1.5" />
+
+  <!-- Buddha Head & Ushnisha Topknot -->
+  <circle cx="32" cy="27" r="4.5" />
+  <path d="M30.5 23 C30.5 20.5 33.5 20.5 33.5 23" />
+  <line x1="32" y1="20.5" x2="32" y2="19" stroke-width="1.5" />
+
+  <!-- Long earlobes -->
+  <path d="M27.5 26 V28" stroke-width="1.5" />
+  <path d="M36.5 26 V28" stroke-width="1.5" />
+
+  <!-- Radiant Aura / Halo (Prabhamandala) -->
+  <path d="M22 28 C22 18 42 18 42 28" stroke-width="1.5" stroke-dasharray="2 2" />
+</svg>

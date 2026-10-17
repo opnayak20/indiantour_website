@@ -1,0 +1,42 @@
+# Prevent directory indexing
+Options -Indexes
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Block access to internal directories
+  RewriteRule ^(config|helpers|data)(/.*)?$ - [F,L,NC]
+
+  # Block direct HTTP access to CLI scripts and seeds
+  RewriteRule ^(test_db\.php|seed_destinations\.php|cli_create_admin\.php|destinations_seed\.json)$ - [F,L,NC]
+
+  # If requesting an existing file, serve it directly
+  RewriteCond %{REQUEST_FILENAME} -f
+  RewriteRule ^ - [L]
+
+  # Extensionless PHP routes (/api/auth -> /api/auth.php)
+  RewriteCond %{REQUEST_FILENAME}\.php -f
+  RewriteRule ^(.*)$ $1.php [L]
+</IfModule>
+
+# Block sensitive file extensions, dotfiles, and CLI scripts
+<FilesMatch "(\.(env|git|sql|sqlite|db|log)|test_db\.php|seed_destinations\.php|cli_create_admin\.php|destinations_seed\.json)$">
+  <IfModule mod_authz_core.c>
+    Require all denied
+  </IfModule>
+  <IfModule !mod_authz_core.c>
+    Order allow,deny
+    Deny from all
+  </IfModule>
+</FilesMatch>
+
+<FilesMatch "^\.">
+  <IfModule mod_authz_core.c>
+    Require all denied
+  </IfModule>
+  <IfModule !mod_authz_core.c>
+    Order allow,deny
+    Deny from all
+  </IfModule>
+</FilesMatch>
+

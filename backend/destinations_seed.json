@@ -1,0 +1,299 @@
+[
+  {
+    "id": "ladakh",
+    "name": "Ladakh",
+    "region": "North",
+    "count": "14 Trips",
+    "badge": "Trending",
+    "image": "https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&w=800&q=80",
+    "type": "domestic"
+  },
+  {
+    "id": "uttarakhand",
+    "name": "Uttarakhand",
+    "region": "North",
+    "count": "22 Trips",
+    "badge": "Must Visit",
+    "image": "https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?auto=format&fit=crop&w=800&q=80",
+    "type": "domestic"
+  },
+  {
+    "id": "himachal",
+    "name": "Himachal Pradesh",
+    "region": "North",
+    "count": "18 Trips",
+    "badge": "Popular",
+    "image": "https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?auto=format&fit=crop&w=800&q=80",
+    "type": "domestic"
+  },
+  {
+    "id": "kashmir",
+    "name": "Jammu & Kashmir",
+    "region": "North",
+    "count": "12 Trips",
+    "badge": "Paradise",
+    "image": "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80",
+    "type": "domestic"
+  },
+  {
+    "id": "sikkim",
+    "name": "Sikkim & Darjeeling",
+    "region": "North-East",
+    "count": "9 Trips",
+    "badge": "Alpine",
+    "image": "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800&q=80",
+    "type": "domestic"
+  },
+  {
+    "id": "meghalaya",
+    "name": "Meghalaya",
+    "region": "North-East",
+    "count": "7 Trips",
+    "badge": "Living Root",
+    "image": "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=800&q=80",
+    "type": "domestic"
+  },
+  {
+    "id": "kerala",
+    "name": "Kerala Backwaters",
+    "region": "South",
+    "count": "10 Trips",
+    "badge": "Serene",
+    "image": "https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?auto=format&fit=crop&w=800&q=80",
+    "type": "domestic"
+  },
+  {
+    "id": "andaman",
+    "name": "Andaman Islands",
+    "region": "Islands",
+    "count": "6 Trips",
+    "badge": "Exotic Beaches",
+    "image": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80",
+    "type": "domestic"
+  },
+  {
+    "id": "rajasthan",
+    "name": "Rajasthan Desert",
+    "region": "West",
+    "count": "11 Trips",
+    "badge": "Royal",
+    "image": "https://images.unsplash.com/photo-1477587458883-47145ed94245?auto=format&fit=crop&w=800&q=80",
+    "type": "domestic"
+  },
+  {
+    "id": "goa",
+    "name": "Goa Coastal Trails",
+    "region": "West",
+    "count": "8 Trips",
+    "badge": "Beach & Nature",
+    "image": "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?auto=format&fit=crop&w=800&q=80",
+    "type": "domestic"
+  },
+  {
+    "id": "arunachal",
+    "name": "Arunachal Pradesh",
+    "region": "North-East",
+    "count": "5 Trips",
+    "badge": "Unexplored",
+    "image": "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80",
+    "type": "domestic"
+  },
+  {
+    "id": "karnataka",
+    "name": "Coorg & Western Ghats",
+    "region": "South",
+    "count": "9 Trips",
+    "badge": "Coffee Trails",
+    "image": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80",
+    "type": "domestic"
+  },
+  {
+    "id": "tamilnadu",
+    "name": "Nilgiris & Ooty",
+    "region": "South",
+    "count": "6 Trips",
+    "badge": "Hill Station",
+    "image": "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800&q=80",
+    "type": "domestic"
+  },
+  {
+    "id": "japan",
+    "name": "Japan",
+    "region": "Asia",
+    "tag": "Custom Itinerary · Enquire",
+    "badge": "Cherry Blossom",
+    "image": "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=800&q=80",
+    "type": "international"
+  },
+  {
+    "id": "bali",
+    "name": "Bali & Komodo",
+    "region": "Asia",
+    "tag": "Custom Itinerary · Enquire",
+    "badge": "Tropical Paradise",
+    "image": "https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=800&q=80",
+    "type": "international"
+  },
+  {
+    "id": "iceland",
+    "name": "Iceland",
+    "region": "Europe",
+    "tag": "Custom Itinerary · Enquire",
+    "badge": "Northern Lights",
+    "image": "https://images.unsplash.com/photo-1504893524553-b855bce32c67?auto=format&fit=crop&w=800&q=80",
+    "type": "international"
+  },
+  {
+    "id": "dubai",
+    "name": "Dubai & Abu Dhabi",
+    "region": "Middle East",
+    "tag": "Custom Itinerary · Enquire",
+    "badge": "Luxury & Desert",
+    "image": "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=800&q=80",
+    "type": "international"
+  },
+  {
+    "id": "switzerland",
+    "name": "Switzerland Alps",
+    "region": "Europe",
+    "tag": "Custom Itinerary · Enquire",
+    "badge": "Alpine Scenic",
+    "image": "https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?auto=format&fit=crop&w=800&q=80",
+    "type": "international"
+  },
+  {
+    "id": "vietnam",
+    "name": "Vietnam & Cambodia",
+    "region": "Asia",
+    "tag": "Custom Itinerary · Enquire",
+    "badge": "Culture & Nature",
+    "image": "https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=800&q=80",
+    "type": "international"
+  },
+  {
+    "id": "kenya",
+    "name": "Kenya Safari",
+    "region": "Africa",
+    "tag": "Custom Itinerary · Enquire",
+    "badge": "Wild Wildlife",
+    "image": "https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&w=800&q=80",
+    "type": "international"
+  },
+  {
+    "id": "nepal",
+    "name": "Nepal Annapurna",
+    "region": "Asia",
+    "tag": "Custom Itinerary · Enquire",
+    "badge": "Himalayan Pass",
+    "image": "https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&w=800&q=80",
+    "type": "international"
+  },
+  {
+    "id": "bhutan",
+    "name": "Bhutan Tiger Nest",
+    "region": "Asia",
+    "tag": "Custom Itinerary · Enquire",
+    "badge": "Gross Happiness",
+    "image": "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800&q=80",
+    "type": "international"
+  },
+  {
+    "id": "norway",
+    "name": "Norway Fjords",
+    "region": "Europe",
+    "tag": "Custom Itinerary · Enquire",
+    "badge": "Fjord Trekking",
+    "image": "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80",
+    "type": "international"
+  },
+  {
+    "id": "maldives",
+    "name": "Maldives",
+    "region": "Asia",
+    "tag": "Custom Itinerary · Enquire",
+    "badge": "Overwater Villa",
+    "image": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80",
+    "type": "international"
+  },
+  {
+    "id": "newzealand",
+    "name": "New Zealand",
+    "region": "Oceania",
+    "tag": "Custom Itinerary · Enquire",
+    "badge": "Milford Sound",
+    "image": "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=800&q=80",
+    "type": "international"
+  },
+  {
+    "id": "thailand",
+    "name": "Thailand Islands",
+    "region": "Asia",
+    "tag": "Custom Itinerary · Enquire",
+    "badge": "Beach & Temples",
+    "image": "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?auto=format&fit=crop&w=800&q=80",
+    "type": "international"
+  },
+  {
+    "id": "srilanka",
+    "name": "Sri Lanka",
+    "region": "Asia",
+    "tag": "Custom Itinerary · Enquire",
+    "badge": "Tea Gardens",
+    "image": "https://images.unsplash.com/photo-1546708973-b339540b5162?auto=format&fit=crop&w=800&q=80",
+    "type": "international"
+  },
+  {
+    "id": "egypt",
+    "name": "Egypt Pyramids",
+    "region": "Africa",
+    "tag": "Custom Itinerary · Enquire",
+    "badge": "Nile Cruise",
+    "image": "https://images.unsplash.com/photo-1503177119275-0aa32b3a9368?auto=format&fit=crop&w=800&q=80",
+    "type": "international"
+  },
+  {
+    "id": "turkey",
+    "name": "Turkey Cappadocia",
+    "region": "Europe",
+    "tag": "Custom Itinerary · Enquire",
+    "badge": "Hot Air Balloon",
+    "image": "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=800&q=80",
+    "type": "international"
+  },
+  {
+    "id": "georgia",
+    "name": "Georgia Caucasus",
+    "region": "Europe",
+    "tag": "Custom Itinerary · Enquire",
+    "badge": "Kazbegi Peaks",
+    "image": "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800&q=80",
+    "type": "international"
+  },
+  {
+    "id": "singapore",
+    "name": "Singapore",
+    "region": "Asia",
+    "tag": "Custom Itinerary · Enquire",
+    "badge": "City & Nature",
+    "image": "https://images.unsplash.com/photo-1525625293386-3f8f99389edd?auto=format&fit=crop&w=800&q=80",
+    "type": "international"
+  },
+  {
+    "id": "italy",
+    "name": "Italy Dolomites",
+    "region": "Europe",
+    "tag": "Custom Itinerary · Enquire",
+    "badge": "Alpine Trails",
+    "image": "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?auto=format&fit=crop&w=800&q=80",
+    "type": "international"
+  },
+  {
+    "id": "france",
+    "name": "France Mont Blanc",
+    "region": "Europe",
+    "tag": "Custom Itinerary · Enquire",
+    "badge": "Chamonix Trek",
+    "image": "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=800&q=80",
+    "type": "international"
+  }
+]

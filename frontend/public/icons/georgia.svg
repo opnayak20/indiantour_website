@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <!-- Mountain ridge base line -->
+  <line x1="4" y1="58" x2="60" y2="58" />
+
+  <!-- Mount Kazbek / Caucasus Snowy Peaks (Dramatic Background) -->
+  <path d="M4 46 L18 18 L32 38 L48 14 L60 44" />
+  <!-- Snow crests on Mount Kazbek summit -->
+  <path d="M14 26 L18 18 L22 25" stroke-width="1.5" />
+  <path d="M44 22 L48 14 L52 21" stroke-width="1.5" />
+
+  <!-- Historic Gergeti Trinity Stone Church (Center Foreground) -->
+  <!-- Stone foundation & main hall -->
+  <rect x="20" y="42" width="26" height="15" rx="0.5" />
+  <!-- Gabled transept roof -->
+  <path d="M18 42 L33 30 L48 42 Z" />
+
+  <!-- Georgian Cylindrical Stone Drum Tower -->
+  <rect x="29" y="24" width="8" height="7" rx="0.5" />
+  <!-- Narrow arched windows on drum -->
+  <line x1="31" y1="26" x2="31" y2="29" stroke-width="1.5" />
+  <line x1="35" y1="26" x2="35" y2="29" stroke-width="1.5" />
+
+  <!-- Conical Georgian Stone Cupola Roof -->
+  <path d="M28 24 L33 14 L38 24 Z" />
+  <!-- Georgian Orthodox Cross Finial atop dome -->
+  <line x1="33" y1="14" x2="33" y2="9" stroke-width="2" />
+  <line x1="31" y1="11" x2="35" y2="11" stroke-width="1.5" />
+
+  <!-- Arched Portal Doorway -->
+  <path d="M30 57 V49 C30 47 36 47 36 49 V57" />
+  <!-- Stone Cross carving above church portal -->
+  <line x1="33" y1="36" x2="33" y2="40" stroke-width="1.5" />
+  <line x1="31" y1="38" x2="35" y2="38" stroke-width="1.5" />
+
+  <!-- Detached Historic Stone Belfry Tower (Left) -->
+  <rect x="10" y="44" width="8" height="13" rx="0.5" />
+  <!-- Belfry arched bell chamber -->
+  <path d="M12 44 V39 C12 37 16 37 16 39 V44" stroke-width="1.5" />
+  <!-- Belfry conical roof & cross -->
+  <path d="M9 39 L14 31 L19 39 Z" />
+  <line x1="14" y1="31" x2="14" y2="28" stroke-width="1.5" />
+</svg>

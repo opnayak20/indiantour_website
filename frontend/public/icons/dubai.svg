@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <!-- Ground foundation & plaza base -->
+  <line x1="8" y1="58" x2="56" y2="58" />
+  <rect x="14" y="55" width="36" height="3" rx="0.5" />
+
+  <!-- BURJ KHALIFA (World's Tallest Skyscraper) -->
+  <!-- Tier 1: Wide Y-shaped pedestal base (Level 1) -->
+  <path d="M22 55 V49 H42 V55" />
+  <line x1="26" y1="55" x2="26" y2="49" stroke-width="1.5" />
+  <line x1="38" y1="55" x2="38" y2="49" stroke-width="1.5" />
+
+  <!-- Tier 2: Stepped Setback Wing Left -->
+  <path d="M24 49 V43 H40 V49" />
+  <!-- Tier 3: Stepped Setback Wing Right -->
+  <path d="M25 43 V37 H39 V43" />
+  <!-- Tier 4 -->
+  <path d="M27 37 V31 H37 V37" />
+  <!-- Tier 5 -->
+  <path d="M28 31 V25 H36 V31" />
+  <!-- Tier 6 -->
+  <path d="M29 25 V19 H35 V25" />
+  <!-- Tier 7: Top spire tower -->
+  <path d="M30 19 V13 H34 V19" />
+
+  <!-- Needle Spire piercing sky -->
+  <line x1="32" y1="13" x2="32" y2="5" stroke-width="2" />
+  <circle cx="32" cy="4" r="1" fill="currentColor" />
+
+  <!-- Center vertical spine structure -->
+  <line x1="32" y1="13" x2="32" y2="49" stroke-width="1.5" />
+
+  <!-- Modern Dubai Skyline Elements (Flanking Modern Towers) -->
+  <!-- Left modern high-rise tower -->
+  <path d="M14 55 V44 H20 V55" stroke-width="1.5" />
+  <line x1="14" y1="44" x2="17" y2="40" stroke-width="1.5" />
+  <line x1="20" y1="44" x2="17" y2="40" stroke-width="1.5" />
+  <!-- Right modern tower -->
+  <path d="M44 55 V42 H50 V55" stroke-width="1.5" />
+  <path d="M44 42 C44 38 50 38 50 42" stroke-width="1.5" />
+
+  <!-- Elegant Crescent Moon (Dubai desert evening sky) -->
+  <path d="M48 10 C46 13 46 17 49 19 C46 19 43 17 43 14 C43 12 45 10 48 10 Z" fill="currentColor" fill-opacity="0.2" />
+</svg>
