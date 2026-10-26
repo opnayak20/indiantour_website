@@ -24,14 +24,111 @@ import {
 import LazyImage from './LazyImage';
 
 export default function DestinationPage({
-  destinationData,
+  destinationData: rawDestinationData,
   onSelectPackage,
   onNavigateHome,
   onNavigateDestination,
   onOpenEmiModal
 }) {
+  // Normalize data — handles both legacy format (categoriesList + packagesByCategory)
+  // and new auto-generated format (hero + allPackages + attractions[].img)
+  const destinationData = React.useMemo(() => {
+    if (!rawDestinationData) return rawDestinationData;
+    const d = { ...rawDestinationData };
+
+    // ── Hero fields ──────────────────────────────────────────────────────────
+    if (!d.heroTitle && d.hero?.title) {
+      d.heroTitle = `${d.hero.title} Tour Packages`;
+    }
+    if (!d.tagline && d.hero?.tagline) {
+      d.tagline = d.hero.tagline;
+    }
+    if (!d.heroImage && d.hero?.image) {
+      d.heroImage = d.hero.image;
+    }
+
+    // ── Activities — ensure each has an `image` field ────────────────────────
+    if (Array.isArray(d.activities)) {
+      d.activities = d.activities.map((act) => ({
+        ...act,
+        image: act.image || act.img || null,
+        name: act.name || act.title || '',
+        duration: act.duration || '',
+        price: act.price || null,
+      }));
+    }
+
+    // ── Attractions — map `img` → `image` ────────────────────────────────────
+    if (Array.isArray(d.attractions)) {
+      d.attractions = d.attractions.map((att) => ({
+        ...att,
+        image: att.image || att.img || null,
+        brief: att.brief || att.desc || att.description || '',
+      }));
+    }
+
+    // ── FAQs — normalize q/a → question/answer ────────────────────────────────
+    if (Array.isArray(d.faqs)) {
+      d.faqs = d.faqs.map((f, i) => ({
+        ...f,
+        id: f.id || `faq-${i}`,
+        question: f.question || f.q || '',
+        answer: f.answer || f.a || '',
+      }));
+    }
+
+    // ── Reviews — normalize img → avatar ─────────────────────────────────────
+    if (Array.isArray(d.reviews)) {
+      d.reviews = d.reviews.map((r) => ({
+        ...r,
+        avatar: r.avatar || r.img || null,
+      }));
+    }
+
+    // ── Package categories — build from allPackages if categoriesList missing ─
+    if (!d.categoriesList || d.categoriesList.length === 0) {
+      if (Array.isArray(d.allPackages) && d.allPackages.length > 0) {
+        // Group allPackages by their `category` or `type` field
+        const grouped = {};
+        d.allPackages.forEach((pkg) => {
+          const cat = pkg.category || pkg.type || 'tour_packages';
+          if (!grouped[cat]) grouped[cat] = [];
+          grouped[cat].push(pkg);
+        });
+
+        // Build categoriesList
+        const catLabelMap = {
+          group: { title: 'Group Trips', navLabel: 'Group Trip', iconType: 'group' },
+          honeymoon: { title: 'Honeymoon Packages', navLabel: 'Honeymoon', iconType: 'honeymoon' },
+          private: { title: 'Tour Packages', navLabel: 'Tour Package', iconType: 'tour' },
+          tour_packages: { title: 'Tour Packages', navLabel: 'Tour Package', iconType: 'tour' },
+          family: { title: 'Family Packages', navLabel: 'Family', iconType: 'tour' },
+          adventure: { title: 'Adventure Packages', navLabel: 'Adventure', iconType: 'tour' },
+        };
+
+        d.categoriesList = Object.keys(grouped).map((key) => ({
+          id: key,
+          title: catLabelMap[key]?.title || key.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase()),
+          navLabel: catLabelMap[key]?.navLabel || key,
+          iconType: catLabelMap[key]?.iconType || 'tour',
+        }));
+
+        d.packagesByCategory = grouped;
+
+        // Flat allPackages for the component's allPackages reference
+        d.allPackages = d.allPackages.map((pkg) => ({
+          ...pkg,
+          name: pkg.name || pkg.title || '',
+          coverImage: pkg.coverImage || pkg.images?.[0] || pkg.heroImages?.[0] || null,
+        }));
+      }
+    }
+
+    return d;
+  }, [rawDestinationData]);
+
   const [activeCategory, setActiveCategory] = useState(
-    destinationData?.categoriesList?.[0]?.id || 'tour_packages'
+    rawDestinationData?.categoriesList?.[0]?.id || rawDestinationData?.allPackages ? 'tour_packages' : 'tour_packages'
   );
   const [isAboutModalOpen, setIsAboutModalOpen] = useState(false);
   const [selectedFaqGroup, setSelectedFaqGroup] = useState('All');
@@ -46,10 +143,12 @@ export default function DestinationPage({
   // Reset scroll to top on destination change
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' });
-    if (destinationData?.categoriesList?.[0]?.id) {
-      setActiveCategory(destinationData.categoriesList[0].id);
+    const firstCat = destinationData?.categoriesList?.[0]?.id;
+    if (firstCat) {
+      setActiveCategory(firstCat);
     }
   }, [destinationData?.slug]);
+
 
   // Scroll to section handler
   const handleCategoryClick = (categoryId) => {
@@ -178,26 +277,7 @@ export default function DestinationPage({
         </div>
       </div>
 
-      {/* 2. Destination Banner Title */}
-      <div className="bg-gradient-to-b from-[#f8f9fa] to-white border-b border-gray-100 py-6 sm:py-10">
-        <div className="container mx-auto px-4 sm:px-6">
-          <div className="max-w-4xl">
-            <div className="inline-flex items-center gap-2 bg-[#fff1f2] border border-[#fecdd3] text-[#ec1d24] text-xs font-bold px-3 py-1 rounded-full mb-3">
-              <span className="w-2 h-2 rounded-full bg-[#ec1d24] animate-pulse"></span>
-              Verified Avian Experiences
-            </div>
-            <h1 className="text-2xl sm:text-4xl md:text-5xl font-black text-gray-950 tracking-tight mb-3">
-              {destinationData?.heroTitle || `${destinationData?.name} Tour Packages`}
-            </h1>
-            <p className="text-sm sm:text-base text-gray-600 max-w-3xl leading-relaxed">
-              {destinationData?.tagline ||
-                `Explore hand-crafted itineraries, top-rated stays, and hassle-free private and group experiences in ${destinationData?.name}.`}
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* 3. Sticky Category Navigation Bar (Avian Experiences exact style) */}
+      {/* 3. Sticky Category Navigation Bar (India Tour Experiences exact style) */}
       <div className="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-gray-200 shadow-xs">
         <div className="container mx-auto px-4 sm:px-6 py-3 flex items-center gap-2 sm:gap-3 overflow-x-auto no-scrollbar scroll-smooth">
           {(destinationData?.categoriesList || []).map((cat) => {
@@ -429,7 +509,7 @@ export default function DestinationPage({
           );
         })}
 
-        {/* 5. About Destination Box (Exact Avian Experiences Style) */}
+        {/* 5. About Destination Box (Exact India Tour Experiences Style) */}
         {destinationData?.about && (
           <section className="bg-[#f8f9fa] rounded-2xl sm:rounded-3xl p-5 sm:p-8 border border-gray-200/80 shadow-2xs">
             <h2 className="text-xl sm:text-2xl font-black text-gray-950 mb-3">
@@ -472,8 +552,12 @@ export default function DestinationPage({
                 >
                   <div className="h-44 w-full overflow-hidden bg-gray-100 relative">
                     <img
-                      src={act.image}
+                      src={act.image || '/hero-buddha.jpg'}
                       alt={act.name}
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = '/hero-buddha.jpg';
+                      }}
                       className="w-full h-full object-cover transition-transform group-hover:scale-108 duration-500"
                     />
                     <span className="absolute bottom-2 left-2 bg-black/60 backdrop-blur-md text-white text-[11px] font-bold px-2 py-0.5 rounded-full">
@@ -545,8 +629,12 @@ export default function DestinationPage({
                   <div className="h-40 sm:h-48 w-full overflow-hidden bg-gray-100 relative">
                     <img
                       loading="lazy"
-                      src={att.image}
+                      src={att.image || '/hero-buddha.jpg'}
                       alt={att.name}
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = '/hero-buddha.jpg';
+                      }}
                       className="w-full h-full object-cover transition-transform group-hover:scale-108 duration-500"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent flex items-end p-3">
@@ -659,7 +747,7 @@ export default function DestinationPage({
           </section>
         )}
 
-        {/* 9. Travellers Reviews Section (Exact Avian Experiences Style) */}
+        {/* 9. Travellers Reviews Section (Exact India Tour Experiences Style) */}
         {destinationData?.reviews?.length > 0 && (
           <section
             id="reviews"

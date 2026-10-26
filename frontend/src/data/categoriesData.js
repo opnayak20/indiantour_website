@@ -1,5 +1,10 @@
 export const categories = [
   {
+    "name": "Sri Lanka",
+    "slug": "sri-lanka",
+    "icon": "/icons/sri-lanka.svg"
+  },
+  {
     "name": "Meghalaya",
     "slug": "meghalaya",
     "icon": "/icons/meghalaya.svg"
@@ -60,29 +65,9 @@ export const categories = [
     "icon": "/icons/goa.svg"
   },
   {
-    "name": "Ladakh",
-    "slug": "ladakh",
-    "icon": "/icons/ladakh.svg"
-  },
-  {
-    "name": "Andaman",
-    "slug": "andaman",
-    "icon": "/icons/andaman.svg"
-  },
-  {
-    "name": "Dubai",
-    "slug": "dubai",
-    "icon": "/icons/dubai.svg"
-  },
-  {
-    "name": "Rajasthan",
-    "slug": "rajasthan",
-    "icon": "/icons/rajasthan.svg"
-  },
-  {
-    "name": "Uttarakhand",
-    "slug": "uttarakhand",
-    "icon": "/icons/uttarakhand.svg"
+    "name": "Sikkim",
+    "slug": "sikkim",
+    "icon": "/icons/sikkim.svg"
   },
   {
     "name": "Malaysia",
@@ -95,13 +80,38 @@ export const categories = [
     "icon": "/icons/georgia.svg"
   },
   {
-    "name": "Almaty",
-    "slug": "almaty",
-    "icon": "/icons/almaty.svg"
+    "name": "Andaman",
+    "slug": "andaman",
+    "icon": "/icons/andaman.svg"
+  },
+  {
+    "name": "Dubai",
+    "slug": "dubai",
+    "icon": "/icons/dubai.svg"
+  },
+  {
+    "name": "Kazakhstan",
+    "slug": "kazakhstan",
+    "icon": "/icons/kazakhstan.svg"
+  },
+  {
+    "name": "Rajasthan",
+    "slug": "rajasthan",
+    "icon": "/icons/rajasthan.svg"
+  },
+  {
+    "name": "Uttarakhand",
+    "slug": "uttarakhand",
+    "icon": "/icons/uttarakhand.svg"
   },
   {
     "name": "Uttar Pradesh",
     "slug": "uttar-pradesh",
     "icon": "/icons/uttar-pradesh.svg"
+  },
+  {
+    "name": "Ladakh",
+    "slug": "ladakh",
+    "icon": "/icons/ladakh.svg"
   }
 ];

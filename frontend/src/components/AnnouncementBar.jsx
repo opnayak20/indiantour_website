@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useCmsData } from '../data/cmsData';
 
 const STAGGER_MS = 22;
 const ENTER_DURATION = 2300;
@@ -6,54 +7,60 @@ const HOLD_DURATION = 3500;
 const SHINE_DURATION = 3200;
 const CYCLE_TOTAL = ENTER_DURATION + HOLD_DURATION + SHINE_DURATION; // 9000ms
 
-const PROMO_MESSAGES = [
-  {
-    desktop: [
-      { text: 'Get up to 6 months of ' },
-      { text: 'No Cost EMI', bold: true },
-      { text: ' on your trips  •  0% Interest  •  No Cards Required  •  ' },
-      { type: 'button', label: 'Learn More', action: 'emi' }
-    ],
-    mobile: [
-      { text: 'Get up to 6 months of ' },
-      { text: 'No Cost EMI', bold: true },
-      { text: ' on your trips  •  ' },
-      { type: 'button', label: 'Learn More', action: 'emi' }
-    ]
-  },
-  {
-    desktop: [
-      { text: 'Sale of the Season', bold: true },
-      { text: ' is live - extra value on every group trip  •  ' },
-      { type: 'button', label: 'Explore Now', action: 'sale' }
-    ],
-    mobile: [
-      { text: 'Sale of the Season', bold: true },
-      { text: ' is live  •  ' },
-      { type: 'button', label: 'Explore Now', action: 'sale' }
-    ]
-  },
-  {
-    desktop: [
-      { text: 'Special Offer: Flat 15% OFF', bold: true },
-      { text: ' on your first trip booking with code ' },
-      { text: 'FIRSTTRIP', bold: true },
-      { text: '  •  ' },
-      { type: 'button', label: 'Claim Offer', action: 'sale' }
-    ],
-    mobile: [
-      { text: 'Flat 15% OFF', bold: true },
-      { text: ' code ' },
-      { text: 'FIRSTTRIP  •  ', bold: true },
-      { type: 'button', label: 'Claim Offer', action: 'sale' }
-    ]
-  }
-];
-
 export default function AnnouncementBar({ onOpenEmiModal }) {
   const [promoIndex, setPromoIndex] = useState(0);
   const [isLeaving, setIsLeaving] = useState(false);
   const [animCycle, setAnimCycle] = useState(0);
+  const headerCms = useCmsData('header');
+  const annConfig = headerCms?.announcement;
+
+  if (annConfig && annConfig.enabled === false) {
+    return null;
+  }
+
+  const PROMO_MESSAGES = [
+    {
+      desktop: [
+        { text: annConfig?.text || 'Get up to 6 months of ' },
+        { text: annConfig?.highlight1 || 'No Cost EMI', bold: true },
+        { text: ` on your trips  •  ${annConfig?.highlight1 || '0% Interest'}  •  ${annConfig?.highlight2 || 'No Cards Required'}  •  ` },
+        { type: 'button', label: annConfig?.actionText || 'Learn More', action: annConfig?.actionType || 'emi' }
+      ],
+      mobile: [
+        { text: annConfig?.text ? annConfig.text.slice(0, 25) + '... ' : 'Get up to 6 months of ' },
+        { text: annConfig?.highlight1 || 'No Cost EMI', bold: true },
+        { text: '  •  ' },
+        { type: 'button', label: annConfig?.actionText || 'Learn More', action: annConfig?.actionType || 'emi' }
+      ]
+    },
+    {
+      desktop: [
+        { text: 'Sale of the Season', bold: true },
+        { text: ' is live - extra value on every group trip  •  ' },
+        { type: 'button', label: 'Explore Now', action: 'sale' }
+      ],
+      mobile: [
+        { text: 'Sale of the Season', bold: true },
+        { text: ' is live  •  ' },
+        { type: 'button', label: 'Explore Now', action: 'sale' }
+      ]
+    },
+    {
+      desktop: [
+        { text: 'Special Offer: Flat 15% OFF', bold: true },
+        { text: ' on your first trip booking with code ' },
+        { text: 'FIRSTTRIP', bold: true },
+        { text: '  •  ' },
+        { type: 'button', label: 'Claim Offer', action: 'sale' }
+      ],
+      mobile: [
+        { text: 'Flat 15% OFF', bold: true },
+        { text: ' code ' },
+        { text: 'FIRSTTRIP  •  ', bold: true },
+        { type: 'button', label: 'Claim Offer', action: 'sale' }
+      ]
+    }
+  ];
 
   useEffect(() => {
     setIsLeaving(false);

@@ -247,6 +247,35 @@ export const CategoryIcon = ({ slug, className = "w-7 h-7" }) => {
         </svg>
       );
 
+    case 'sri-lanka':
+      return (
+        <svg {...props}>
+          <path d="M12 42c0-8 6-12 12-12s12 4 12 12" />
+          <path d="M24 6v24 M16 14l8-8 8 8" />
+          <circle cx="24" cy="18" r="4" />
+          <path d="M6 42h36" />
+        </svg>
+      );
+
+    case 'sikkim':
+      return (
+        <svg {...props}>
+          <path d="M6 42l12-20 6 8 8-12 10 24z" />
+          <path d="M18 22l3 5 5-4 M32 18l3 5 4-3" />
+          <circle cx="24" cy="10" r="3" />
+        </svg>
+      );
+
+    case 'kazakhstan':
+      return (
+        <svg {...props}>
+          <path d="M6 42l15-24 8 11 13-17 4 30z M18 21l3 4 4-3 M35 22l3 4 3-2" />
+          <path d="M8 14l32 8" />
+          <path d="M22 17l1 4h6l1-4z M23 21h6v6h-6z M25 23h2" />
+          <path d="M10 42v-4 M10 38l3-3h-2l2-3-2 1z" />
+        </svg>
+      );
+
     default:
       return (
         <svg {...props}>

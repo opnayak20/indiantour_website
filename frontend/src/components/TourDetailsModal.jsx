@@ -14,6 +14,7 @@ import {
   FaRegCopy
 } from 'react-icons/fa6';
 import { API_BASE } from '../config/api';
+import { DESTINATIONS_DATA } from '../data/destinationsData';
 import LazyImage from './LazyImage';
 
 // Ticket Notch Scallop Curve SVG as Data URI (cloned exactly from reference)
@@ -38,13 +39,28 @@ export function getTourDetailsData(tour) {
     console.error('Error reading package overrides:', err);
   }
 
-  const effectiveTour = { ...(tour || {}), ...(overrides || {}) };
+  // Lookup full rich package from DESTINATIONS_DATA if tour has a matching slug, id, or title
+  let matchedTour = null;
+  const tourKey = (tour?.slug || tour?.id || tour?.title || tour?.name || '').toLowerCase();
+  if (DESTINATIONS_DATA) {
+    for (const dest of Object.values(DESTINATIONS_DATA)) {
+      if (dest && Array.isArray(dest.allPackages)) {
+        const found = dest.allPackages.find(
+          p => (p.slug && p.slug.toLowerCase() === tourKey) ||
+               (p.id && String(p.id).toLowerCase() === tourKey) ||
+               (p.title && p.title.toLowerCase() === (tour?.title || tour?.name || '').toLowerCase())
+        );
+        if (found) {
+          matchedTour = found;
+          break;
+        }
+      }
+    }
+  }
+
+  const effectiveTour = { ...(matchedTour || {}), ...(tour || {}), ...(overrides || {}) };
   const t = (effectiveTour?.title || effectiveTour?.name || '').toLowerCase();
-  const isJaisalmer = t.includes('jaisalmer') || t.includes('thar') || t.includes('desert');
-  const isMeghalaya = t.includes('meghalaya') || t.includes('kaziranga');
-  const isKashmir = t.includes('kashmir');
-  const isSpiti = t.includes('spiti');
-  const isLadakh = t.includes('ladakh') || t.includes('leh');
+  const isJaisalmer = (t.includes('jaisalmer') || t.includes('thar') || t.includes('desert')) && (!effectiveTour?.itinerary || effectiveTour.itinerary.length === 0);
 
   let baseData = null;
   if (isJaisalmer) {
@@ -89,25 +105,25 @@ Our Jaisalmer group trip from Ahmedabad runs for 3 days and 2 nights. You board 
         { title: 'Trip Leader included', desc: 'Experienced Leader' }
       ],
       heroImages: [
-        'https://img.avianexperiences.com/trek/d5b19425-cec1-4e3c-81bb-7f00f04f644d/Camel_Safari.jpg',
-        'https://img.avianexperiences.com/trek-memories/d30902d7-f575-4bc3-a483-32f64e67bcef/DSC00719.jpg',
-        'https://img.avianexperiences.com/trek/59b01d6e-0709-430d-9bdf-905a8b209d92/Bada_Bagh_Jaisalmer_5.jpg',
-        'https://img.avianexperiences.com/schedule/25a588e2-16f1-4916-981e-0e317380beae/Patwon_Ki_Haveli_Jaisalmer6.jpg',
-        'https://img.avianexperiences.com/trek/0d9ea3a2-36db-4a3d-a099-f8338d0160cd/DSC00297.jpg'
+        'https://img.indiatour.live/trek/d5b19425-cec1-4e3c-81bb-7f00f04f644d/Camel_Safari.jpg',
+        'https://img.indiatour.live/trek-memories/d30902d7-f575-4bc3-a483-32f64e67bcef/DSC00719.jpg',
+        'https://img.indiatour.live/trek/59b01d6e-0709-430d-9bdf-905a8b209d92/Bada_Bagh_Jaisalmer_5.jpg',
+        'https://img.indiatour.live/schedule/25a588e2-16f1-4916-981e-0e317380beae/Patwon_Ki_Haveli_Jaisalmer6.jpg',
+        'https://img.indiatour.live/trek/0d9ea3a2-36db-4a3d-a099-f8338d0160cd/DSC00297.jpg'
       ],
       memoriesImages: [
-        'https://img.avianexperiences.com/trek-memories/45a340c3-d15c-420a-869d-95ce9c76c9fa/DSC00297.jpg',
-        'https://img.avianexperiences.com/trek/dd74fd31-7d7c-4439-b5e1-1eeadb8c7d21/Jalsaimer_Fort6.jpg',
-        'https://img.avianexperiences.com/trek-memories/271e7d6f-a39a-4a64-a7d5-b52bf749a7b7/DSC00834.jpg',
-        'https://img.avianexperiences.com/trek/2a1f598b-227c-47cd-9e94-8241d02016c5/DSC00719.jpg',
-        'https://img.avianexperiences.com/trek-memories/c9c267ed-906c-4c39-abdc-8084739f3fa9/DSC01353.jpg'
+        'https://img.indiatour.live/trek-memories/45a340c3-d15c-420a-869d-95ce9c76c9fa/DSC00297.jpg',
+        'https://img.indiatour.live/trek/dd74fd31-7d7c-4439-b5e1-1eeadb8c7d21/Jalsaimer_Fort6.jpg',
+        'https://img.indiatour.live/trek-memories/271e7d6f-a39a-4a64-a7d5-b52bf749a7b7/DSC00834.jpg',
+        'https://img.indiatour.live/trek/2a1f598b-227c-47cd-9e94-8241d02016c5/DSC00719.jpg',
+        'https://img.indiatour.live/trek-memories/c9c267ed-906c-4c39-abdc-8084739f3fa9/DSC01353.jpg'
       ],
       itinerary: [
         {
           day: 0,
           title: 'Overnight journey from Ahmedabad to Jaisalmer',
           date: 'November 05, 2026',
-          img: 'https://img.avianexperiences.com/schedule/b6bb257e-2060-43bd-b14d-7ceeec528381/Atal_Bridge.jpg',
+          img: 'https://img.indiatour.live/schedule/b6bb257e-2060-43bd-b14d-7ceeec528381/Atal_Bridge.jpg',
           points: [
             'We start our journey via road towards Jaisalmer in the evening from Ahmedabad.',
             'Reporting at RTO Circle, Ahmedabad at approx. 8:00 PM.',
@@ -120,7 +136,7 @@ Our Jaisalmer group trip from Ahmedabad runs for 3 days and 2 nights. You board 
           day: 1,
           title: 'Arrival in Jaisalmer & City Sightseeing',
           date: 'November 06, 2026',
-          img: 'https://img.avianexperiences.com/schedule/25a588e2-16f1-4916-981e-0e317380beae/Patwon_Ki_Haveli_Jaisalmer6.jpg',
+          img: 'https://img.indiatour.live/schedule/25a588e2-16f1-4916-981e-0e317380beae/Patwon_Ki_Haveli_Jaisalmer6.jpg',
           points: [
             'Post an overnight journey from Ahmedabad, arrive at Jaisalmer in the morning.',
             'Pick up from Jaisalmer Bus Stop by Tempo Traveller / Taxi Vehicle.',
@@ -137,7 +153,7 @@ Our Jaisalmer group trip from Ahmedabad runs for 3 days and 2 nights. You board 
           day: 2,
           title: 'Departure for Sand Dunes via Bada Baugh & Kuldhara',
           date: 'November 07, 2026',
-          img: 'https://img.avianexperiences.com/schedule/cad2f822-8e58-4387-a59c-0bc0146de8d5/Bada_Bagh_Jaisalmer_5.jpg',
+          img: 'https://img.indiatour.live/schedule/cad2f822-8e58-4387-a59c-0bc0146de8d5/Bada_Bagh_Jaisalmer_5.jpg',
           points: [
             'Start your day with a tasty breakfast at the Jaisalmer hotel.',
             'Morning visit to Bada Bagh – historic cenotaphs of Jaisalmer rulers surrounded by open desert.',
@@ -155,7 +171,7 @@ Our Jaisalmer group trip from Ahmedabad runs for 3 days and 2 nights. You board 
           day: 3,
           title: 'Departure for Jaisalmer & Visit Longewala, Tanot Mata Mandir',
           date: 'November 08, 2026',
-          img: 'https://img.avianexperiences.com/schedule/422499fa-ca17-4cef-82a9-bddbced75134/tanot-mata-temple_2.jpg',
+          img: 'https://img.indiatour.live/schedule/422499fa-ca17-4cef-82a9-bddbced75134/tanot-mata-temple_2.jpg',
           points: [
             'Breakfast at the Desert Camp and check out.',
             'Drive to the historic Longewala battlefield, immortalized during the 1971 Indo-Pak war.',
@@ -171,7 +187,7 @@ Our Jaisalmer group trip from Ahmedabad runs for 3 days and 2 nights. You board 
           day: 4,
           title: 'Arrival at Ahmedabad',
           date: 'November 09, 2026',
-          img: 'https://img.avianexperiences.com/schedule/fb5f3b45-7110-49b7-9501-69970b76fe74/Screenshot_2026-09-26_at_7.13.44_PM.png',
+          img: 'https://img.indiatour.live/schedule/fb5f3b45-7110-49b7-9501-69970b76fe74/Screenshot_2026-09-26_at_7.13.44_PM.png',
           points: [
             'Arrive in Ahmedabad early in the morning (around 7:00 AM - 8:00 AM).',
             'Conclude this wonderful desert journey filled with cherished memories, new group friends, and countless photos!'
@@ -207,7 +223,7 @@ Our Jaisalmer group trip from Ahmedabad runs for 3 days and 2 nights. You board 
           regularPrice: 10800,
           discountPrice: 7800,
           vehicle: 'AC Sleeper Bus + Tempo Traveller',
-          img: 'https://img.avianexperiences.com/package/0d79e635-bcc4-40f4-9403-000ab7db6929/Atal_Bridge.jpg'
+          img: 'https://img.indiatour.live/package/0d79e635-bcc4-40f4-9403-000ab7db6929/Atal_Bridge.jpg'
         },
         {
           id: 'jaisalmer',
@@ -216,7 +232,7 @@ Our Jaisalmer group trip from Ahmedabad runs for 3 days and 2 nights. You board 
           regularPrice: 7800,
           discountPrice: 5800,
           vehicle: 'Tempo Traveller / SUV (Ex-Jaisalmer)',
-          img: 'https://img.avianexperiences.com/package/ceb4e5f4-13af-4eb8-bb57-e9dc14b9f6ec/Atal_Bridge_copy.jpg'
+          img: 'https://img.indiatour.live/package/ceb4e5f4-13af-4eb8-bb57-e9dc14b9f6ec/Atal_Bridge_copy.jpg'
         }
       ],
       sharingOptions: [
@@ -237,14 +253,14 @@ Our Jaisalmer group trip from Ahmedabad runs for 3 days and 2 nights. You board 
         { date: '26 Nov', day: 'Thursday', fullDate: '26 Nov - 30 Nov', status: 'Sold Out', statusClass: 'text-red-600 border-red-200 bg-red-50' }
       ],
       attractions: [
-        { name: 'Jaisalmer Fort', tag: 'The Golden Wonder of Rajasthan', img: 'https://img.avianexperiences.com/attractions/b6dd1b9a-851b-4ea8-8d16-e97dfc846356' },
-        { name: 'Patwon ki Haveli', tag: 'Rajasthan’s Architectural Marvel', img: 'https://img.avianexperiences.com/attractions/8a11b056-9594-404b-988f-322938c5af87' },
-        { name: 'Salim Singh Ki Haweli', tag: 'Royal mansion famed for balconies', img: 'https://img.avianexperiences.com/attractions/a738907b-ee80-47dd-8d6c-93c396e60362' },
-        { name: 'Nathmal Ki Haveli', tag: 'A Gem of Rajput Stone Craft', img: 'https://img.avianexperiences.com/attractions/b4292090-0e1e-4cba-82f2-654a7765b2bc' },
-        { name: 'Gadisar Lake', tag: 'Historic desert reservoir & sunset', img: 'https://img.avianexperiences.com/attractions/ec8f85d8-9849-4224-9fa2-888bf85696c3' },
-        { name: 'Bada Bagh', tag: 'Royal Cenotaphs on the Sand Ridge', img: 'https://img.avianexperiences.com/trek/59b01d6e-0709-430d-9bdf-905a8b209d92/Bada_Bagh_Jaisalmer_5.jpg' },
-        { name: 'Kuldhara Ghost Village', tag: 'Abandoned Paliwal Brahmin heritage', img: 'https://img.avianexperiences.com/attractions/8a11b056-9594-404b-988f-322938c5af87' },
-        { name: 'Sam Sand Dunes', tag: 'Desert camping, camel safari & campfire', img: 'https://img.avianexperiences.com/trek/d5b19425-cec1-4e3c-81bb-7f00f04f644d/Camel_Safari.jpg' }
+        { name: 'Jaisalmer Fort', tag: 'The Golden Wonder of Rajasthan', img: 'https://img.indiatour.live/attractions/b6dd1b9a-851b-4ea8-8d16-e97dfc846356' },
+        { name: 'Patwon ki Haveli', tag: 'Rajasthan’s Architectural Marvel', img: 'https://img.indiatour.live/attractions/8a11b056-9594-404b-988f-322938c5af87' },
+        { name: 'Salim Singh Ki Haweli', tag: 'Royal mansion famed for balconies', img: 'https://img.indiatour.live/attractions/a738907b-ee80-47dd-8d6c-93c396e60362' },
+        { name: 'Nathmal Ki Haveli', tag: 'A Gem of Rajput Stone Craft', img: 'https://img.indiatour.live/attractions/b4292090-0e1e-4cba-82f2-654a7765b2bc' },
+        { name: 'Gadisar Lake', tag: 'Historic desert reservoir & sunset', img: 'https://img.indiatour.live/attractions/ec8f85d8-9849-4224-9fa2-888bf85696c3' },
+        { name: 'Bada Bagh', tag: 'Royal Cenotaphs on the Sand Ridge', img: 'https://img.indiatour.live/trek/59b01d6e-0709-430d-9bdf-905a8b209d92/Bada_Bagh_Jaisalmer_5.jpg' },
+        { name: 'Kuldhara Ghost Village', tag: 'Abandoned Paliwal Brahmin heritage', img: 'https://img.indiatour.live/attractions/8a11b056-9594-404b-988f-322938c5af87' },
+        { name: 'Sam Sand Dunes', tag: 'Desert camping, camel safari & campfire', img: 'https://img.indiatour.live/trek/d5b19425-cec1-4e3c-81bb-7f00f04f644d/Camel_Safari.jpg' }
       ],
       quickInfoItems: [
         {
@@ -296,7 +312,7 @@ Our Jaisalmer group trip from Ahmedabad runs for 3 days and 2 nights. You board 
           type: 'private',
           tourBooked: 'Jaisalmer Group Trip',
           rating: 5,
-          img: 'https://img.avianexperiences.com/review/186bd742-1ed6-409b-8a03-e403d8bf8fe5/1.jpeg',
+          img: 'https://img.indiatour.live/review/186bd742-1ed6-409b-8a03-e403d8bf8fe5/1.jpeg',
           review: 'The trip was exceptionally well-organized! The desert camp experience at Sam Sand Dunes and the sunset camel ride were unforgettable. The trip captain kept everyone engaged and energized.'
         },
         {
@@ -326,201 +342,394 @@ Our Jaisalmer group trip from Ahmedabad runs for 3 days and 2 nights. You board 
       ]
     };
   } else {
-    // Dynamic Generator for other destinations (Meghalaya, Kashmir, Spiti, etc.)
+    // Dynamic Generator for destinations (Meghalaya, Kashmir, Thailand, Maldives, etc.)
     const destName = effectiveTour?.title || effectiveTour?.name || 'Exotic Tour Package';
     const durationStr = effectiveTour?.duration || '6 Days 5 Nights';
-    const baseP = effectiveTour?.price || effectiveTour?.basePrice || 18999;
-    const origP = effectiveTour?.originalPrice || effectiveTour?.original_price || baseP + 4000;
-    const saveP = Math.max(2000, origP - baseP);
+    const baseP = Number(effectiveTour?.price || effectiveTour?.basePrice || 18999);
+    const origP = Number(effectiveTour?.originalPrice || effectiveTour?.original_price || baseP + 4000);
+    const saveP = Number(effectiveTour?.saveAmount || effectiveTour?.discount || Math.max(2000, origP - baseP));
 
-    const images = (effectiveTour?.images && effectiveTour.images.length >= 5)
-      ? effectiveTour.images
-      : [
-          effectiveTour?.image || 'https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&w=1200&q=80',
-          'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80',
-          'https://images.unsplash.com/photo-1581793745862-99fde7fa73d2?auto=format&fit=crop&w=800&q=80',
-          'https://images.unsplash.com/photo-1595815771614-ade9d652a65d?auto=format&fit=crop&w=800&q=80',
-          'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80'
+    const images = (effectiveTour?.heroImages && effectiveTour.heroImages.length > 0)
+      ? effectiveTour.heroImages
+      : (effectiveTour?.images && effectiveTour.images.length >= 5)
+        ? effectiveTour.images
+        : [
+            effectiveTour?.coverImage || effectiveTour?.image || 'https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&w=1200&q=80',
+            'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80',
+            'https://images.unsplash.com/photo-1581793745862-99fde7fa73d2?auto=format&fit=crop&w=800&q=80',
+            'https://images.unsplash.com/photo-1595815771614-ade9d652a65d?auto=format&fit=crop&w=800&q=80',
+            'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80'
+          ];
+
+    // Format batches dynamically
+    let formattedBatches = [];
+    let dynamicMonths = [];
+
+    if (Array.isArray(effectiveTour?.batches) && effectiveTour.batches.length > 0) {
+      const monthMap = new Map();
+      formattedBatches = effectiveTour.batches.map((b, idx) => {
+        if (b.fullDate && b.status && b.date) return b;
+
+        const start = b.startDate ? new Date(b.startDate) : null;
+        const end = b.endDate ? new Date(b.endDate) : null;
+        const startStr = start && !isNaN(start) 
+          ? start.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' }) 
+          : `Batch ${idx + 1}`;
+        const endStr = end && !isNaN(end) 
+          ? end.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' }) 
+          : '';
+        const dayStr = start && !isNaN(start) 
+          ? start.toLocaleDateString('en-US', { weekday: 'long' }) 
+          : 'Day';
+        const monthKey = start && !isNaN(start) 
+          ? start.toLocaleDateString('en-US', { month: 'long', year: 'numeric' }) 
+          : 'Upcoming';
+
+        monthMap.set(monthKey, (monthMap.get(monthKey) || 0) + 1);
+
+        const isSoldOut = b.seats === 0;
+        const isFillingFast = b.isFast || (b.seats > 0 && b.seats <= 15);
+        const status = isSoldOut ? 'Sold Out' : (isFillingFast ? 'Filling Fast' : 'Available');
+        const statusClass = isSoldOut 
+          ? 'text-red-600 border-red-200 bg-red-50' 
+          : (isFillingFast ? 'text-amber-600 border-amber-200 bg-amber-50' : 'text-green border-green-200 bg-green-50');
+
+        return {
+          date: startStr,
+          day: dayStr,
+          fullDate: endStr ? `${startStr} - ${endStr}` : startStr,
+          status,
+          statusClass,
+          monthKey
+        };
+      });
+
+      dynamicMonths = Array.from(monthMap.entries()).map(([name, count]) => ({ name, count }));
+    }
+
+    if (dynamicMonths.length === 0) {
+      dynamicMonths = [
+        { name: 'November 2026', count: 4 },
+        { name: 'December 2026', count: 5 },
+        { name: 'January 2027', count: 4 },
+        { name: 'February 2027', count: 4 }
+      ];
+    }
+
+    if (formattedBatches.length === 0) {
+      formattedBatches = [
+        { date: '05 Nov', day: 'Thursday', fullDate: '05 Nov - 10 Nov', status: 'Available', statusClass: 'text-green border-green-200 bg-green-50', monthKey: 'November 2026' },
+        { date: '15 Nov', day: 'Sunday', fullDate: '15 Nov - 20 Nov', status: 'Filling Fast', statusClass: 'text-amber-600 border-amber-200 bg-amber-50', monthKey: 'November 2026' },
+        { date: '25 Nov', day: 'Wednesday', fullDate: '25 Nov - 30 Nov', status: 'Available', statusClass: 'text-green border-green-200 bg-green-50', monthKey: 'November 2026' },
+        { date: '05 Dec', day: 'Saturday', fullDate: '05 Dec - 10 Dec', status: 'Available', statusClass: 'text-green border-green-200 bg-green-50', monthKey: 'December 2026' }
+      ];
+    }
+
+    // Dynamic package cities per destination
+    let packageCities = effectiveTour?.packageCities;
+    if (!Array.isArray(packageCities) || packageCities.length === 0) {
+      if (t.includes('meghalaya') || t.includes('kaziranga')) {
+        packageCities = [
+          {
+            id: 'guwahati',
+            name: 'Guwahati (Standard)',
+            duration: durationStr,
+            regularPrice: origP,
+            discountPrice: baseP,
+            vehicle: 'Dedicated AC Tempo Traveller / SUV (Ex-Guwahati)',
+            img: images[0]
+          },
+          {
+            id: 'shillong',
+            name: 'Shillong (Direct Join)',
+            duration: durationStr,
+            regularPrice: origP - 2000,
+            discountPrice: baseP - 2000,
+            vehicle: 'Dedicated SUV (Ex-Shillong)',
+            img: images[1] || images[0]
+          }
         ];
+      } else if (t.includes('kashmir')) {
+        packageCities = [
+          {
+            id: 'srinagar',
+            name: 'Srinagar (Ex-Airport)',
+            duration: durationStr,
+            regularPrice: origP,
+            discountPrice: baseP,
+            vehicle: 'Dedicated Innova / Tempo Traveller',
+            img: images[0]
+          },
+          {
+            id: 'delhi',
+            name: 'Delhi (Via Train/Flight)',
+            duration: durationStr,
+            regularPrice: origP + 3000,
+            discountPrice: baseP + 3000,
+            vehicle: 'Train / Flight + Tempo Traveller',
+            img: images[1] || images[0]
+          }
+        ];
+      } else if (t.includes('maldives')) {
+        packageCities = [
+          {
+            id: 'male',
+            name: 'Male (Velana Airport Pickup)',
+            duration: durationStr,
+            regularPrice: origP,
+            discountPrice: baseP,
+            vehicle: 'Speedboat / Seaplane Transfer',
+            img: images[0]
+          },
+          {
+            id: 'india',
+            name: 'Mumbai / Delhi (With Return Flights)',
+            duration: durationStr,
+            regularPrice: origP + 18000,
+            discountPrice: baseP + 18000,
+            vehicle: 'Return Flights + Speedboat Transfer',
+            img: images[1] || images[0]
+          }
+        ];
+      } else if (t.includes('thailand')) {
+        packageCities = [
+          {
+            id: 'bangkok',
+            name: 'Bangkok (Airport Pickup)',
+            duration: durationStr,
+            regularPrice: origP,
+            discountPrice: baseP,
+            vehicle: 'AC Tourist Coach & Speedboat',
+            img: images[0]
+          },
+          {
+            id: 'phuket',
+            name: 'Phuket (Island Gateway)',
+            duration: durationStr,
+            regularPrice: origP + 2000,
+            discountPrice: baseP + 2000,
+            vehicle: 'AC Coach & Speedboat Ferry',
+            img: images[1] || images[0]
+          }
+        ];
+      } else {
+        packageCities = [
+          {
+            id: 'standard',
+            name: 'Standard Route',
+            duration: durationStr,
+            regularPrice: origP,
+            discountPrice: baseP,
+            vehicle: 'Tempo Traveller / Dedicated SUV',
+            img: images[0]
+          }
+        ];
+      }
+    }
+
+    let sharingOptions = effectiveTour?.sharingOptions;
+    if (!Array.isArray(sharingOptions) || sharingOptions.length === 0) {
+      sharingOptions = [
+        { id: 'quad', name: 'Quad Sharing', regular: origP, discounted: baseP, off: saveP },
+        { id: 'triple', name: 'Triple Sharing', regular: origP + 1200, discounted: baseP + 1200, off: saveP },
+        { id: 'double', name: 'Double Sharing', regular: origP + 2500, discounted: baseP + 2500, off: saveP }
+      ];
+    }
+
+    // Dynamic Places to Visit
+    const placesToVisit = (effectiveTour?.placesToVisit && effectiveTour.placesToVisit.length > 0)
+      ? effectiveTour.placesToVisit
+      : [
+          { name: 'Panoramic Viewpoints & Mountain Passes', desc: 'Marvel at dramatic natural vistas and pristine valley horizons with curated photo halts.' },
+          { name: 'Heritage Landmarks & Cultural Sanctuaries', desc: 'Explore centuries-old shrines, architecture, and vibrant local communities.' },
+          { name: 'Crystal Rivers & Nature Trails', desc: 'Walk along untouched forest paths and enjoy tranquil waterside moments.' }
+        ];
+
+    // Dynamic Attractions
+    const attractions = (effectiveTour?.attractions && effectiveTour.attractions.length > 0)
+      ? effectiveTour.attractions
+      : placesToVisit.slice(0, 8).map((p, idx) => ({
+          name: p.name,
+          tag: p.desc || 'Iconic Sightseeing Landmark',
+          img: p.img || images[idx % images.length]
+        }));
+
+    // Dynamic Itinerary
+    let itinerary = [];
+    if (Array.isArray(effectiveTour?.itinerary) && effectiveTour.itinerary.length > 0) {
+      itinerary = effectiveTour.itinerary.map((d, idx) => ({
+        day: d.day !== undefined ? d.day : idx + 1,
+        title: d.title || d.brief || `Day ${idx + 1}`,
+        date: d.date || `Day ${d.day !== undefined ? d.day : idx + 1}`,
+        img: d.img || images[idx % images.length],
+        points: Array.isArray(d.points) && d.points.length > 0 ? d.points : [d.brief || d.title],
+        stay: d.stay || '🏨 Verified Premium Accommodation',
+        meals: d.meals || '🍽️ Breakfast & Dinner Included'
+      }));
+    } else {
+      itinerary = [
+        {
+          day: 1,
+          title: `Arrival & Welcome at ${destName}`,
+          date: 'Day 1',
+          img: images[0],
+          points: [
+            'Arrive at the destination reporting hub and meet your expedition captain.',
+            'Check-in to your premium boutique stay and freshen up.',
+            'Evening orientation session, group introductions, and welcome dinner.'
+          ],
+          stay: '🏨 Deluxe Boutique Hotel',
+          meals: '🍽️ Dinner Included'
+        },
+        {
+          day: 2,
+          title: 'Full Day Iconic Sightseeing & Trail Exploration',
+          date: 'Day 2',
+          img: images[1] || images[0],
+          points: [
+            'Wake up to fresh morning air and hearty breakfast.',
+            'Embark on guided sightseeing of the most iconic landscapes and heritage landmarks.',
+            'Capture stunning photographs at prime scenic viewpoints.'
+          ],
+          stay: '🏨 Deluxe Boutique Hotel',
+          meals: '🍽️ Breakfast & Dinner Included'
+        },
+        {
+          day: 3,
+          title: 'Offbeat Adventure & Cultural Immersion',
+          date: 'Day 3',
+          img: images[2] || images[0],
+          points: [
+            'Venture into scenic valleys, local markets, and cultural landmarks.',
+            'Interaction with local communities and sampling traditional treats.',
+            'Evening campfire and bonding session under starry skies.'
+          ],
+          stay: '⛺ Scenic Camp / Heritage Resort',
+          meals: '🍽️ Breakfast & Dinner Included'
+        },
+        {
+          day: 4,
+          title: 'Lakeside Excursion & Scenic Trekking',
+          date: 'Day 4',
+          img: images[3] || images[0],
+          points: [
+            'Visit stunning water bodies and nature trails.',
+            'Experience peaceful serene moments away from city hustle.',
+            'Buffet dinner with regional flavors.'
+          ],
+          stay: '🏨 Deluxe Boutique Stay',
+          meals: '🍽️ Breakfast & Dinner Included'
+        },
+        {
+          day: 5,
+          title: 'Final Sunrise & Departure with Memories',
+          date: 'Day 5',
+          img: images[4] || images[0],
+          points: [
+            'Enjoy final sunrise and breakfast.',
+            'Check out and transfer to departure hub with bagful of memories and lifelong friendships.'
+          ],
+          stay: 'Tour Concludes',
+          meals: '🍽️ Breakfast Included'
+        }
+      ];
+    }
 
     baseData = {
       title: destName,
-      subtitle: effectiveTour?.route || effectiveTour?.subtitle || 'Handcrafted Group Expedition',
+      subtitle: effectiveTour?.route || effectiveTour?.subtitle || effectiveTour?.tagline || 'Handcrafted Group Expedition',
       duration: durationStr,
-    categoryBadge: 'Group Trip',
-    basePrice: baseP,
-    originalPrice: origP,
-    saveAmount: saveP,
-    routeSummary: `Curated ${durationStr} expedition with premium stay and verified trip captain`,
-    overviewText: `${destName} is one of India's most breathtaking travel experiences. Discover jaw-dropping landscapes, authentic local heritage, and memorable group camaraderie.
+      categoryBadge: effectiveTour?.categoryBadge || (effectiveTour?.category === 'group' ? 'Group Trip' : 'Tour Package'),
+      basePrice: baseP,
+      originalPrice: origP,
+      saveAmount: saveP,
+      routeSummary: effectiveTour?.routeSummary || effectiveTour?.location || `Curated ${durationStr} expedition with verified stay and trip captain`,
+      overviewText: effectiveTour?.overviewText || effectiveTour?.overview || `${destName} is one of the most breathtaking travel destinations. Discover jaw-dropping landscapes, authentic local heritage, and memorable group camaraderie.
 
 Our ${durationStr} group package takes care of verified stays, daily breakfasts and dinners, experiential sightseeing, and an expert trip captain from start to finish.`,
-    placesToVisit: [
-      { name: 'Panoramic Viewpoints & Mountain Passes', desc: 'Marvel at dramatic mountain vistas and pristine valley horizons with curated photo halts.' },
-      { name: 'Heritage Landmarks & Cultural Sanctuaries', desc: 'Explore centuries-old monasteries, shrines, and vibrant tribal villages.' },
-      { name: 'Crystal Rivers & Nature Trails', desc: 'Walk along untouched forest paths and enjoy tranquil lakeside moments.' }
-    ],
-    thingsToDo: [
-      { name: 'Campfire & Acoustic Evenings', desc: 'Unwind under blanket of stars with acoustic tunes and laughter.' },
-      { name: 'Local Gastronomy Tastings', desc: 'Sample authentic regional dishes and freshly brewed mountain teas.' },
-      { name: 'Cultural Village Walks', desc: 'Interact with warm locals and learn traditional ways of living.' }
-    ],
-    travelTips: [
-      { name: 'Pack suitable layers', desc: 'Check seasonal temperatures and carry adequate thermals or windproof jackets.' },
-      { name: 'Sturdy footwear', desc: 'Comfortable hiking shoes or walking sneakers are recommended.' },
-      { name: 'Essential IDs & permits', desc: 'Carry valid photo ID for verification at check-posts and permits.' }
-    ],
-    perks: [
-      { title: 'Stay included', desc: 'Handpicked Stays' },
-      { title: 'Meals included', desc: 'Breakfast & Dinner' },
-      { title: 'Sightseeing included', desc: 'Curated Route' },
-      { title: 'Trip Leader included', desc: 'Expedition Captain' }
-    ],
-    heroImages: images.slice(0, 5),
-    memoriesImages: images,
-    itinerary: [
-      {
-        day: 0,
-        title: `Arrival & Welcome at ${destName}`,
-        date: 'Day 0',
-        img: images[0],
-        points: [
-          'Arrive at the destination reporting hub and meet your expedition captain.',
-          'Check-in to your premium boutique stay and freshen up.',
-          'Evening orientation session, group introductions, and welcome dinner.'
-        ],
-        stay: '🏨 Deluxe Boutique Hotel',
-        meals: '🍽️ Dinner Included'
-      },
-      {
-        day: 1,
-        title: 'Full Day Iconic Sightseeing & Trail Exploration',
-        date: 'Day 1',
-        img: images[1] || images[0],
-        points: [
-          'Wake up to fresh morning air and hearty breakfast.',
-          'Embark on guided sightseeing of the most iconic landscapes and heritage landmarks.',
-          'Capture stunning photographs at prime scenic viewpoints.'
-        ],
-        stay: '🏨 Deluxe Boutique Hotel',
-        meals: '🍽️ Breakfast & Dinner Included'
-      },
-      {
-        day: 2,
-        title: 'Offbeat Adventure & Cultural Immersion',
-        date: 'Day 2',
-        img: images[2] || images[0],
-        points: [
-          'Venture into scenic valleys, local markets, and cultural landmarks.',
-          'Interaction with local communities and sampling traditional treats.',
-          'Evening campfire and bonding session under starry skies.'
-        ],
-        stay: '⛺ Scenic Camp / Heritage Resort',
-        meals: '🍽️ Breakfast & Dinner Included'
-      },
-      {
-        day: 3,
-        title: 'Lakeside Excursion & Scenic Trekking',
-        date: 'Day 3',
-        img: images[3] || images[0],
-        points: [
-          'Visit stunning water bodies and nature trails.',
-          'Experience peaceful serene moments away from city hustle.',
-          'Buffet dinner with regional flavors.'
-        ],
-        stay: '🏨 Deluxe Boutique Stay',
-        meals: '🍽️ Breakfast & Dinner Included'
-      },
-      {
-        day: 4,
-        title: 'Final Sunrise & Departure with Memories',
-        date: 'Day 4',
-        img: images[4] || images[0],
-        points: [
-          'Enjoy final sunrise and breakfast.',
-          'Check out and transfer to departure hub with bagful of memories and lifelong friendships.'
-        ],
-        stay: 'Tour Concludes',
-        meals: '🍽️ Breakfast Included'
-      }
-    ],
-    inclusions: [
-      'Accommodation in handpicked hotels & scenic camps',
-      'Breakfast and dinner as specified in itinerary',
-      'Private vehicle for all transfers and curated sightseeing',
-      'Experienced and certified Trip Captain throughout the expedition',
-      'All toll taxes, parking fees, and driver allowances',
-      'First aid kit and oxygen support on high-altitude circuits'
-    ],
-    exclusions: [
-      '5% GST on the total package billing',
-      'Airfare or train fare to and from destination',
-      'Lunch and any extra personal refreshments',
-      'Optional adventure activities, entry tickets, and permits',
-      'Personal medical expenses or emergency evacuation costs'
-    ],
-    packageCities: [
-      {
-        id: 'standard',
-        name: 'Standard Route',
-        duration: durationStr,
-        regularPrice: origP,
-        discountPrice: baseP,
-        vehicle: 'Tempo Traveller / Dedicated SUV',
-        img: images[0]
-      }
-    ],
-    sharingOptions: [
-      { id: 'quad', name: 'Quad Sharing', regular: origP - 1000, discounted: baseP - 1000, off: saveP },
-      { id: 'triple', name: 'Triple Sharing', regular: origP, discounted: baseP, off: saveP },
-      { id: 'double', name: 'Double Sharing', regular: origP + 2000, discounted: baseP + 2000, off: saveP }
-    ],
-    months: [
-      { name: 'November 2026', count: 4 },
-      { name: 'December 2026', count: 4 },
-      { name: 'January 2027', count: 4 },
-      { name: 'February 2027', count: 4 }
-    ],
-    batches: [
-      { date: '05 Nov', day: 'Thursday', fullDate: '05 Nov - 10 Nov', status: 'Available', statusClass: 'text-green border-green-200 bg-green-50' },
-      { date: '15 Nov', day: 'Sunday', fullDate: '15 Nov - 20 Nov', status: 'Filling Fast', statusClass: 'text-amber-600 border-amber-200 bg-amber-50' },
-      { date: '25 Nov', day: 'Wednesday', fullDate: '25 Nov - 30 Nov', status: 'Available', statusClass: 'text-green border-green-200 bg-green-50' },
-      { date: '05 Dec', day: 'Saturday', fullDate: '05 Dec - 10 Dec', status: 'Available', statusClass: 'text-green border-green-200 bg-green-50' }
-    ],
-    attractions: [
-      { name: 'Scenic Valley Viewpoint', tag: 'Panoramic Himalayan vistas', img: images[0] },
-      { name: 'Ancient Heritage Shrine', tag: 'Centuries of rich local spirituality', img: images[1] },
-      { name: 'Crystal River Sanctuary', tag: 'Tranquil glacial waters and alpine woods', img: images[2] },
-      { name: 'Artisan Village Trail', tag: 'Handmade crafts, woven shawls & smiles', img: images[3] }
-    ],
-    quickInfoItems: [
-      { title: 'Things to Carry', content: 'Warm layers, windbreaker jacket, sunscreen, sturdy walking sneakers, water bottle, and personal medical kit.' },
-      { title: 'Weather & Best Time', content: 'Pleasant temperatures during the day and crisp mountain breeze during evening.' },
-      { title: 'Safety Guidelines', content: 'Certified guides, verified accommodations, and 24/7 dedicated backend support.' }
-    ],
-    faqs: [
-      { q: `What is included in the ${destName} trip?`, a: 'The package covers premium stay, breakfast & dinner, transfers in comfortable vehicles, and an experienced trip captain.' },
-      { q: 'Is it suitable for solo travelers?', a: 'Yes! 50% of our group trip travelers join solo. It is extremely welcoming, safe, and social.' }
-    ],
-    reviews: [
-      {
-        name: 'Rohan Sharma',
-        type: 'solo',
-        tourBooked: destName,
-        rating: 5,
-        img: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80',
-        review: `Unbelievable journey to ${destName}! The group leader was phenomenal and the accommodations were top tier.`
-      },
-      {
-        name: 'Ananya Verma',
-        type: 'group',
-        tourBooked: destName,
-        rating: 5,
-        img: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&q=80',
-        review: 'Superb coordination, hygienic food, and fantastic group vibes. Will definitely travel with India Tour again!'
-      }
-    ]
-  };
+      placesToVisit,
+      thingsToDo: (effectiveTour?.thingsToDo && effectiveTour.thingsToDo.length > 0)
+        ? effectiveTour.thingsToDo
+        : [
+            { name: 'Campfire & Acoustic Evenings', desc: 'Unwind under blanket of stars with acoustic tunes and laughter.' },
+            { name: 'Local Gastronomy Tastings', desc: 'Sample authentic regional dishes and freshly brewed local delicacies.' },
+            { name: 'Cultural Village Walks', desc: 'Interact with warm locals and learn traditional ways of living.' }
+          ],
+      travelTips: (effectiveTour?.travelTips && effectiveTour.travelTips.length > 0)
+        ? effectiveTour.travelTips
+        : [
+            { name: 'Pack suitable layers', desc: 'Check seasonal temperatures and carry adequate thermals or windproof jackets.' },
+            { name: 'Sturdy footwear', desc: 'Comfortable hiking shoes or walking sneakers are recommended.' },
+            { name: 'Essential IDs & permits', desc: 'Carry valid photo ID for verification at check-posts and permits.' }
+          ],
+      perks: (effectiveTour?.perks && effectiveTour.perks.length > 0)
+        ? effectiveTour.perks
+        : [
+            { title: 'Stay included', desc: 'Handpicked Stays' },
+            { title: 'Meals included', desc: 'Breakfast & Dinner' },
+            { title: 'Sightseeing included', desc: 'Curated Route' },
+            { title: 'Trip Leader included', desc: 'Expedition Captain' }
+          ],
+      heroImages: images.slice(0, 5),
+      memoriesImages: (effectiveTour?.memoriesImages && effectiveTour.memoriesImages.length > 0) ? effectiveTour.memoriesImages : images,
+      itinerary,
+      inclusions: (effectiveTour?.inclusions && effectiveTour.inclusions.length > 0)
+        ? effectiveTour.inclusions
+        : [
+            'Accommodation in verified hotels & scenic camps on sharing basis',
+            'Breakfast and dinner as specified in itinerary',
+            'Dedicated private vehicle for all transfers and curated sightseeing',
+            'Experienced and certified Trip Captain throughout the expedition',
+            'All toll taxes, parking fees, and driver allowances'
+          ],
+      exclusions: (effectiveTour?.exclusions && effectiveTour.exclusions.length > 0)
+        ? effectiveTour.exclusions
+        : [
+            '5% GST on the total package billing',
+            'Airfare or train fare to and from destination hub',
+            'Lunch and any extra personal refreshments',
+            'Optional adventure activities, entry tickets, and permits',
+            'Personal medical expenses or emergency evacuation costs'
+          ],
+      packageCities,
+      sharingOptions,
+      months: dynamicMonths,
+      batches: formattedBatches,
+      attractions,
+      quickInfoItems: (effectiveTour?.quickInfoItems && effectiveTour.quickInfoItems.length > 0)
+        ? effectiveTour.quickInfoItems
+        : [
+            { title: 'Things to Carry', content: 'Warm layers, windbreaker jacket, sunscreen, sturdy walking sneakers, water bottle, and personal medical kit.' },
+            { title: 'Weather & Best Time', content: 'Pleasant daytime temperatures and crisp mountain breeze during evening.' },
+            { title: 'Safety Guidelines', content: 'Certified guides, verified accommodations, and 24/7 dedicated backend support.' }
+          ],
+      faqs: (effectiveTour?.faqs && effectiveTour.faqs.length > 0)
+        ? effectiveTour.faqs
+        : [
+            { q: `What is included in the ${destName} trip?`, a: 'The package covers premium stay, breakfast & dinner, transfers in comfortable vehicles, and an experienced trip captain.' },
+            { q: 'Is it suitable for solo travelers?', a: 'Yes! 50% of our group trip travelers join solo. It is extremely welcoming, safe, and social.' }
+          ],
+      reviews: (effectiveTour?.reviews && effectiveTour.reviews.length > 0)
+        ? effectiveTour.reviews
+        : [
+            {
+              name: 'Rohan Sharma',
+              type: 'solo',
+              tourBooked: destName,
+              rating: 5,
+              img: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80',
+              review: `Unbelievable journey to ${destName}! The group leader was phenomenal and the accommodations were top tier.`
+            },
+            {
+              name: 'Ananya Verma',
+              type: 'group',
+              tourBooked: destName,
+              rating: 5,
+              img: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&q=80',
+              review: 'Superb coordination, hygienic food, and fantastic group vibes. Will definitely travel with India Tour again!'
+            }
+          ]
+    };
   }
 
   const finalData = { ...baseData };
@@ -534,56 +743,6 @@ Our ${durationStr} group package takes care of verified stays, daily breakfasts 
   if (effectiveTour.saveAmount) finalData.saveAmount = Number(effectiveTour.saveAmount);
   if (effectiveTour.routeSummary || effectiveTour.location) finalData.routeSummary = effectiveTour.routeSummary || effectiveTour.location;
   if (effectiveTour.overviewText || effectiveTour.overview) finalData.overviewText = effectiveTour.overviewText || effectiveTour.overview;
-
-  if (Array.isArray(effectiveTour.itinerary) && effectiveTour.itinerary.length > 0) {
-    finalData.itinerary = effectiveTour.itinerary;
-  }
-  if (Array.isArray(effectiveTour.inclusions) && effectiveTour.inclusions.length > 0) {
-    finalData.inclusions = effectiveTour.inclusions;
-  }
-  if (Array.isArray(effectiveTour.exclusions) && effectiveTour.exclusions.length > 0) {
-    finalData.exclusions = effectiveTour.exclusions;
-  }
-  if (Array.isArray(effectiveTour.placesToVisit) && effectiveTour.placesToVisit.length > 0) {
-    finalData.placesToVisit = effectiveTour.placesToVisit;
-  }
-  if (Array.isArray(effectiveTour.thingsToDo) && effectiveTour.thingsToDo.length > 0) {
-    finalData.thingsToDo = effectiveTour.thingsToDo;
-  }
-  if (Array.isArray(effectiveTour.travelTips) && effectiveTour.travelTips.length > 0) {
-    finalData.travelTips = effectiveTour.travelTips;
-  }
-  if (Array.isArray(effectiveTour.attractions) && effectiveTour.attractions.length > 0) {
-    finalData.attractions = effectiveTour.attractions;
-  }
-  if (Array.isArray(effectiveTour.perks) && effectiveTour.perks.length > 0) {
-    finalData.perks = effectiveTour.perks;
-  }
-  if (Array.isArray(effectiveTour.heroImages) && effectiveTour.heroImages.length > 0) {
-    finalData.heroImages = effectiveTour.heroImages;
-  }
-  if (Array.isArray(effectiveTour.memoriesImages) && effectiveTour.memoriesImages.length > 0) {
-    finalData.memoriesImages = effectiveTour.memoriesImages;
-  }
-  if (Array.isArray(effectiveTour.packageCities) && effectiveTour.packageCities.length > 0) {
-    finalData.packageCities = effectiveTour.packageCities;
-  }
-  if (Array.isArray(effectiveTour.sharingOptions) && effectiveTour.sharingOptions.length > 0) {
-    finalData.sharingOptions = effectiveTour.sharingOptions;
-  }
-  if (Array.isArray(effectiveTour.batches) && effectiveTour.batches.length > 0) {
-    finalData.batches = effectiveTour.batches;
-  }
-  if (Array.isArray(effectiveTour.quickInfoItems) && effectiveTour.quickInfoItems.length > 0) {
-    finalData.quickInfoItems = effectiveTour.quickInfoItems;
-  }
-  if (Array.isArray(effectiveTour.faqs) && effectiveTour.faqs.length > 0) {
-    finalData.faqs = effectiveTour.faqs;
-  }
-  if (Array.isArray(effectiveTour.reviews) && effectiveTour.reviews.length > 0) {
-    finalData.reviews = effectiveTour.reviews;
-  }
-
   return finalData;
 }
 
@@ -653,13 +812,25 @@ export default function TourDetailsModal({ tour, onClose }) {
   const [copiedToast, setCopiedToast] = useState(false);
 
   // Dynamic Price calculation
-  const currentCityObj = data.packageCities.find((c) => c.id === selectedCity) || data.packageCities[0];
-  const currentSharingObj = data.sharingOptions.find((s) => s.id === selectedSharing) || data.sharingOptions[0];
+  const currentCityObj = data.packageCities.find((c) => c.id === selectedCity) || data.packageCities[0] || {};
+  const currentSharingObj = data.sharingOptions.find((s) => s.id === selectedSharing) || data.sharingOptions[0] || {};
 
-  const cityDiscount = selectedCity === 'jaisalmer' ? 2000 : 0;
-  const displayPrice = Math.max(4000, currentSharingObj.discounted - cityDiscount);
-  const displayRegularPrice = Math.max(6000, currentSharingObj.regular - cityDiscount);
-  const displaySaveAmount = displayRegularPrice - displayPrice;
+  const baseCityDiscountPrice = Number(data.packageCities[0]?.discountPrice || data.basePrice || 0);
+  const currentCityDiscountPrice = Number(currentCityObj?.discountPrice || baseCityDiscountPrice);
+  const cityAdjustment = currentCityDiscountPrice - baseCityDiscountPrice;
+
+  const baseRegularPrice = Number(currentSharingObj?.regular || data.originalPrice || 10000);
+  const baseDiscountPrice = Number(currentSharingObj?.discounted || data.basePrice || 8000);
+
+  const displayPrice = Math.max(2000, baseDiscountPrice + cityAdjustment);
+  const displayRegularPrice = Math.max(displayPrice + 1000, baseRegularPrice + cityAdjustment);
+  const displaySaveAmount = Math.max(1000, displayRegularPrice - displayPrice);
+
+  const visibleBatches = useMemo(() => {
+    if (!data.batches || data.batches.length === 0) return [];
+    const filtered = data.batches.filter((b) => !b.monthKey || b.monthKey === selectedMonth);
+    return filtered.length > 0 ? filtered : data.batches;
+  }, [data.batches, selectedMonth]);
 
   // Scroll spy / Tab clicking
   const scrollToSection = (id) => {
@@ -1324,8 +1495,8 @@ export default function TourDetailsModal({ tour, onClose }) {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                   {data.sharingOptions.map((opt) => {
                     const isSelected = selectedSharing === opt.id;
-                    const price = opt.discounted - cityDiscount;
-                    const regPrice = opt.regular - cityDiscount;
+                    const price = opt.discounted + cityAdjustment;
+                    const regPrice = opt.regular + cityAdjustment;
                     return (
                       <div
                         key={opt.id}
@@ -1382,7 +1553,7 @@ export default function TourDetailsModal({ tour, onClose }) {
 
               {/* Batches List */}
               <div className="flex flex-col gap-3">
-                {data.batches.map((batch, bIdx) => {
+                {visibleBatches.map((batch, bIdx) => {
                   const isBatchSelected = selectedBatchIndex === bIdx;
                   return (
                     <div
@@ -1404,7 +1575,7 @@ export default function TourDetailsModal({ tour, onClose }) {
 
                         <div className="border-l border-gray-200 pl-3">
                           <p className="text-sm font-medium text-gray-800">{batch.fullDate}</p>
-                          <p className="text-xs text-gray-500">Ahmedabad &lt;-&gt; Jaisalmer Circuit</p>
+                          <p className="text-xs text-gray-500">{data.routeSummary || `${data.title} Circuit`}</p>
                         </div>
                       </div>
 
@@ -1457,11 +1628,11 @@ export default function TourDetailsModal({ tour, onClose }) {
                           <div className="text-xs text-gray-500">{currentCityObj.vehicle}</div>
                         </td>
                         <td className="py-4 px-4 text-center border-l border-light-gray">
-                          <div className="text-sm text-gray-400 line-through">₹ {(opt.regular - cityDiscount).toLocaleString('en-IN')}</div>
-                          <div className="text-xs text-emerald-600 font-semibold">₹ {opt.off}/- OFF</div>
+                          <div className="text-sm text-gray-400 line-through">₹ {((opt.regular || data.originalPrice) + cityAdjustment).toLocaleString('en-IN')}</div>
+                          <div className="text-xs text-emerald-600 font-semibold">₹ {opt.off || Math.max(1000, (opt.regular - opt.discounted))}/- OFF</div>
                         </td>
                         <td className="py-4 px-4 text-center border-l border-light-gray">
-                          <div className="text-base productSansBold text-primary">₹ {(opt.discounted - cityDiscount).toLocaleString('en-IN')}</div>
+                          <div className="text-base productSansBold text-primary">₹ {((opt.discounted || data.basePrice) + cityAdjustment).toLocaleString('en-IN')}</div>
                           <div className="text-xs text-gray-400">per person + GST</div>
                         </td>
                       </tr>
@@ -1609,7 +1780,7 @@ export default function TourDetailsModal({ tour, onClose }) {
           <div className="tour-sidebar-col justify-center w-2/6 md:block hidden shrink-0">
             <div className="tour-sticky-sidebar">
               
-              {/* Card 1: Ticket Pricing Card (Exact clone styling of Avian Experiences) */}
+              {/* Card 1: Ticket Pricing Card (Exact clone styling of India Tour Experiences) */}
               <div className="rounded-3xl border border-gray-200/80 shadow-md overflow-hidden bg-white">
                 <div>
                   {/* Top gradient with Save ₹ badge */}

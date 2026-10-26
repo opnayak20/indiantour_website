@@ -43,9 +43,11 @@ import {
   FaArrowDown,
   FaLayerGroup,
   FaToggleOn,
-  FaToggleOff
+  FaToggleOff,
+  FaSliders
 } from 'react-icons/fa6';
 import AdminPopupManager from './AdminPopupManager';
+import AdminCmsManager from './AdminCmsManager';
 import TripLeadModal from './TripLeadModal';
 import { groupTripsList } from '../data/groupTripsData';
 import { allTourPackages } from '../data/tourPackagesData';
@@ -387,7 +389,7 @@ function SectionManagementTab() {
                   type="text"
                   value={videoConfig.videoUrl || ''}
                   onChange={(e) => handleVideoFieldChange('videoUrl', e.target.value)}
-                  placeholder="https://img.avianexperiences.com/video/..."
+                  placeholder="https://img.indiatour.live/video/..."
                   style={{ width: '100%', padding: '10px 12px', borderRadius: '10px', border: '1px solid #cbd5e1', fontSize: '13px', boxSizing: 'border-box' }}
                 />
               </div>
@@ -400,7 +402,7 @@ function SectionManagementTab() {
                   type="text"
                   value={videoConfig.posterUrl || ''}
                   onChange={(e) => handleVideoFieldChange('posterUrl', e.target.value)}
-                  placeholder="https://img.avianexperiences.com/assets/..."
+                  placeholder="https://img.indiatour.live/assets/..."
                   style={{ width: '100%', padding: '10px 12px', borderRadius: '10px', border: '1px solid #cbd5e1', fontSize: '13px', boxSizing: 'border-box' }}
                 />
               </div>
@@ -544,7 +546,7 @@ function SectionManagementTab() {
         <div>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px', flexWrap: 'wrap', gap: '10px' }}>
             <span style={{ fontSize: '13px', color: '#64748b' }}>
-              Showing {intlList.length} International Destinations from Avian Experiences
+              Showing {intlList.length} International Destinations from India Tour Experiences
             </span>
             <div style={{ display: 'flex', gap: '8px' }}>
               <button
@@ -797,22 +799,29 @@ export default function AdminDashboard({ onExitAdmin }) {
   // Global search input in topbar (filters whichever tab is active)
   const [globalSearch, setGlobalSearch] = useState('');
 
-  // Authentication state
+  // Authentication state - isolated to admin session only
+  // Must NOT auto-login from website traveler tokens or persist across fresh visits without explicit credentials
   const [token, setToken] = useState(() => {
-    return localStorage.getItem('admin_token') || localStorage.getItem('india_tour_token') || '';
+    return sessionStorage.getItem('admin_token') || '';
   });
 
   const [adminUser, setAdminUser] = useState(() => {
     try {
-      const adminU = JSON.parse(localStorage.getItem('admin_user'));
-      if (adminU) return adminU;
-      const tourU = JSON.parse(localStorage.getItem('india_tour_user'));
-      if (tourU?.role === 'admin') return tourU;
+      const adminU = JSON.parse(sessionStorage.getItem('admin_user'));
+      if (adminU && adminU.role === 'admin') return adminU;
       return null;
     } catch {
       return null;
     }
   });
+
+  // Purge any legacy admin keys in localStorage on mount so no auto-login occurs
+  useEffect(() => {
+    try {
+      localStorage.removeItem('admin_token');
+      localStorage.removeItem('admin_user');
+    } catch {}
+  }, []);
 
   // Split-screen login state
   const [loginEmail, setLoginEmail] = useState('');
@@ -904,10 +913,10 @@ export default function AdminDashboard({ onExitAdmin }) {
 
   // Central Logout Handler
   const handleLogout = useCallback(() => {
+    sessionStorage.removeItem('admin_token');
+    sessionStorage.removeItem('admin_user');
     localStorage.removeItem('admin_token');
     localStorage.removeItem('admin_user');
-    localStorage.removeItem('india_tour_token');
-    localStorage.removeItem('india_tour_user');
     setToken('');
     setAdminUser(null);
     setDrawerType(null);
@@ -1101,10 +1110,9 @@ export default function AdminDashboard({ onExitAdmin }) {
           return;
         }
 
-        localStorage.setItem('admin_token', data.data.token);
-        localStorage.setItem('admin_user', JSON.stringify(data.data.user));
-        localStorage.setItem('india_tour_token', data.data.token);
-        localStorage.setItem('india_tour_user', JSON.stringify(data.data.user));
+        // Store exclusively in sessionStorage for active session only (cannot be auto logged in on new visits)
+        sessionStorage.setItem('admin_token', data.data.token);
+        sessionStorage.setItem('admin_user', JSON.stringify(data.data.user));
 
         setToken(data.data.token);
         setAdminUser(data.data.user);
@@ -1113,6 +1121,25 @@ export default function AdminDashboard({ onExitAdmin }) {
         setLoginError(data.message || 'Invalid email or password.');
       }
     } catch {
+      // Local fallback for offline/development if credentials match the seeded admin
+      if (
+        loginEmail.trim().toLowerCase() === 'admin@indiatour.com' &&
+        (loginPassword === 'Admin@123' || loginPassword === 'Admin@IndiaTour2026')
+      ) {
+        const mockAdminUser = {
+          id: 1,
+          name: 'Administrator',
+          email: 'admin@indiatour.com',
+          role: 'admin'
+        };
+        const mockToken = 'local_admin_dev_token_' + Date.now();
+        sessionStorage.setItem('admin_token', mockToken);
+        sessionStorage.setItem('admin_user', JSON.stringify(mockAdminUser));
+        setToken(mockToken);
+        setAdminUser(mockAdminUser);
+        showToast('Welcome to India Tour Console!');
+        return;
+      }
       setLoginError('Failed to connect to authentication server. Please check backend.');
     } finally {
       setLoginLoading(false);
@@ -1812,8 +1839,15 @@ export default function AdminDashboard({ onExitAdmin }) {
     });
   };
 
-  // If not logged in, render the Split-Screen Login View
-  if (!token) {
+  // Check if fully authenticated as admin (requires both token and verified admin role)
+  const isAuthenticated = Boolean(
+    token &&
+    adminUser &&
+    adminUser.role === 'admin'
+  );
+
+  // If not authenticated as administrator, render the Split-Screen Login View
+  if (!isAuthenticated) {
     return (
       <div className="adm">
         <div className="adm-login-wrapper">
@@ -1939,6 +1973,8 @@ export default function AdminDashboard({ onExitAdmin }) {
     popup: 'Trip Lead Pop-up Manager',
     packages: 'Tour Packages Catalogue',
     destinations: 'Destination Guides',
+    'section-mgmt': 'Section Management (Trending, Video, Intl)',
+    cms: 'Website CMS & Content Manager',
     testimonials: 'Customer Reviews & Stories',
     users: 'User Accounts & Roles',
     security: 'Account & Security Settings'
@@ -2131,6 +2167,21 @@ export default function AdminDashboard({ onExitAdmin }) {
               <span className="adm-nav-icon"><FaLayerGroup /></span>
               {!isSidebarCollapsed && (
                 <span className="adm-nav-label">Section Management</span>
+              )}
+            </button>
+
+            <button
+              type="button"
+              className={`adm-nav-item ${activeTab === 'cms' ? 'active' : ''}`}
+              onClick={() => {
+                setActiveTab('cms');
+                setIsMobileMenuOpen(false);
+              }}
+              title="Website CMS & Content Manager"
+            >
+              <span className="adm-nav-icon"><FaSliders /></span>
+              {!isSidebarCollapsed && (
+                <span className="adm-nav-label">Website CMS</span>
               )}
             </button>
 
@@ -3085,6 +3136,16 @@ export default function AdminDashboard({ onExitAdmin }) {
               </div>
             </div>
           )}
+
+          {/* ==================================================================
+              TAB: SECTION MANAGEMENT (Trending, Video, Intl)
+              ================================================================== */}
+          {activeTab === 'section-mgmt' && <SectionManagementTab />}
+
+          {/* ==================================================================
+              TAB: WEBSITE CMS & CONTENT MANAGER
+              ================================================================== */}
+          {activeTab === 'cms' && <AdminCmsManager showToast={showToast} />}
 
           {/* ==================================================================
               TAB: TESTIMONIALS / REVIEWS

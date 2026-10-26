@@ -56,7 +56,7 @@ export default function DomesticDestinations({ onDestinationSelect }) {
     <div className="relative bg-white">
       <div className="py-6 md:py-10 container mx-auto px-4 md:px-6">
         
-        {/* Section Heading - Matches exact Avian Experiences style */}
+        {/* Section Heading */}
         <div className="pb-2 pt-4 md:pt-0 px-2 md:px-1 productSansBold">
           <h2 className="md:text-2xl text-xl ProductSans font-bold text-gray-900 tracking-tight">
             Domestic Destinations
@@ -69,7 +69,7 @@ export default function DomesticDestinations({ onDestinationSelect }) {
             <button
               onClick={() => handleScroll('left')}
               aria-label="Previous domestic destinations"
-              className="absolute top-1/2 transform -translate-y-1/2 bg-white/90 hover:bg-white border-2 border-gray-200/90 rounded-full p-2.5 z-20 -left-3 md:-left-6 hidden md:flex items-center justify-center cursor-pointer transition-all hover:scale-105 shadow-md"
+              className="absolute top-1/2 transform -translate-y-1/2 bg-white/90 hover:bg-white border border-gray-200 rounded-full p-2.5 z-20 -left-3 md:-left-6 hidden md:flex items-center justify-center cursor-pointer transition-all hover:scale-105 shadow-md"
             >
               <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                 <path d="M12.5 15L7.5 10L12.5 5" stroke="#333333" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
@@ -100,6 +100,10 @@ export default function DomesticDestinations({ onDestinationSelect }) {
                   }}
                   className="object-cover w-full h-full"
                 />
+                {/* Destination Name Overlay */}
+                <div className="avian-dest-card-overlay">
+                  <span className="avian-dest-card-name">{dest.name}</span>
+                </div>
               </div>
             ))}
           </div>
@@ -109,7 +113,7 @@ export default function DomesticDestinations({ onDestinationSelect }) {
             <button
               onClick={() => handleScroll('right')}
               aria-label="Next domestic destinations"
-              className="absolute top-1/2 transform -translate-y-1/2 bg-white/90 hover:bg-white border-2 border-gray-200/90 rounded-full p-2.5 z-20 -right-3 md:-right-6 hidden md:flex items-center justify-center cursor-pointer transition-all hover:scale-105 shadow-md"
+              className="absolute top-1/2 transform -translate-y-1/2 bg-white/90 hover:bg-white border border-gray-200 rounded-full p-2.5 z-20 -right-3 md:-right-6 hidden md:flex items-center justify-center cursor-pointer transition-all hover:scale-105 shadow-md"
             >
               <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                 <path d="M7.5 5L12.5 10L7.5 15" stroke="#333333" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />

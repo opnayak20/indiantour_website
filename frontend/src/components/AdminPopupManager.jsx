@@ -52,8 +52,8 @@ const PRESET_IMAGES = [
 ];
 
 const COLOR_SWATCHES = [
-  { name: 'Avian Crimson Red', value: '#ec1d24' },
-  { name: 'Avian Vibrant Red', value: '#e52b2b' },
+  { name: 'India Tour Crimson Red', value: '#ec1d24' },
+  { name: 'India Tour Vibrant Red', value: '#e52b2b' },
   { name: 'Royal Blue', value: '#2563eb' },
   { name: 'Emerald Green', value: '#059669' },
   { name: 'Deep Violet', value: '#7c3aed' }

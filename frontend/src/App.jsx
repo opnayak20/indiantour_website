@@ -22,6 +22,7 @@ import GroupTripsPage from './components/GroupTripsPage';
 import CreatorTripPage from './components/CreatorTripPage';
 import TourPackagesPage from './components/TourPackagesPage';
 import TripLeadModal from './components/TripLeadModal';
+import PolicyModal from './components/PolicyModal';
 import SearchBar from './components/SearchBar';
 import WhyChooseUs from './components/WhyChooseUs';
 import DestinationPage from './components/DestinationPage';
@@ -29,12 +30,11 @@ import { groupTripsList } from './data/groupTripsData';
 import { allTourPackages } from './data/tourPackagesData';
 import { DESTINATIONS_DATA } from './data/destinationsData';
 import { API_BASE } from './config/api';
+import { initCmsSync } from './data/cmsData';
 
-const allDestinationPackages = [
-  ...(DESTINATIONS_DATA.kashmir?.allPackages || []),
-  ...(DESTINATIONS_DATA.thailand?.allPackages || []),
-  ...(DESTINATIONS_DATA.meghalaya?.allPackages || [])
-];
+const allDestinationPackages = Object.values(DESTINATIONS_DATA).flatMap(
+  (dest) => dest?.allPackages || []
+);
 
 const allAvailableTours = [...groupTripsList, ...allTourPackages, ...allDestinationPackages];
 
@@ -74,6 +74,12 @@ function parseRouteFromLocation() {
 
   // 1. Admin check (/admin or #admin)
   if (cleanPath === 'admin' || cleanPath.startsWith('admin/') || hash.includes('admin')) {
+    try {
+      const storedUser = JSON.parse(localStorage.getItem('india_tour_user'));
+      if (storedUser && storedUser.role !== 'admin') {
+        return { isAdmin: false, tab: 'packages', destination: null, tourId: null };
+      }
+    } catch {}
     return { isAdmin: true, tab: 'packages', destination: null, tourId: null };
   }
 
@@ -135,9 +141,15 @@ export default function App() {
   const [selectedDestination, setSelectedDestination] = useState(initialRoute.destination);
   const [selectedTour, setSelectedTour] = useState(() => {
     if (initialRoute.tourId) {
-      return allAvailableTours.find(
-        (t) => t.id === initialRoute.tourId || t.slug === initialRoute.tourId
-      ) || null;
+      const q = initialRoute.tourId.toLowerCase();
+      return (
+        allAvailableTours.find(
+          (t) =>
+            (t.id && String(t.id).toLowerCase() === q) ||
+            (t.slug && String(t.slug).toLowerCase() === q) ||
+            (t.link && t.link.toLowerCase().endsWith('/' + q))
+        ) || null
+      );
     }
     return null;
   });
@@ -146,6 +158,7 @@ export default function App() {
   const [searchQuery, setSearchQuery] = useState('');
   const [isEmiModalOpen, setIsEmiModalOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [policyModalType, setPolicyModalType] = useState(null); // 'about' | 'terms' | 'privacy' | 'cancellation'
 
   const handleQuickSearch = (query) => {
     setSearchQuery(query);
@@ -173,8 +186,10 @@ export default function App() {
     }
   });
 
-  // Listen to standard browser popstate (back/forward history navigation)
+  // Listen to standard browser popstate (back/forward history navigation) & Sync CMS
   useEffect(() => {
+    initCmsSync();
+
     // Strip hash if present
     if (typeof window !== 'undefined' && window.location.hash) {
       if (window.location.hash.toLowerCase().includes('admin')) {
@@ -186,13 +201,26 @@ export default function App() {
 
     const syncRoute = () => {
       const route = parseRouteFromLocation();
+      try {
+        const storedUser = JSON.parse(localStorage.getItem('india_tour_user'));
+        if (route.isAdmin && storedUser && storedUser.role !== 'admin') {
+          setIsAdminView(false);
+          window.history.replaceState(null, '', '/');
+          return;
+        }
+      } catch {}
+
       setIsAdminView(route.isAdmin);
       setSelectedDestination(route.destination);
       setActiveTab(route.tab);
 
       if (route.tourId) {
+        const q = route.tourId.toLowerCase();
         const found = allAvailableTours.find(
-          (t) => t.id === route.tourId || t.slug === route.tourId
+          (t) =>
+            (t.id && String(t.id).toLowerCase() === q) ||
+            (t.slug && String(t.slug).toLowerCase() === q) ||
+            (t.link && t.link.toLowerCase().endsWith('/' + q))
         );
         setSelectedTour(found || null);
       } else {
@@ -207,6 +235,10 @@ export default function App() {
   }, []);
 
   const handleOpenAdmin = () => {
+    // Normal non-admin travelers cannot open admin
+    if (currentUser && currentUser.role !== 'admin') {
+      return;
+    }
     setSelectedTour(null);
     setSelectedDestination(null);
     setIsAdminView(true);
@@ -221,6 +253,13 @@ export default function App() {
     setSelectedTour(null);
     setSelectedDestination(null);
     setActiveTab('packages');
+    // Clear admin active session so returning to /admin cannot auto-login
+    try {
+      sessionStorage.removeItem('admin_token');
+      sessionStorage.removeItem('admin_user');
+      localStorage.removeItem('admin_token');
+      localStorage.removeItem('admin_user');
+    } catch {}
     window.scrollTo({ top: 0, behavior: 'smooth' });
     try {
       window.history.pushState(null, '', '/');
@@ -244,9 +283,7 @@ export default function App() {
     try {
       localStorage.setItem('india_tour_user', JSON.stringify(user));
     } catch {}
-    if (user?.role === 'admin') {
-      handleOpenAdmin();
-    }
+    // Do not auto-login or auto-open admin console; stay on website
   };
 
   const handleLogout = () => {
@@ -255,6 +292,8 @@ export default function App() {
     localStorage.removeItem('india_tour_token');
     localStorage.removeItem('admin_user');
     localStorage.removeItem('admin_token');
+    sessionStorage.removeItem('admin_user');
+    sessionStorage.removeItem('admin_token');
   };
 
   const handleSelectDestination = (destSlug) => {
@@ -376,10 +415,18 @@ export default function App() {
       return;
     }
 
-    setSelectedTour(tour);
+    const richTour =
+      allAvailableTours.find(
+        (t) =>
+          (t.slug && tour.slug && t.slug === tour.slug) ||
+          (t.id && tour.id && String(t.id) === String(tour.id)) ||
+          (t.title && tour.title && t.title.toLowerCase() === tour.title.toLowerCase())
+      ) || tour;
+
+    setSelectedTour(richTour);
     window.scrollTo({ top: 0, behavior: 'instant' });
     try {
-      const tourParam = tour.slug || tour.id;
+      const tourParam = richTour.slug || richTour.id;
       window.history.pushState({ tour: tourParam }, '', `?tour=${tourParam}`);
     } catch {}
   };
@@ -424,7 +471,7 @@ export default function App() {
         setActiveTab={handleTabChange}
       />
 
-      {/* 4. Avian-Style Destination & Category Icons Slider (Persistent across EVERY page) */}
+      {/* 4. India Tour-Style Destination & Category Icons Slider (Persistent across EVERY page) */}
       <CategorySlider
         selectedCategory={selectedCategory || selectedDestination}
         onSelectCategory={handleCategorySelect}
@@ -433,6 +480,7 @@ export default function App() {
       <main className="flex-1">
         {selectedTour ? (
           <TourDetailsModal
+            key={selectedTour.id || selectedTour.slug || selectedTour.title}
             tour={selectedTour}
             onClose={handleCloseTour}
           />
@@ -457,7 +505,7 @@ export default function App() {
               onCtaClick={() => setIsEmiModalOpen(true)}
             />
 
-            {/* 6. Avian-Style Floating Search & Quick Tags */}
+            {/* 6. India Tour-Style Floating Search & Quick Tags */}
             <SearchBar
               searchQuery={searchQuery}
               setSearchQuery={setSearchQuery}
@@ -477,7 +525,7 @@ export default function App() {
               />
             </div>
 
-            {/* 8. Avian Experience Travel Video Banner */}
+            {/* 8. India Tour Experience Travel Video Banner */}
             <VideoBannerSection onBannerClick={handleTourSelect} />
 
             {/* 9. International Destinations Carousel */}
@@ -500,7 +548,7 @@ export default function App() {
               <WatchAndRead onStorySelect={handleTourSelect} />
             </div>
 
-            {/* 13. Why Travel With Us (Avian Experiences Trust Pillars) */}
+            {/* 13. Why Travel With Us (India Tour Experiences Trust Pillars) */}
             <WhyChooseUs onExploreClick={() => handleTabChange('group')} />
 
             {/* 14. Reviews & Customer Testimonials */}
@@ -520,6 +568,7 @@ export default function App() {
         onNavigateTab={handleTabChange}
         onOpenEmiModal={() => setIsEmiModalOpen(true)}
         onOpenAdmin={handleOpenAdmin}
+        onOpenPolicyModal={setPolicyModalType}
       />
 
       {/* Interactive Modals */}
@@ -542,6 +591,17 @@ export default function App() {
         tour={leadModalTour}
         popupSettings={popupSettings}
         onOpenEmiModal={() => setIsEmiModalOpen(true)}
+      />
+
+      {/* Dynamic Policy & Informational Modal (About Us, Terms, Privacy, Cancellation) */}
+      <PolicyModal
+        isOpen={Boolean(policyModalType)}
+        type={policyModalType}
+        onClose={() => setPolicyModalType(null)}
+        onOpenEmiModal={() => {
+          setPolicyModalType(null);
+          setIsEmiModalOpen(true);
+        }}
       />
 
     </div>

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useCmsData } from '../data/cmsData';
 import {
   FaWhatsapp,
   FaInstagram,
@@ -9,7 +10,14 @@ import {
 } from 'react-icons/fa6';
 
 export default function ContactCta() {
-  const whatsappUrl = "https://wa.me/919548436762?text=Hello,%20I%20want%20details%20about%20upcoming%20experiences.";
+  const footerCms = useCmsData('footer');
+  const contact = footerCms?.contactCta;
+  const social = footerCms?.socialLinks;
+
+  const rawPhone = contact?.whatsapp || '+919548436762';
+  const cleanPhone = rawPhone.replace(/[^0-9]/g, '');
+  const encodedMsg = encodeURIComponent(contact?.whatsappMessage || 'Hello, I want details about upcoming travel experiences.');
+  const whatsappUrl = `https://wa.me/${cleanPhone}?text=${encodedMsg}`;
 
   return (
     <div className="contact-cta-wrapper">
@@ -30,10 +38,10 @@ export default function ContactCta() {
 
             <div>
               <p className="text-xs sm:text-sm text-gray-700 font-medium">
-                Don't wait any longer, Contact us!
+                {contact?.heading || "Don't wait any longer, Contact us!"}
               </p>
               <h3 className="text-xl sm:text-3xl md:text-4xl font-extrabold productSansBold text-gray-900 group-hover:text-primary transition-colors tracking-tight">
-                95 48 436 762
+                {contact?.phone || "95 48 436 762"}
               </h3>
             </div>
           </a>
@@ -45,13 +53,13 @@ export default function ContactCta() {
         {/* Right Column: Social Media Links */}
         <div className="contact-cta-right">
           <p className="text-sm text-gray-800 font-semibold mb-3">
-            Be part of our Social Media Journey!
+            {contact?.subheading || "Be part of our Social Media Journey!"}
           </p>
           
           <div className="social-badge-list">
             {/* Instagram */}
             <a
-              href="https://www.instagram.com/"
+              href={social?.instagram || 'https://www.instagram.com/'}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Instagram"
@@ -62,7 +70,7 @@ export default function ContactCta() {
 
             {/* YouTube */}
             <a
-              href="https://www.youtube.com/"
+              href={social?.youtube || 'https://www.youtube.com/'}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="YouTube"
@@ -73,7 +81,7 @@ export default function ContactCta() {
 
             {/* Facebook */}
             <a
-              href="https://www.facebook.com/"
+              href={social?.facebook || 'https://www.facebook.com/'}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Facebook"
@@ -84,7 +92,7 @@ export default function ContactCta() {
 
             {/* X (formerly Twitter) */}
             <a
-              href="https://twitter.com/"
+              href={social?.twitter || 'https://www.x.com/'}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="X (formerly Twitter)"
@@ -95,7 +103,7 @@ export default function ContactCta() {
 
             {/* LinkedIn */}
             <a
-              href="https://www.linkedin.com/"
+              href={social?.linkedin || 'https://www.linkedin.com/'}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="LinkedIn"

@@ -1,31 +1,32 @@
 import React, { useState } from 'react';
 import { API_BASE } from '../config/api';
+import { useCmsData } from '../data/cmsData';
 import LazyImage from './LazyImage';
 
 // Curated Photos matching the 5-photo mosaic grid (High-speed CloudFront CDN WebP)
 const CREATOR_PHOTOS = [
   {
-    url: 'https://img.avianexperiences.com/trek/a2199543-ae66-4cd1-8013-4632f393a1b8/Winter_Spiti_01.webp',
+    url: 'https://img.indiatour.live/trek/a2199543-ae66-4cd1-8013-4632f393a1b8/Winter_Spiti_01.webp',
     title: 'Frozen Waterfall at Spiti Valley',
     caption: 'Majestic ice formations and frozen cascades near Kaza'
   },
   {
-    url: 'https://img.avianexperiences.com/trek/987f7011-6106-4c6f-a526-a46d706497dc/Winter_Spiti_02.webp',
+    url: 'https://img.indiatour.live/trek/987f7011-6106-4c6f-a526-a46d706497dc/Winter_Spiti_02.webp',
     title: 'Langza Buddha Statue',
     caption: 'Golden statue of Lord Buddha overlooking snow-clad peaks'
   },
   {
-    url: 'https://img.avianexperiences.com/trek/ba5e9d18-6e69-4a7d-a44c-bcfa38c79844/Winter_Spiti_04.webp',
+    url: 'https://img.indiatour.live/trek/ba5e9d18-6e69-4a7d-a44c-bcfa38c79844/Winter_Spiti_04.webp',
     title: 'Himalayan Snowscape',
     caption: 'Breathtaking white horizon across Kinnaur and Spiti'
   },
   {
-    url: 'https://img.avianexperiences.com/trek/03722d76-bdc1-41db-8b36-25e76e4dbd1b/Winter_Spiti_05.webp',
+    url: 'https://img.indiatour.live/trek/03722d76-bdc1-41db-8b36-25e76e4dbd1b/Winter_Spiti_05.webp',
     title: 'Tibetan Prayer Flags on Ridge',
     caption: 'Wind-blown colorful flags at Kunzum Pass'
   },
   {
-    url: 'https://img.avianexperiences.com/trek/bcd7ce32-bbbc-418b-86e9-17a69b595477/Winter_Spiti_03.webp',
+    url: 'https://img.indiatour.live/trek/bcd7ce32-bbbc-418b-86e9-17a69b595477/Winter_Spiti_03.webp',
     title: 'High-Altitude Pass Summit',
     caption: 'Standing on top of the world at 14,500 ft'
   }
@@ -33,27 +34,27 @@ const CREATOR_PHOTOS = [
 
 const HIGHLIGHT_CARDS = [
   {
-    img: 'https://img.avianexperiences.com/trek/a2199543-ae66-4cd1-8013-4632f393a1b8/Winter_Spiti_01.webp',
+    img: 'https://img.indiatour.live/trek/a2199543-ae66-4cd1-8013-4632f393a1b8/Winter_Spiti_01.webp',
     title: 'Kunzum Pass Prayer Flags',
     subtitle: 'Gateway to Spiti'
   },
   {
-    img: 'https://img.avianexperiences.com/trek/987f7011-6106-4c6f-a526-a46d706497dc/Winter_Spiti_02.webp',
+    img: 'https://img.indiatour.live/trek/987f7011-6106-4c6f-a526-a46d706497dc/Winter_Spiti_02.webp',
     title: 'Frozen Spiti River Bed',
     subtitle: 'Winter Silence'
   },
   {
-    img: 'https://img.avianexperiences.com/trek/ba5e9d18-6e69-4a7d-a44c-bcfa38c79844/Winter_Spiti_04.webp',
+    img: 'https://img.indiatour.live/trek/ba5e9d18-6e69-4a7d-a44c-bcfa38c79844/Winter_Spiti_04.webp',
     title: 'Key Monastery in Snow',
     subtitle: '1000-Year Heritage'
   },
   {
-    img: 'https://img.avianexperiences.com/trek/03722d76-bdc1-41db-8b36-25e76e4dbd1b/Winter_Spiti_05.webp',
+    img: 'https://img.indiatour.live/trek/03722d76-bdc1-41db-8b36-25e76e4dbd1b/Winter_Spiti_05.webp',
     title: 'Langza Ancient Village',
     subtitle: 'Fossil Hunting'
   },
   {
-    img: 'https://img.avianexperiences.com/trek/bcd7ce32-bbbc-418b-86e9-17a69b595477/Winter_Spiti_03.webp',
+    img: 'https://img.indiatour.live/trek/bcd7ce32-bbbc-418b-86e9-17a69b595477/Winter_Spiti_03.webp',
     title: 'Hikkim Highest Post Office',
     subtitle: 'Letter to Loved Ones'
   }
@@ -294,6 +295,12 @@ const renderQuickInfoIcon = (type) => {
 };
 
 export default function CreatorTripPage() {
+  const pagesCms = useCmsData('pages');
+  const footerCms = useCmsData('footer');
+  const creatorCms = pagesCms?.creatorPage || {};
+  const creatorName = creatorCms.creatorName || 'Ananya Sharma';
+  const whatsappClean = (footerCms?.contactCta?.whatsapp || '+919548436762').replace(/[^0-9]/g, '');
+
   const [activeTab, setActiveTab] = useState('about');
   const [expandedDay, setExpandedDay] = useState(null);
   const [allExpanded, setAllExpanded] = useState(false);
@@ -372,14 +379,14 @@ export default function CreatorTripPage() {
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
           <div>
             <div className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-gray-700 mb-1">
-              <span>Travel like Ananya Sharma</span>
+              <span>{creatorCms.heroSubtitle || `Travel like ${creatorName}`}</span>
               <span className="w-4 h-4 rounded-full bg-blue-500 text-white flex items-center justify-center text-[10px] font-bold">
                 ✓
               </span>
               <span className="text-gray-400">↗</span>
             </div>
             <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-gray-950 font-sans tracking-tight">
-              Experience Spiti Valley in Winter
+              {creatorCms.heroTitle || 'Experience Spiti Valley in Winter'}
             </h1>
           </div>
 
@@ -396,7 +403,7 @@ export default function CreatorTripPage() {
           </button>
         </div>
 
-        {/* 5-Photo Mosaic Grid (Avian Experiences exact style) */}
+        {/* 5-Photo Mosaic Grid (India Tour Experiences exact style) */}
         <div className="creator-mosaic-grid relative mb-8">
           {/* Main Hero Photo (Spans 2 cols & 2 rows) */}
           <div 
@@ -611,10 +618,10 @@ export default function CreatorTripPage() {
             {/* SECTION: About this Itinerary */}
             <div id="about" className="space-y-3 pt-2 scroll-mt-24">
               <h2 className="text-lg sm:text-xl font-bold text-gray-950 productSansBold">
-                About this Itinerary
+                {creatorCms.aboutTitle || 'About this Itinerary'}
               </h2>
               <p className="text-sm md:text-base text-gray-700 leading-relaxed font-normal">
-                Welcome to an exclusive winter journey through Spiti Valley, inspired by Ananya Sharma's unforgettable Himalayan adventure. After capturing the hearts of travelers with her winter escape to Kashmir, Ananya set her sights on something even more raw, remote, and transformative — Spiti in winter. Braving frozen roads, sub-zero temperatures, and untouched trails, she experienced a side of the Himalayas few dare to explore.
+                {creatorCms.aboutText || "Welcome to an exclusive winter journey through Spiti Valley, inspired by Ananya Sharma's unforgettable Himalayan adventure. After capturing the hearts of travelers with her winter escape to Kashmir, Ananya set her sights on something even more raw, remote, and transformative — Spiti in winter. Braving frozen roads, sub-zero temperatures, and untouched trails, she experienced a side of the Himalayas few dare to explore."}
               </p>
               <button
                 type="button"
@@ -783,7 +790,7 @@ export default function CreatorTripPage() {
               </div>
             </div>
 
-            {/* SECTION: Quick Info Accordions (Avian Experiences exact style) */}
+            {/* SECTION: Quick Info Accordions (India Tour Experiences exact style) */}
             <div id="quick-info" className="space-y-3 pt-6 border-t border-gray-100 scroll-mt-24">
               <h3 className="text-base font-bold text-gray-950">Quick Info</h3>
               <div className="quick-info-grid">
@@ -874,10 +881,10 @@ export default function CreatorTripPage() {
               
               <div>
                 <h3 className="creator-enquiry-title">
-                  Spiti in Winter
+                  {creatorCms.heroTitle || 'Spiti in Winter'}
                 </h3>
                 <div className="creator-enquiry-subtitle">
-                  <span>Travel like <strong>Ananya Sharma</strong></span>
+                  <span>Travel like <strong>{creatorName}</strong></span>
                   <svg className="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24">
                     <circle cx="12" cy="12" r="10" fill="#1da1f2" />
                     <path d="M8.5 12.2l2.3 2.3 4.7-4.8" stroke="#ffffff" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" fill="none" />
@@ -895,7 +902,7 @@ export default function CreatorTripPage() {
                     Thank you! Our expedition coordinator will connect with you on WhatsApp shortly to confirm your slot.
                   </p>
                   <a
-                    href="https://wa.me/919548436762?text=Hello,%20I%20am%20interested%20in%20the%20Spiti%20in%20Winter%20trip%20with%20Aditi%20Raval."
+                    href={`https://wa.me/${whatsappClean}?text=${encodeURIComponent(`Hello, I am interested in the ${creatorCms.heroTitle || 'Spiti in Winter'} trip with ${creatorName}.`)}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-block mt-2 px-4 py-2 rounded-xl bg-emerald-600 text-white text-xs font-bold shadow-md hover:bg-emerald-700 transition"
@@ -1032,23 +1039,20 @@ export default function CreatorTripPage() {
               </button>
             </div>
             <div className="text-sm text-gray-700 space-y-3 leading-relaxed">
-              <p>
-                Welcome to an exclusive winter journey through Spiti Valley, inspired by Ananya Sharma's unforgettable Himalayan adventure.
-              </p>
-              <p>
-                After capturing the hearts of travelers with her winter escape to Kashmir, Ananya set her sights on something even more raw, remote, and transformative — Spiti in winter. Braving frozen roads, sub-zero temperatures, and untouched trails, she experienced a side of the Himalayas few dare to explore.
-              </p>
-              <p>
-                This itinerary is crafted straight from her journey - filled with real moments, local insights, and unmatched winter beauty - so you can follow her footsteps into the heart of Spiti’s snow-covered soul.
-              </p>
-              <h4 className="font-bold text-gray-950 text-base productSansBold pt-2">Why travel like Ananya?</h4>
-              <p>
-                Ananya doesn’t just visit places; she unearths them. Her winter trip to Spiti was not a typical vacation — it was a journey of silence, snow, and stories. From quiet monasteries blanketed in white to frozen rivers and raw village life, she captured Spiti as only a true traveler can. And now, you can too.
-              </p>
-              <h4 className="font-bold text-gray-950 text-base productSansBold pt-2">Why Spiti in Winter?</h4>
-              <p>
-                Spiti in winter is not for everyone - but if you seek something rare and soul-stirring, this is it. With the roads less crowded, the landscapes more dramatic, and the silence deeper than ever, winter in Spiti reveals a stillness that summer can never offer.
-              </p>
+              {creatorCms.aboutText ? (
+                creatorCms.aboutText.split('\n').filter((p) => p.trim() !== '').map((para, idx) => (
+                  <p key={idx}>{para}</p>
+                ))
+              ) : (
+                <>
+                  <p>
+                    Welcome to an exclusive winter journey through Spiti Valley, inspired by {creatorName}'s unforgettable Himalayan adventure.
+                  </p>
+                  <p>
+                    After capturing the hearts of travelers with her winter escape to Kashmir, {creatorName} set her sights on something even more raw, remote, and transformative — Spiti in winter. Braving frozen roads, sub-zero temperatures, and untouched trails, she experienced a side of the Himalayas few dare to explore.
+                  </p>
+                </>
+              )}
             </div>
           </div>
         </div>

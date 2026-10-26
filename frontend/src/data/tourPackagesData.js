@@ -1,4 +1,4 @@
-// Curated Tour Packages Data matching Avian Experiences layout and destinations
+// Curated Tour Packages Data matching India Tour Expeditions layout and destinations
 
 export const tourPackageDestinations = [
   {

@@ -1,7 +1,13 @@
 import React from 'react';
 import { FaWhatsapp } from 'react-icons/fa6';
+import { useCmsData } from '../data/cmsData';
 
 export default function EmiModal({ isOpen, onClose }) {
+  const pagesCms = useCmsData('pages');
+  const footerCms = useCmsData('footer');
+  const emi = pagesCms?.emiModal || {};
+  const whatsappNumber = footerCms?.contactCta?.whatsapp?.replace(/[^0-9]/g, '') || '919548436762';
+
   if (!isOpen) return null;
 
   return (
@@ -22,10 +28,10 @@ export default function EmiModal({ isOpen, onClose }) {
           </div>
           <div>
             <h3 className="text-lg sm:text-2xl font-bold productSansBold text-gray-900">
-              No Cost EMI on All Trips
+              {emi.title || 'No Cost EMI on All Trips'}
             </h3>
             <p className="text-xs text-gray-500">
-              Plan now, pay flexibly in easy monthly installments
+              {emi.subtitle || 'Plan now, pay flexibly in easy monthly installments'}
             </p>
           </div>
         </div>
@@ -34,37 +40,37 @@ export default function EmiModal({ isOpen, onClose }) {
           <div className="flex items-start gap-2.5 sm:gap-3 p-3 bg-gray-50 rounded-xl border border-gray-100">
             <span className="text-primary text-base font-bold">✓</span>
             <div>
-              <strong className="block text-gray-900 font-semibold">Up to 6 Months Zero Interest</strong>
-              No hidden charges, zero processing fees, and exact division of your package total.
+              <strong className="block text-gray-900 font-semibold">{emi.point1Title || 'Up to 6 Months Zero Interest'}</strong>
+              {emi.point1Desc || 'No hidden charges, zero processing fees, and exact division of your package total.'}
             </div>
           </div>
 
           <div className="flex items-start gap-2.5 sm:gap-3 p-3 bg-gray-50 rounded-xl border border-gray-100">
             <span className="text-primary text-base font-bold">✓</span>
             <div>
-              <strong className="block text-gray-900 font-semibold">No Credit Card Needed</strong>
-              Eligible via UPI, debit card, or fast digital paperless verification in under 2 minutes.
+              <strong className="block text-gray-900 font-semibold">{emi.point2Title || 'No Credit Card Needed'}</strong>
+              {emi.point2Desc || 'Eligible via UPI, debit card, or fast digital paperless verification in under 2 minutes.'}
             </div>
           </div>
 
           <div className="flex items-start gap-2.5 sm:gap-3 p-3 bg-gray-50 rounded-xl border border-gray-100">
             <span className="text-primary text-base font-bold">✓</span>
             <div>
-              <strong className="block text-gray-900 font-semibold">Applicable on All Experiences</strong>
-              Includes Spiti Valley, Leh Ladakh, Meghalaya, Vietnam, Bali, Kedarnath, and more.
+              <strong className="block text-gray-900 font-semibold">{emi.point3Title || 'Applicable on All Experiences'}</strong>
+              {emi.point3Desc || 'Includes Spiti Valley, Leh Ladakh, Meghalaya, Vietnam, Bali, Kedarnath, and more.'}
             </div>
           </div>
         </div>
 
         <div className="flex flex-col sm:flex-row gap-2.5 sm:gap-3 pt-2">
           <a
-            href="https://wa.me/919548436762?text=Hello,%20I%20would%20like%20to%20know%20more%20about%20the%20No%20Cost%20EMI%20plan."
+            href={`https://wa.me/${whatsappNumber}?text=Hello,%20I%20would%20like%20to%20know%20more%20about%20the%20No%20Cost%20EMI%20plan.`}
             target="_blank"
             rel="noopener noreferrer"
             className="flex-1 bg-primary hover:bg-[#d0181e] text-white font-bold py-3 px-4 rounded-xl text-center text-xs sm:text-sm transition-colors shadow-md flex items-center justify-center gap-2"
           >
             <FaWhatsapp className="w-5 h-5 flex-shrink-0" />
-            <span>Check EMI Eligibility via WhatsApp</span>
+            <span>{emi.whatsappButtonText || 'Check EMI Eligibility via WhatsApp'}</span>
           </a>
           <button
             onClick={onClose}

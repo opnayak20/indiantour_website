@@ -1,7 +1,17 @@
 import React from 'react';
-import { promoBanners } from '../data/websiteData';
+import { useCmsData } from '../data/cmsData';
 
 export default function PromoBannerSale({ onBannerClick }) {
+  const homepageCms = useCmsData('homepage');
+  const banner = homepageCms?.saleBanner || {};
+
+  const badgeText = banner.badge || 'Limited Period Offer';
+  const titleText = banner.title || 'Plan Your Winter Getaway';
+  const subtitleText = banner.subtitle || 'Flat ₹4,000 Off on Early Bird Group Bookings with 0% Interest No Cost EMI';
+  const codeText = banner.code || 'CODE: WINTER2026';
+  const buttonText = banner.buttonText || 'Explore Deals ↗';
+  const imageUrl = banner.image || 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=1600&q=85';
+
   return (
     <div className="w-full my-6 sm:my-8 md:my-10">
       <div className="container mx-auto px-4 md:px-6">
@@ -13,8 +23,8 @@ export default function PromoBannerSale({ onBannerClick }) {
           <img
             loading="lazy"
             decoding="async"
-            src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=1600&q=85"
-            alt="Winter Mountain Getaway"
+            src={imageUrl}
+            alt={titleText}
             onError={(e) => {
               e.currentTarget.onerror = null;
               e.currentTarget.src = 'https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1400&q=80';
@@ -28,23 +38,25 @@ export default function PromoBannerSale({ onBannerClick }) {
           {/* Banner Content */}
           <div className="relative z-10 flex flex-col justify-center h-full px-6 sm:px-12 md:px-16 text-white max-w-2xl">
             <span className="inline-block bg-[#e52b2b] text-white text-[11px] sm:text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full w-fit mb-2 shadow-sm">
-              Limited Period Offer
+              {badgeText}
             </span>
 
             <h3 className="text-2xl sm:text-4xl md:text-5xl font-extrabold productSansBold drop-shadow-md leading-tight">
-              Plan Your Winter Getaway
+              {titleText}
             </h3>
 
             <p className="text-xs sm:text-sm md:text-base text-gray-200 mt-2 max-w-lg font-medium drop-shadow">
-              Flat ₹4,000 Off on Early Bird Group Bookings with 0% Interest No Cost EMI
+              {subtitleText}
             </p>
 
             <div className="mt-4 flex flex-wrap items-center gap-3">
-              <span className="bg-white/20 backdrop-blur-md border border-white/40 px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-semibold tracking-wider font-mono">
-                CODE: WINTER2026
-              </span>
+              {codeText && (
+                <span className="bg-white/20 backdrop-blur-md border border-white/40 px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-semibold tracking-wider font-mono">
+                  {codeText}
+                </span>
+              )}
               <span className="inline-flex items-center text-xs sm:text-sm font-bold text-white group-hover:underline bg-white/20 px-3.5 py-1.5 rounded-xl backdrop-blur-md">
-                Explore Deals ↗
+                {buttonText}
               </span>
             </div>
           </div>

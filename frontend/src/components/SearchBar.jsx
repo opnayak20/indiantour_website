@@ -1,17 +1,23 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { FaMagnifyingGlass, FaXmark } from 'react-icons/fa6';
+import { useCmsData } from '../data/cmsData';
 
 export default function SearchBar({ searchQuery, setSearchQuery, onQuickSelect }) {
-  const popularSearches = [
-    'Spiti Valley',
-    'Meghalaya',
-    'Leh Ladakh',
-    'Kashmir',
-    'Bali',
-    'Vietnam',
-    'Kedarnath',
-    'Jaisalmer'
-  ];
+  const homepageCms = useCmsData('homepage');
+  const searchConfig = homepageCms?.search;
+
+  const popularSearches = searchConfig?.quickTags && searchConfig.quickTags.length > 0
+    ? searchConfig.quickTags
+    : [
+        'Spiti Valley',
+        'Meghalaya',
+        'Leh Ladakh',
+        'Kashmir',
+        'Bali',
+        'Vietnam',
+        'Kedarnath',
+        'Jaisalmer'
+      ];
 
   return (
     <div className="w-full max-w-4xl mx-auto px-4 -mt-6 sm:-mt-8 relative z-30">
@@ -24,7 +30,7 @@ export default function SearchBar({ searchQuery, setSearchQuery, onQuickSelect }
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search tours, destinations or experiences (e.g. Spiti, Meghalaya, Ladakh)..."
+            placeholder={searchConfig?.placeholder || "Search tours, destinations or experiences (e.g. Spiti, Meghalaya, Ladakh)..."}
             className="w-full bg-transparent text-sm sm:text-base text-gray-900 placeholder-gray-400 focus:outline-none productSans"
           />
           {searchQuery && (

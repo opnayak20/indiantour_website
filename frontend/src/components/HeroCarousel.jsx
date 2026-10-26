@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { useCmsData } from '../data/cmsData';
 
-const heroSlides = [
+const DEFAULT_HERO_SLIDES = [
   {
     image: '/hero-buddha.jpg',
     title: 'Spiti Valley Buddha Statue & Snowy Himalayan Peaks'
@@ -23,24 +24,39 @@ const heroSlides = [
   }
 ];
 
-// Persona words that cycle - starts on Travellers matching reference
-const audienceWords = ['Travellers', 'Adventurers', 'Explorers', 'Families', 'Couples', 'Solo Travelers', 'Friends'];
+const DEFAULT_AUDIENCE_WORDS = ['Travellers', 'Adventurers', 'Explorers', 'Families', 'Couples', 'Solo Travelers', 'Friends'];
 
 export default function HeroCarousel() {
+  const homepageCms = useCmsData('homepage');
+  const heroCms = homepageCms?.hero;
+
+  const heroSlides = Array.isArray(heroCms?.slides) && heroCms.slides.length > 0
+    ? heroCms.slides
+    : DEFAULT_HERO_SLIDES;
+
+  const audienceWords = Array.isArray(heroCms?.audienceWords) && heroCms.audienceWords.length > 0
+    ? heroCms.audienceWords
+    : DEFAULT_AUDIENCE_WORDS;
+
+  const headlineLine1 = heroCms?.line1 || 'Experiences for';
+  const touristImgSrc = heroCms?.touristImg || '/tourist-text.png';
+
   const [currentSlide, setCurrentSlide] = useState(0);
   const [wordIndex, setWordIndex] = useState(0);
   const [isFadingWord, setIsFadingWord] = useState(false);
 
   // Auto-advance hero slides
   useEffect(() => {
+    if (heroSlides.length <= 1) return;
     const slideInterval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
     }, 6000);
     return () => clearInterval(slideInterval);
-  }, []);
+  }, [heroSlides.length]);
 
   // Cycle audience words
   useEffect(() => {
+    if (audienceWords.length <= 1) return;
     const wordInterval = setInterval(() => {
       setIsFadingWord(true);
       setTimeout(() => {
@@ -49,7 +65,7 @@ export default function HeroCarousel() {
       }, 350);
     }, 2800);
     return () => clearInterval(wordInterval);
-  }, []);
+  }, [audienceWords.length]);
 
   return (
     <div className="relative w-full overflow-hidden bg-gray-900 select-none">
@@ -83,7 +99,7 @@ export default function HeroCarousel() {
         <div className="hero-heading-box">
           {/* Line 1: Experiences for */}
           <h1 className="text-2xl sm:text-4xl md:text-5xl font-extrabold productSansBold tracking-tight text-white mb-1">
-            Experiences for
+            {headlineLine1}
           </h1>
 
           {/* Line 2: [Tourist-image] Families */}
@@ -93,7 +109,7 @@ export default function HeroCarousel() {
               loading="eager"
               fetchPriority="high"
               decoding="async"
-              src="/tourist-text.png"
+              src={touristImgSrc}
               alt="Tourist"
               className="hero-tourist-img"
             />
@@ -104,7 +120,7 @@ export default function HeroCarousel() {
                 isFadingWord ? 'opacity-0 transform -translate-y-1' : 'opacity-100 transform translate-y-0'
               }`}
             >
-              {audienceWords[wordIndex]}
+              {audienceWords[wordIndex % audienceWords.length]}
             </span>
           </div>
         </div>
@@ -118,8 +134,8 @@ export default function HeroCarousel() {
               aria-label={`Go to slide ${i + 1}`}
               className={`transition-all duration-300 rounded-full cursor-pointer ${
                 i === currentSlide
-                  ? 'w-6 h-1.5 bg-white'
-                  : 'w-1.5 h-1.5 bg-white/50 hover:bg-white/80'
+                  ? 'w-7 h-2 bg-[#ec1d24] shadow-md'
+                  : 'w-2 h-2 bg-white/70 hover:bg-white'
               }`}
             />
           ))}

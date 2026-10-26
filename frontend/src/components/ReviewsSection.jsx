@@ -102,7 +102,7 @@ export default function ReviewsSection({ onViewAllReviews }) {
           </div>
         </motion.div>
 
-        {/* Section Header (Avian Experiences exact style) */}
+        {/* Section Header (India Tour Experiences exact style) */}
         <div className="pb-4 sm:pb-6 productSansBold flex flex-col sm:flex-row sm:items-end justify-between gap-3.5">
           <div>
             <div className="flex items-center gap-2 mb-1">

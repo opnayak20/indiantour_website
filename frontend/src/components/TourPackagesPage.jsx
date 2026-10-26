@@ -4,7 +4,7 @@ import { categories } from '../data/categoriesData';
 import { API_BASE } from '../config/api';
 import LazyImage from './LazyImage';
 
-// Individual Tour Package Card matching avianexperiences.com design
+// Individual Tour Package Card matching indiatour.live design
 function TourCard({ pkg, onCardClick }) {
   const [activeImgIdx, setActiveImgIdx] = useState(0);
 
@@ -98,7 +98,7 @@ function TourCard({ pkg, onCardClick }) {
         </div>
 
         <div className="mt-2.5 pt-1">
-          {/* Green Savings Badge (Avian Experiences exact style) */}
+          {/* Green Savings Badge (India Tour Experiences exact style) */}
           {pkg.badge && (
             <div className="inline-flex items-center gap-1 bg-[#f0fdf4] text-[#16a34a] border border-[#bbf7d0] px-2 py-0.5 rounded text-[11px] font-bold tracking-tight">
               <svg className="w-3 h-3 text-[#16a34a]" fill="none" stroke="currentColor" viewBox="0 0 24 24">

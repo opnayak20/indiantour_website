@@ -1,10 +1,12 @@
 import React, { useRef, useState, useEffect, useCallback } from 'react';
 import { categories } from '../data/categoriesData';
+import { CategoryIcon } from './CategoryIcons';
 
 export default function CategorySlider({ selectedCategory, onSelectCategory }) {
   const scrollRef = useRef(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
+  const [imgError, setImgError] = useState({});
 
   const checkScroll = useCallback(() => {
     if (scrollRef.current) {
@@ -77,13 +79,18 @@ export default function CategorySlider({ selectedCategory, onSelectCategory }) {
                 title={cat.name}
               >
                 <div className="category-icon-container">
-                  <img
-                    src={cat.icon}
-                    alt={cat.name}
-                    className="category-img"
-                    loading="lazy"
-                    decoding="async"
-                  />
+                  {imgError[cat.slug] ? (
+                    <CategoryIcon slug={cat.slug} className="w-6 h-6 text-gray-700" />
+                  ) : (
+                    <img
+                      src={cat.icon}
+                      alt={cat.name}
+                      className="category-img"
+                      loading="lazy"
+                      decoding="async"
+                      onError={() => setImgError((prev) => ({ ...prev, [cat.slug]: true }))}
+                    />
+                  )}
                 </div>
                 <span className="category-label">{cat.name}</span>
                 {isSelected && <span className="category-active-bar" />}

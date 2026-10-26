@@ -1,8 +1,15 @@
 import React, { useState } from 'react';
+import { useCmsData } from '../data/cmsData';
 
-export default function Footer({ onNavigateTab, onOpenEmiModal, onOpenAdmin }) {
+export default function Footer({ onNavigateTab, onOpenEmiModal, onOpenAdmin, onOpenPolicyModal }) {
   const [email, setEmail] = useState('');
   const [subscribed, setSubscribed] = useState(false);
+  const footerCms = useCmsData('footer');
+  const headerCms = useCmsData('header');
+  const corp = footerCms?.corporateOffice;
+  const main = footerCms?.mainBranch;
+  const newsletter = footerCms?.newsletter;
+  const copyright = footerCms?.copyright;
 
   const handleSubscribe = (e) => {
     e.preventDefault();
@@ -17,49 +24,84 @@ export default function Footer({ onNavigateTab, onOpenEmiModal, onOpenAdmin }) {
     <footer className="site-footer">
       <div className="site-footer-inner">
         
-        {/* Main Footer Layout: 3 Horizontal Columns matching Avian Experiences exactly */}
+        {/* Main Footer Layout: 3 Horizontal Columns matching India Tour Experiences exactly */}
         <div className="site-footer-grid">
           
           {/* Column 1: Company Logo & Address */}
           <div className="site-footer-col-brand">
             <a href="/" className="inline-block bg-white px-3.5 py-2 rounded-2xl shadow-sm transition-transform hover:scale-105 mb-4">
               <img
-                src="/indiatournewlogo.jpg"
-                alt="India Tourism Live Travels"
+                src={headerCms?.navbar?.logoUrl || "/indiatournewlogo.jpg"}
+                alt={headerCms?.navbar?.brandName || "India Tourism Live Travels"}
                 className="h-9 sm:h-11 md:h-12 w-auto object-contain"
               />
             </a>
 
-            {/* Office Address (Clean, modern redesign with ProductSans) */}
-            <a
-              href="https://maps.google.com/?q=W35P%2BM9P,+Alipur+Ibrahimpur+Urf+Ikk,+Haridwar,+Uttarakhand+249402"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="site-footer-address-card group"
-            >
-              <div className="site-footer-address-icon">
-                <svg
-                  className="w-5 h-5 text-red-500 group-hover:scale-110 transition-transform"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                >
-                  <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 0 1 0-5 2.5 2.5 0 0 1 0 5z" />
-                </svg>
-              </div>
-              <div className="site-footer-address-content">
-                <div className="flex items-center gap-1.5 mb-1">
-                  <p className="site-footer-company-name">India Tour Pvt. Ltd.</p>
-                  <svg className="w-3.5 h-3.5 text-gray-400 group-hover:text-red-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all opacity-70" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                    <path d="M7 17L17 7M17 7H7M17 7V17" />
+            {/* Corporate Office */}
+            <div className="mb-4">
+              <a
+                href={corp?.mapUrl || 'https://maps.google.com'}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="site-footer-address-card group"
+              >
+                <div className="site-footer-address-icon">
+                  <svg
+                    className="w-5 h-5 text-red-500 group-hover:scale-110 transition-transform"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                  >
+                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 0 1 0-5 2.5 2.5 0 0 1 0 5z" />
                   </svg>
                 </div>
-                <p className="site-footer-address-lines">
-                  W35P+M9P, Road, Alipur<br />
-                  Ibrahimpur Urf Ikk, Haridwar<br />
-                  Uttarakhand 249402
-                </p>
-              </div>
-            </a>
+                <div className="site-footer-address-content">
+                  <div className="flex items-center gap-1.5 mb-1">
+                    <p className="site-footer-company-name">{corp?.heading || 'Corporate Office'}</p>
+                    <svg className="w-3.5 h-3.5 text-gray-400 group-hover:text-red-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all opacity-70" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                      <path d="M7 17L17 7M17 7H7M17 7V17" />
+                    </svg>
+                  </div>
+                  <p className="site-footer-address-lines">
+                    {corp?.line1}<br />
+                    {corp?.line2}<br />
+                    {corp?.line3}
+                  </p>
+                </div>
+              </a>
+            </div>
+
+            {/* Main Branch Address */}
+            <div>
+              <a
+                href={main?.mapUrl || 'https://maps.google.com'}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="site-footer-address-card group"
+              >
+                <div className="site-footer-address-icon">
+                  <svg
+                    className="w-5 h-5 text-red-500 group-hover:scale-110 transition-transform"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                  >
+                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 0 1 0-5 2.5 2.5 0 0 1 0 5z" />
+                  </svg>
+                </div>
+                <div className="site-footer-address-content">
+                  <div className="flex items-center gap-1.5 mb-1">
+                    <p className="site-footer-company-name">{main?.heading || 'Main Branch Address'}</p>
+                    <svg className="w-3.5 h-3.5 text-gray-400 group-hover:text-red-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all opacity-70" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                      <path d="M7 17L17 7M17 7H7M17 7V17" />
+                    </svg>
+                  </div>
+                  <p className="site-footer-address-lines">
+                    {main?.line1}<br />
+                    {main?.line2}<br />
+                    {main?.line3}
+                  </p>
+                </div>
+              </a>
+            </div>
           </div>
 
           {/* Column 2: Explore Links (Side by Side 2-Column layout) */}
@@ -114,7 +156,10 @@ export default function Footer({ onNavigateTab, onOpenEmiModal, onOpenAdmin }) {
                 </button>
                 <button
                   type="button"
-                  onClick={() => document.getElementById('contact-cta')?.scrollIntoView({ behavior: 'smooth' })}
+                  onClick={() => {
+                    const ph = (footerCms?.contactCta?.whatsapp || '+919548436762').replace(/[^0-9]/g, '');
+                    window.open(`https://wa.me/${ph}?text=${encodeURIComponent('Hello, I am interested in career and trip leader opportunities with India Tour.')}`, '_blank');
+                  }}
                   className="site-footer-link"
                 >
                   Careers
@@ -131,7 +176,7 @@ export default function Footer({ onNavigateTab, onOpenEmiModal, onOpenAdmin }) {
                 </button>
                 <button
                   type="button"
-                  onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                  onClick={() => onOpenPolicyModal ? onOpenPolicyModal('about') : window.scrollTo({ top: 0, behavior: 'smooth' })}
                   className="site-footer-link"
                 >
                   About Us
@@ -145,21 +190,21 @@ export default function Footer({ onNavigateTab, onOpenEmiModal, onOpenAdmin }) {
                 </button>
                 <button
                   type="button"
-                  onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                  onClick={() => onOpenPolicyModal ? onOpenPolicyModal('terms') : window.scrollTo({ top: 0, behavior: 'smooth' })}
                   className="site-footer-link"
                 >
                   Terms &amp; Conditions
                 </button>
                 <button
                   type="button"
-                  onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                  onClick={() => onOpenPolicyModal ? onOpenPolicyModal('privacy') : window.scrollTo({ top: 0, behavior: 'smooth' })}
                   className="site-footer-link"
                 >
                   Privacy Policy
                 </button>
                 <button
                   type="button"
-                  onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                  onClick={() => onOpenPolicyModal ? onOpenPolicyModal('cancellation') : window.scrollTo({ top: 0, behavior: 'smooth' })}
                   className="site-footer-link"
                 >
                   Payment Details
@@ -171,10 +216,10 @@ export default function Footer({ onNavigateTab, onOpenEmiModal, onOpenAdmin }) {
           {/* Column 3: Newsletter Form */}
           <div className="site-footer-col-newsletter">
             <h3 className="site-footer-heading">
-              Get Updates &amp; more!
+              {newsletter?.heading || 'Get Updates & more!'}
             </h3>
             <p className="site-footer-newsletter-text">
-              Subscribe to the free newsletter and stay up to date.
+              {newsletter?.subtitle || 'Subscribe to the free newsletter and stay up to date.'}
             </p>
 
             {subscribed ? (
@@ -188,14 +233,14 @@ export default function Footer({ onNavigateTab, onOpenEmiModal, onOpenAdmin }) {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Your Email"
+                  placeholder={newsletter?.placeholder || 'Your Email'}
                   className="site-footer-input"
                 />
                 <button
                   type="submit"
                   className="site-footer-submit"
                 >
-                  Subscribe
+                  {newsletter?.buttonText || 'Subscribe'}
                 </button>
               </form>
             )}
@@ -208,12 +253,11 @@ export default function Footer({ onNavigateTab, onOpenEmiModal, onOpenAdmin }) {
         
         <div className="site-footer-bottom">
           <div className="site-footer-copyright">
-            © 2026 India Tour Private Limited
+            {copyright?.text || '© 2026 India Tour Private Limited'}
           </div>
           <div className="site-footer-madein">
-            <span>Made with</span>
+            <span>{copyright?.tagline ? copyright.tagline.replace('❤️', '').trim() : 'Made with in India 🇮🇳'}</span>
             <span style={{ color: '#ef4444' }}>❤️</span>
-            <span>in India 🇮🇳</span>
           </div>
         </div>
 

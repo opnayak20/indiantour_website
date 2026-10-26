@@ -23,11 +23,11 @@ export const groupTripsList = [
     badge: 'Save 3,000',
     secondaryBadge: null,
     images: [
-      'https://img.avianexperiences.com/trek/d5b19425-cec1-4e3c-81bb-7f00f04f644d/Camel_Safari.jpg',
-      'https://img.avianexperiences.com/trek-memories/d30902d7-f575-4bc3-a483-32f64e67bcef/DSC00719.jpg',
-      'https://img.avianexperiences.com/trek-memories/e8827dda-9c4a-4c18-b975-29b75cfc61da/DJI_0030.jpg',
-      'https://img.avianexperiences.com/trek/59b01d6e-0709-430d-9bdf-905a8b209d92/Bada_Bagh_Jaisalmer_5.jpg',
-      'https://img.avianexperiences.com/trek/0d9ea3a2-36db-4a3d-a099-f8338d0160cd/DSC00297.jpg'
+      'https://d37ng3z2ha8i9t.cloudfront.net/trek/d5b19425-cec1-4e3c-81bb-7f00f04f644d/Camel_Safari.jpg',
+      'https://d37ng3z2ha8i9t.cloudfront.net/trek-memories/d30902d7-f575-4bc3-a483-32f64e67bcef/DSC00719.jpg',
+      'https://d37ng3z2ha8i9t.cloudfront.net/trek-memories/e8827dda-9c4a-4c18-b975-29b75cfc61da/DJI_0030.jpg',
+      'https://d37ng3z2ha8i9t.cloudfront.net/trek/59b01d6e-0709-430d-9bdf-905a8b209d92/Bada_Bagh_Jaisalmer_5.jpg',
+      'https://d37ng3z2ha8i9t.cloudfront.net/trek/0d9ea3a2-36db-4a3d-a099-f8338d0160cd/DSC00297.jpg'
     ],
     overview: 'Experience the Thar Desert magic: camp in luxury Swiss tents at Sam Sand Dunes, ride camels across golden ripples of sand, and celebrate with Rajasthani folk music and campfire.',
     inclusions: [
@@ -51,11 +51,11 @@ export const groupTripsList = [
     badge: 'Save 3,000',
     secondaryBadge: null,
     images: [
-      'https://img.avianexperiences.com/trek/a955fba9-3c6f-4f92-9502-80b374faf078/seven_sisters_falls_9.jpg',
-      'https://img.avianexperiences.com/trek/a9469af1-87c1-4140-9d69-8c185138398f/Double_Decker_Living_Root_Bridge_7.jpg',
-      'https://img.avianexperiences.com/trek/58600f59-3c14-45b2-bb0e-83c5b2bbf8a0/shnongpdeng_Village_1.jpg',
-      'https://img.avianexperiences.com/trek/b8cd0aff-7a58-46cd-b72d-81285dcec4d8/arwah_cave_1.jpg',
-      'https://img.avianexperiences.com/trek/2697971c-ae11-4f06-84d8-33e364b49ef5/Krang_Suri_Falls_7.jpg'
+      'https://d37ng3z2ha8i9t.cloudfront.net/trek/a955fba9-3c6f-4f92-9502-80b374faf078/seven_sisters_falls_9.jpg',
+      'https://d37ng3z2ha8i9t.cloudfront.net/trek/a9469af1-87c1-4140-9d69-8c185138398f/Double_Decker_Living_Root_Bridge_7.jpg',
+      'https://d37ng3z2ha8i9t.cloudfront.net/trek/58600f59-3c14-45b2-bb0e-83c5b2bbf8a0/shnongpdeng_Village_1.jpg',
+      'https://d37ng3z2ha8i9t.cloudfront.net/trek/b8cd0aff-7a58-46cd-b72d-81285dcec4d8/arwah_cave_1.jpg',
+      'https://d37ng3z2ha8i9t.cloudfront.net/trek/2697971c-ae11-4f06-84d8-33e364b49ef5/Krang_Suri_Falls_7.jpg'
     ],
     overview: 'Explore the Abode of Clouds: trek to the ancient Double Decker Living Root Bridge, witness thunderous waterfalls in Cherrapunji, and boat on crystal-clear Dawki river.',
     inclusions: [
@@ -79,11 +79,11 @@ export const groupTripsList = [
     badge: 'Save 4,000',
     secondaryBadge: null,
     images: [
-      'https://img.avianexperiences.com/trek/ca79229b-9c48-423e-98af-4f6cf0e2f338/boating_4.jpg',
-      'https://img.avianexperiences.com/trek/5a7685fc-fa99-4b84-a93b-cd0f7c8094fa/jeep_safari_7.jpg',
-      'https://img.avianexperiences.com/trek/2905a780-cc64-49a9-9e13-af9d4f56bad1/Double_Decker_Living_Root_Bridge_7.jpg',
-      'https://img.avianexperiences.com/trek/004b5d7c-2e4f-4d9b-be00-4eba8497780b/seven_sisters_falls_9.jpg',
-      'https://img.avianexperiences.com/trek/39f6a62c-4264-422e-a5ec-589b978c3376/Krang_Suri_Falls_1.jpg'
+      'https://d37ng3z2ha8i9t.cloudfront.net/trek/ca79229b-9c48-423e-98af-4f6cf0e2f338/boating_4.jpg',
+      'https://d37ng3z2ha8i9t.cloudfront.net/trek/5a7685fc-fa99-4b84-a93b-cd0f7c8094fa/jeep_safari_7.jpg',
+      'https://d37ng3z2ha8i9t.cloudfront.net/trek/2905a780-cc64-49a9-9e13-af9d4f56bad1/Double_Decker_Living_Root_Bridge_7.jpg',
+      'https://d37ng3z2ha8i9t.cloudfront.net/trek/004b5d7c-2e4f-4d9b-be00-4eba8497780b/seven_sisters_falls_9.jpg',
+      'https://d37ng3z2ha8i9t.cloudfront.net/trek/39f6a62c-4264-422e-a5ec-589b978c3376/Krang_Suri_Falls_1.jpg'
     ],
     overview: 'The complete Northeast group experience combining wildlife safaris in Kaziranga National Park with living root bridges and limestone caves of Meghalaya.',
     inclusions: [
@@ -107,11 +107,11 @@ export const groupTripsList = [
     badge: 'Save 4,000',
     secondaryBadge: null,
     images: [
-      'https://img.avianexperiences.com/trek/b5d3520b-61c6-4a83-9bdb-5901de243d27',
-      'https://img.avianexperiences.com/trek/79c09837-fd85-477b-a54d-64802cfd6974',
-      'https://img.avianexperiences.com/trek/2e72d619-ac99-4230-8b26-8161cb387ddb',
-      'https://img.avianexperiences.com/trek/5eca5599-5bdc-494d-8be9-e67e2f537d1a',
-      'https://img.avianexperiences.com/trek/6deaa300-4423-4566-a5c5-51408b8e19d3'
+      'https://d37ng3z2ha8i9t.cloudfront.net/trek/b5d3520b-61c6-4a83-9bdb-5901de243d27',
+      'https://d37ng3z2ha8i9t.cloudfront.net/trek/79c09837-fd85-477b-a54d-64802cfd6974',
+      'https://d37ng3z2ha8i9t.cloudfront.net/trek/2e72d619-ac99-4230-8b26-8161cb387ddb',
+      'https://d37ng3z2ha8i9t.cloudfront.net/trek/5eca5599-5bdc-494d-8be9-e67e2f537d1a',
+      'https://d37ng3z2ha8i9t.cloudfront.net/trek/6deaa300-4423-4566-a5c5-51408b8e19d3'
     ],
     overview: 'Witness Kashmir turned into a fairytale winter wonderland: snow fights in Gulmarg, cable car ride, Sonamarg glacier vistas, and houseboat stay on Dal Lake.',
     inclusions: [
@@ -135,11 +135,11 @@ export const groupTripsList = [
     badge: 'Save 4,000',
     secondaryBadge: null,
     images: [
-      'https://img.avianexperiences.com/trek/ce6bdd4e-236a-4ad7-805c-bbd6db768708',
-      'https://img.avianexperiences.com/trek/7d040232-1b40-463f-abc4-3a145e1ff21e',
-      'https://img.avianexperiences.com/trek/54822ab3-f445-444c-af33-e67b69345d84',
-      'https://img.avianexperiences.com/trek/8ef59c8a-f2e4-40b1-8f00-db88bd1c34e7',
-      'https://img.avianexperiences.com/trek/507144c6-6ff4-41a5-9c54-30fbd83dfe98'
+      'https://d37ng3z2ha8i9t.cloudfront.net/trek/ce6bdd4e-236a-4ad7-805c-bbd6db768708',
+      'https://d37ng3z2ha8i9t.cloudfront.net/trek/7d040232-1b40-463f-abc4-3a145e1ff21e',
+      'https://d37ng3z2ha8i9t.cloudfront.net/trek/54822ab3-f445-444c-af33-e67b69345d84',
+      'https://d37ng3z2ha8i9t.cloudfront.net/trek/8ef59c8a-f2e4-40b1-8f00-db88bd1c34e7',
+      'https://d37ng3z2ha8i9t.cloudfront.net/trek/507144c6-6ff4-41a5-9c54-30fbd83dfe98'
     ],
     overview: 'Direct group expedition from Delhi to Srinagar covering Gulmarg, Sonamarg, Pahalgam, and Dal Lake with complete travel logistics taken care of.',
     inclusions: [
@@ -163,11 +163,11 @@ export const groupTripsList = [
     badge: 'Save 4,000',
     secondaryBadge: null,
     images: [
-      'https://img.avianexperiences.com/trek/85581134-8d74-4fca-a1bf-614c077c7dfb/Spiti_Valley_Group_Photo_2.jpeg',
-      'https://img.avianexperiences.com/trek/a3502211-239b-41fc-8b09-2e1c984ea138',
-      'https://img.avianexperiences.com/trek/7493d033-2094-47b5-aae9-54895427b03a',
-      'https://img.avianexperiences.com/trek/14bb61ff-53f9-44bf-9861-0f4ae5fc7849',
-      'https://img.avianexperiences.com/trek/0477b847-c682-43e1-b146-a7ead0d3c652'
+      'https://d37ng3z2ha8i9t.cloudfront.net/trek/85581134-8d74-4fca-a1bf-614c077c7dfb/Spiti_Valley_Group_Photo_2.jpeg',
+      'https://d37ng3z2ha8i9t.cloudfront.net/trek/a3502211-239b-41fc-8b09-2e1c984ea138',
+      'https://d37ng3z2ha8i9t.cloudfront.net/trek/7493d033-2094-47b5-aae9-54895427b03a',
+      'https://d37ng3z2ha8i9t.cloudfront.net/trek/14bb61ff-53f9-44bf-9861-0f4ae5fc7849',
+      'https://d37ng3z2ha8i9t.cloudfront.net/trek/0477b847-c682-43e1-b146-a7ead0d3c652'
     ],
     overview: 'A thrilling 4x4 snow drive into white Spiti Valley: witness frozen waterfalls, Key Monastery under snow blankets, and drive through high mountain passes.',
     inclusions: [
@@ -478,6 +478,32 @@ export const groupTripsList = [
       'Deluxe hotel and lake camp accommodations',
       'Breakfast and dinner included daily',
       'Experienced road marshal and medical backup'
+    ]
+  },
+  {
+    id: 'group-ladakh-leh',
+    slug: 'leh-ladakh-group-trip',
+    category: 'ladakh',
+    seasonType: 'summer',
+    title: 'Leh Ladakh Group Trip from Leh',
+    route: 'with Nubra Valley & Pangong Tso',
+    duration: '8 Days 7 Nights',
+    price: 25800,
+    originalPrice: 29800,
+    badge: 'SAVE ₹4,000',
+    secondaryBadge: 'Direct Join',
+    images: [
+      'https://images.unsplash.com/photo-1581793745862-99fde7fa73d2?auto=format&fit=crop&w=800&q=80',
+      'https://images.unsplash.com/photo-1571536802807-30451e3955d8?auto=format&fit=crop&w=800&q=80',
+      'https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=800&q=80'
+    ],
+    overview: 'Airport-to-airport group expedition starting right in Leh: acclimatize in Leh city, traverse Khardung La pass, explore Nubra Valley sand dunes, and camp under the stars at Pangong Tso.',
+    inclusions: [
+      'Leh Airport pickup and drop in private vehicle',
+      'Acclimatization hotel stay in Leh with heating',
+      'Pangong Tso luxury lakeside camp stay & Nubra hotel',
+      'Breakfast and dinner included on all days',
+      'Experienced mountain trip leader and oxygen cylinders'
     ]
   }
 ];

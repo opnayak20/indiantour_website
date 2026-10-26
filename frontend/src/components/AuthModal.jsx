@@ -226,12 +226,12 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess }) {
   };
 
   return (
-    <div className="avian-auth-overlay">
+    <div className="India Tour-auth-overlay">
       {/* Background click to dismiss */}
       <div className="fixed inset-0" onClick={handleClose} />
 
-      {/* Modal Card matching Avian Experiences exact styling */}
-      <div className="avian-auth-card">
+      {/* Modal Card matching India Tour Experiences exact styling */}
+      <div className="India Tour-auth-card">
         
         {/* Top Right Close '✕' Button */}
         <button
@@ -304,12 +304,12 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess }) {
                 placeholder="Email Address"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="avian-auth-single-input"
+                className="India Tour-auth-single-input"
                 autoFocus
               />
             </div>
 
-            <div className="avian-auth-input-container">
+            <div className="India Tour-auth-input-container">
               <input
                 type={showPassword ? 'text' : 'password'}
                 required
@@ -318,7 +318,7 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess }) {
                 placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="avian-auth-input"
+                className="India Tour-auth-input"
               />
               <button
                 type="button"
@@ -342,7 +342,7 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess }) {
             <button
               type="submit"
               disabled={isLoading}
-              className="avian-auth-btn mt-2"
+              className="India Tour-auth-btn mt-2"
             >
               {isLoading ? 'Signing In...' : 'Sign In'}
             </button>
@@ -383,7 +383,7 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess }) {
                 placeholder="Full Name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="avian-auth-single-input"
+                className="India Tour-auth-single-input"
                 autoFocus
               />
             </div>
@@ -397,7 +397,7 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess }) {
                 placeholder="Email Address"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="avian-auth-single-input"
+                className="India Tour-auth-single-input"
               />
             </div>
 
@@ -410,11 +410,11 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess }) {
                 placeholder="Mobile Number"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
-                className="avian-auth-single-input"
+                className="India Tour-auth-single-input"
               />
             </div>
 
-            <div className="avian-auth-input-container">
+            <div className="India Tour-auth-input-container">
               <input
                 type={showPassword ? 'text' : 'password'}
                 required
@@ -424,7 +424,7 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess }) {
                 placeholder="Create Password (min. 6 characters)"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="avian-auth-input"
+                className="India Tour-auth-input"
               />
               <button
                 type="button"
@@ -448,7 +448,7 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess }) {
             <button
               type="submit"
               disabled={isLoading}
-              className="avian-auth-btn mt-3 mb-2"
+              className="India Tour-auth-btn mt-3 mb-2"
             >
               {isLoading ? 'Sending Verification...' : 'Continue to Verification'}
             </button>
@@ -494,7 +494,7 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess }) {
                 placeholder="Enter 6-digit OTP"
                 value={otpCode}
                 onChange={(e) => setOtpCode(e.target.value.replace(/\D/g, ''))}
-                className="avian-auth-single-input text-center tracking-widest text-lg font-bold"
+                className="India Tour-auth-single-input text-center tracking-widest text-lg font-bold"
                 autoFocus
               />
             </div>
@@ -502,7 +502,7 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess }) {
             <button
               type="submit"
               disabled={isLoading}
-              className="avian-auth-btn mb-2"
+              className="India Tour-auth-btn mb-2"
             >
               {isLoading ? 'Verifying...' : 'Verify & Create Account'}
             </button>
