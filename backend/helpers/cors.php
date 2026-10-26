@@ -44,8 +44,10 @@ if ($appEnv === 'local') {
 }
 
 $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+$originHost = !empty($origin) ? parse_url($origin, PHP_URL_HOST) : null;
+$serverHost = $_SERVER['HTTP_HOST'] ?? '';
 
-if ($origin && in_array($origin, $allowedOrigins, true)) {
+if ($origin && ($originHost === $serverHost || in_array($origin, $allowedOrigins, true))) {
     header("Access-Control-Allow-Origin: " . $origin);
     header("Access-Control-Allow-Credentials: true");
     header("Vary: Origin");

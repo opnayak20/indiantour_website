@@ -6,9 +6,12 @@
   "scripts": {
     "dev": "npm run dev --prefix frontend",
     "frontend": "npm run dev --prefix frontend",
-    "backend": "php -S localhost:8000 -t backend",
+    "backend": "php -S localhost:8000 -t backend backend/router.php",
     "build": "npm run build --prefix frontend",
     "pack:hostinger": "npm run build --prefix frontend && node prepare_hostinger_deploy.js",
     "lint": "npm run lint --prefix frontend"
+  },
+  "devDependencies": {
+    "archiver": "^8.0.0"
   }
 }

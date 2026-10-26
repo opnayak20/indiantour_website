@@ -20,6 +20,17 @@ export default function CategorySlider({ selectedCategory, onSelectCategory }) {
     return () => window.removeEventListener('resize', checkScroll);
   }, [checkScroll]);
 
+  // Auto-center active category in scrollable viewport
+  useEffect(() => {
+    if (selectedCategory && scrollRef.current) {
+      const activeEl = scrollRef.current.querySelector('.is-selected');
+      if (activeEl) {
+        activeEl.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+        setTimeout(checkScroll, 350);
+      }
+    }
+  }, [selectedCategory, checkScroll]);
+
   const handleScroll = (direction) => {
     if (scrollRef.current) {
       const scrollAmount = 380;
@@ -32,7 +43,7 @@ export default function CategorySlider({ selectedCategory, onSelectCategory }) {
   };
 
   return (
-    <div className="relative bg-white border-b border-gray-100 py-1.5 md:py-2 select-none">
+    <div className="relative bg-white border-b border-gray-100 py-1.5 md:py-2 select-none shadow-2xs">
       <div className="relative max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
         
         {/* Left Arrow Button with Gradient Scrim (Tablet/Desktop) */}
@@ -54,10 +65,10 @@ export default function CategorySlider({ selectedCategory, onSelectCategory }) {
         <div
           ref={scrollRef}
           onScroll={checkScroll}
-          className="category-slider-track no-scrollbar w-full"
+          className="category-slider-track no-scrollbar touch-pan-x w-full"
         >
           {categories.map((cat) => {
-            const isSelected = selectedCategory === cat.slug;
+            const isSelected = (selectedCategory || '').toLowerCase() === cat.slug.toLowerCase();
             return (
               <button
                 key={cat.slug}

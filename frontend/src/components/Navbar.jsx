@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-export default function Navbar({ onOpenAuthModal, activeTab, setActiveTab, onOpenAdmin, currentUser, onLogout }) {
+export default function Navbar({ onOpenAuthModal, activeTab, setActiveTab, onOpenAdmin, currentUser, onLogout, onNavigateHome }) {
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const menuRef = useRef(null);
 
@@ -30,7 +30,16 @@ export default function Navbar({ onOpenAuthModal, activeTab, setActiveTab, onOpe
       <div className="flex container mx-auto px-4 sm:px-6 lg:px-8 py-2 items-center justify-between">
         
         {/* Brand Logo: India Tourism Live Travels */}
-        <a className="flex items-center cursor-pointer group py-1 flex-shrink-0" href="/">
+        <a 
+          className="flex items-center cursor-pointer group py-1 flex-shrink-0" 
+          href="/"
+          onClick={(e) => {
+            if (onNavigateHome) {
+              e.preventDefault();
+              onNavigateHome();
+            }
+          }}
+        >
           <img
             src="/indiatournewlogo.jpg"
             alt="India Tourism Live Travels"
@@ -78,7 +87,7 @@ export default function Navbar({ onOpenAuthModal, activeTab, setActiveTab, onOpe
         {/* Right User Profile Icon Button (Avian Experiences exact style) */}
         <div className="flex items-center gap-2.5 relative" ref={menuRef}>
           <a
-            href="https://wa.me/919099599331?text=Hello,%20I%20am%20interested%20in%20booking%20a%20tour%20package."
+            href="https://wa.me/919548436762?text=Hello,%20I%20am%20interested%20in%20booking%20a%20tour%20package."
             target="_blank"
             rel="noopener noreferrer"
             className="hidden sm:inline-flex items-center gap-2 bg-[#fff5f6] hover:bg-[#ffebee] text-[#ec1d24] border border-red-200/80 text-xs font-bold px-3.5 py-2 rounded-full transition shadow-2xs"

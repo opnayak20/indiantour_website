@@ -34,8 +34,8 @@ class Mailer {
                 <p style='color:#9CA3AF; font-size:12px; margin-bottom:0;'>⏳ This code will expire in <strong>10 minutes</strong>. If you did not request this, please ignore this email.</p>
             </div>
             <div style='text-align:center; margin-top:20px; color:#6B7280; font-size:12px;'>
-                Adventure Nature Club • Ahmedabad, Gujarat, India<br>
-                Certified Mountain & Wilderness Safety
+                Indian Tour & Travel • W35P+M9P, Road, Alipur Ibrahimpur Urf Ikk, Haridwar, Uttarakhand 249402<br>
+                Phone / WhatsApp: +91 9548436762 • Certified Mountain & Wilderness Safety
             </div>
         </div>
         ";

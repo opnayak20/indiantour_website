@@ -419,6 +419,48 @@ html, body {
   }
 }
 
+/* Avian Experiences Destination Card (Matching exact avianexperiences.com dimensions & aesthetics) */
+.avian-dest-card {
+  width: 250px;
+  min-width: 250px;
+  height: 380px;
+  border-radius: 30px;
+  overflow: hidden;
+  flex-shrink: 0;
+  box-shadow: 0 7px 7px -3px rgba(0, 0, 0, 0.35), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.5s ease, box-shadow 0.5s ease;
+  cursor: pointer;
+  margin: 0.75rem 0.5rem;
+  background-color: #f3f4f6;
+  position: relative;
+}
+
+.avian-dest-card:hover {
+  transform: translate3d(0, -1px, 0) scale(1.03);
+  box-shadow: 0 14px 20px -3px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.15);
+}
+
+@media screen and (max-width: 1025px) {
+  .avian-dest-card {
+    min-width: 200px;
+    width: 200px;
+    height: 300px;
+    border-radius: 25px;
+    margin: 0.5rem 0.4rem;
+  }
+}
+
+@media screen and (max-width: 436px) {
+  .avian-dest-card {
+    min-width: 200px;
+    width: 190px;
+    height: 302px;
+    border-radius: 20px;
+    margin: 0.5rem 0.35rem;
+  }
+}
+
+
 .review-card-fluid {
   width: 280px;
   height: 375px;
@@ -1254,8 +1296,32 @@ html, body {
 }
 
 @font-face {
+  font-family: 'ProductSans';
+  src: url('/fonts/ProductSans-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
   font-family: 'ProductSansBold';
-  src: url('/fonts/Product%20Sans%20Bold.woff2') format('woff2');
+  src: url('/fonts/ProductSans-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Product Sans';
+  src: url('/fonts/ProductSans-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Product Sans';
+  src: url('/fonts/ProductSans-Bold.woff2') format('woff2');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -1263,7 +1329,7 @@ html, body {
 
 @font-face {
   font-family: 'AvianFont';
-  src: url('/fonts/Boldini%20Regular.woff2') format('woff2');
+  src: url('/fonts/Boldini-Regular.woff2') format('woff2');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -1648,7 +1714,7 @@ input::-ms-clear {
 
 @font-face {
   font-family: 'ProductSans';
-  src: url('/fonts/Product%20Sans%20Bold.woff2') format('woff2');
+  src: url('/fonts/ProductSans-Bold.woff2') format('woff2');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -1664,7 +1730,7 @@ input::-ms-clear {
 
 @font-face {
   font-family: 'Product Sans';
-  src: url('/fonts/Product%20Sans%20Bold.woff2') format('woff2');
+  src: url('/fonts/ProductSans-Bold.woff2') format('woff2');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -2010,7 +2076,7 @@ body {
 
 @font-face {
   font-family: 'Product Sans';
-  src: url('/fonts/Product%20Sans%20Bold.woff2') format('woff2');
+  src: url('/fonts/ProductSans-Bold.woff2') format('woff2');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -2256,8 +2322,7 @@ body {
   text-transform: uppercase;
   letter-spacing: 0.08em;
 }
-
-
-
-
+#app-cache-buster-v2 {
+  display: block;
+}
 

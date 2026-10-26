@@ -40,13 +40,582 @@ import {
   FaCircleQuestion,
   FaCompass,
   FaArrowUp,
-  FaArrowDown
+  FaArrowDown,
+  FaLayerGroup,
+  FaToggleOn,
+  FaToggleOff
 } from 'react-icons/fa6';
 import AdminPopupManager from './AdminPopupManager';
 import TripLeadModal from './TripLeadModal';
 import { groupTripsList } from '../data/groupTripsData';
 import { allTourPackages } from '../data/tourPackagesData';
 import { getTourDetailsData } from './TourDetailsModal';
+import { allTrendingPackages, defaultTrendingIds } from '../data/websiteData';
+
+import { DEFAULT_VIDEO_BANNER } from './VideoBannerSection';
+import { internationalDestinations } from '../data/websiteData';
+
+// ============================================================
+// SECTION MANAGEMENT TAB — Controls Trending packages, Travel Video,
+// and International Destinations on the homepage
+// ============================================================
+function SectionManagementTab() {
+  const [activeSubTab, setActiveSubTab] = useState('trending'); // 'trending' | 'video' | 'international'
+
+  // --- TRENDING PACKAGES STATE ---
+  const getStoredIds = () => {
+    try {
+      const raw = localStorage.getItem('trendingVisibleIds');
+      if (raw) return JSON.parse(raw);
+    } catch (e) { /* ignore */ }
+    return defaultTrendingIds;
+  };
+
+  const [orderedPackages, setOrderedPackages] = useState(() => {
+    const visibleIds = getStoredIds();
+    const visible = visibleIds
+      .map(id => allTrendingPackages.find(p => p.id === id))
+      .filter(Boolean);
+    const hidden = allTrendingPackages.filter(p => !visibleIds.includes(p.id));
+    return [...visible.map(p => ({ ...p, visible: true })), ...hidden.map(p => ({ ...p, visible: false }))];
+  });
+
+  const [savedTrending, setSavedTrending] = useState(false);
+
+  const toggleVisibility = (id) => {
+    setOrderedPackages(prev =>
+      prev.map(p => p.id === id ? { ...p, visible: !p.visible } : p)
+    );
+    setSavedTrending(false);
+  };
+
+  const moveUp = (index) => {
+    if (index === 0) return;
+    setOrderedPackages(prev => {
+      const arr = [...prev];
+      [arr[index - 1], arr[index]] = [arr[index], arr[index - 1]];
+      return arr;
+    });
+    setSavedTrending(false);
+  };
+
+  const moveDown = (index) => {
+    setOrderedPackages(prev => {
+      if (index === prev.length - 1) return prev;
+      const arr = [...prev];
+      [arr[index], arr[index + 1]] = [arr[index + 1], arr[index]];
+      return arr;
+    });
+    setSavedTrending(false);
+  };
+
+  const saveTrendingChanges = () => {
+    const visibleIds = orderedPackages.filter(p => p.visible).map(p => p.id);
+    const orderIds = orderedPackages.map(p => p.id);
+    localStorage.setItem('trendingVisibleIds', JSON.stringify(visibleIds));
+    localStorage.setItem('trendingPackagesOrder', JSON.stringify(orderIds));
+
+    window.dispatchEvent(new StorageEvent('storage', {
+      key: 'trendingVisibleIds',
+      newValue: JSON.stringify(visibleIds),
+    }));
+    window.dispatchEvent(new StorageEvent('storage', {
+      key: 'trendingPackagesOrder',
+      newValue: JSON.stringify(orderIds),
+    }));
+    setSavedTrending(true);
+    setTimeout(() => setSavedTrending(false), 3000);
+  };
+
+  const resetTrendingToDefault = () => {
+    localStorage.removeItem('trendingVisibleIds');
+    localStorage.removeItem('trendingPackagesOrder');
+    const visible = defaultTrendingIds
+      .map(id => allTrendingPackages.find(p => p.id === id))
+      .filter(Boolean);
+    const hidden = allTrendingPackages.filter(p => !defaultTrendingIds.includes(p.id));
+    setOrderedPackages([...visible.map(p => ({ ...p, visible: true })), ...hidden.map(p => ({ ...p, visible: false }))]);
+    setSavedTrending(false);
+  };
+
+  // --- VIDEO BANNER STATE ---
+  const [videoConfig, setVideoConfig] = useState(() => {
+    try {
+      const stored = localStorage.getItem('travel_video_banner_settings');
+      if (stored) return { ...DEFAULT_VIDEO_BANNER, ...JSON.parse(stored) };
+    } catch {}
+    return DEFAULT_VIDEO_BANNER;
+  });
+  const [savedVideo, setSavedVideo] = useState(false);
+
+  const handleVideoFieldChange = (field, val) => {
+    setVideoConfig(prev => ({ ...prev, [field]: val }));
+    setSavedVideo(false);
+  };
+
+  const saveVideoSettings = () => {
+    localStorage.setItem('travel_video_banner_settings', JSON.stringify(videoConfig));
+    window.dispatchEvent(new StorageEvent('storage', {
+      key: 'travel_video_banner_settings',
+      newValue: JSON.stringify(videoConfig),
+    }));
+    setSavedVideo(true);
+    setTimeout(() => setSavedVideo(false), 3000);
+  };
+
+  const resetVideoSettings = () => {
+    localStorage.removeItem('travel_video_banner_settings');
+    setVideoConfig(DEFAULT_VIDEO_BANNER);
+    window.dispatchEvent(new StorageEvent('storage', {
+      key: 'travel_video_banner_settings',
+      newValue: JSON.stringify(DEFAULT_VIDEO_BANNER),
+    }));
+    setSavedVideo(false);
+  };
+
+  // --- INTERNATIONAL DESTINATIONS STATE ---
+  const [intlList, setIntlList] = useState(() => {
+    try {
+      const stored = localStorage.getItem('admin_international_destinations');
+      if (stored) return JSON.parse(stored);
+    } catch {}
+    return internationalDestinations;
+  });
+  const [savedIntl, setSavedIntl] = useState(false);
+
+  const saveIntlSettings = () => {
+    localStorage.setItem('admin_international_destinations', JSON.stringify(intlList));
+    window.dispatchEvent(new StorageEvent('storage', {
+      key: 'admin_international_destinations',
+      newValue: JSON.stringify(intlList),
+    }));
+    setSavedIntl(true);
+    setTimeout(() => setSavedIntl(false), 3000);
+  };
+
+  const resetIntlSettings = () => {
+    localStorage.removeItem('admin_international_destinations');
+    setIntlList(internationalDestinations);
+    window.dispatchEvent(new StorageEvent('storage', {
+      key: 'admin_international_destinations',
+      newValue: JSON.stringify(internationalDestinations),
+    }));
+    setSavedIntl(false);
+  };
+
+  const visibleCount = orderedPackages.filter(p => p.visible).length;
+
+  return (
+    <div>
+      {/* Top Header Card */}
+      <div style={{ background: '#fff', borderRadius: '16px', padding: '24px', marginBottom: '20px', border: '1px solid #e2e8f0' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
+          <div>
+            <h2 style={{ fontSize: '20px', fontWeight: 800, color: '#01132d', margin: 0 }}>Section & Media Management</h2>
+            <p style={{ fontSize: '13px', color: '#64748b', margin: '4px 0 0' }}>
+              Manage homepage sections: <strong>Trending Packages</strong>, <strong>Tour & Travel Video Banner</strong>, and <strong>International Destinations</strong>.
+            </p>
+          </div>
+
+          {/* Sub-Tabs Pills */}
+          <div style={{ display: 'flex', background: '#f1f5f9', padding: '4px', borderRadius: '12px', gap: '4px' }}>
+            <button
+              type="button"
+              onClick={() => setActiveSubTab('trending')}
+              style={{
+                fontSize: '12px', fontWeight: 700, padding: '7px 16px', borderRadius: '8px', border: 'none', cursor: 'pointer',
+                background: activeSubTab === 'trending' ? '#01132d' : 'transparent',
+                color: activeSubTab === 'trending' ? '#fff' : '#64748b',
+                transition: 'all 0.2s'
+              }}
+            >
+              Trending Tours ({visibleCount})
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveSubTab('video')}
+              style={{
+                fontSize: '12px', fontWeight: 700, padding: '7px 16px', borderRadius: '8px', border: 'none', cursor: 'pointer',
+                background: activeSubTab === 'video' ? '#01132d' : 'transparent',
+                color: activeSubTab === 'video' ? '#fff' : '#64748b',
+                transition: 'all 0.2s'
+              }}
+            >
+              🎬 Video Banner Section
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveSubTab('international')}
+              style={{
+                fontSize: '12px', fontWeight: 700, padding: '7px 16px', borderRadius: '8px', border: 'none', cursor: 'pointer',
+                background: activeSubTab === 'international' ? '#01132d' : 'transparent',
+                color: activeSubTab === 'international' ? '#fff' : '#64748b',
+                transition: 'all 0.2s'
+              }}
+            >
+              ✈️ International Destinations ({intlList.length})
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* ======================================================== */}
+      {/* 1. TRENDING TOURS TAB */}
+      {/* ======================================================== */}
+      {activeSubTab === 'trending' && (
+        <div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px', flexWrap: 'wrap', gap: '10px' }}>
+            <span style={{ fontSize: '13px', color: '#64748b' }}>
+              Showing {visibleCount} of {orderedPackages.length} packages in Trending
+            </span>
+            <div style={{ display: 'flex', gap: '8px' }}>
+              <button
+                type="button"
+                onClick={resetTrendingToDefault}
+                style={{ fontSize: '12px', fontWeight: 600, color: '#64748b', background: '#f1f5f9', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '7px 14px', cursor: 'pointer' }}
+              >
+                Reset to Default
+              </button>
+              <button
+                type="button"
+                onClick={saveTrendingChanges}
+                style={{
+                  fontSize: '13px', fontWeight: 700, color: '#fff',
+                  background: savedTrending ? '#10b981' : '#01132d',
+                  border: 'none', borderRadius: '10px', padding: '9px 20px',
+                  cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '7px'
+                }}
+              >
+                {savedTrending ? <><FaCircleCheck size={13} /> Saved!</> : 'Save Changes'}
+              </button>
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            {orderedPackages.map((pkg, index) => (
+              <div
+                key={pkg.id}
+                style={{
+                  background: '#fff',
+                  borderRadius: '14px',
+                  border: pkg.visible ? '1.5px solid #bfdbfe' : '1.5px solid #e2e8f0',
+                  padding: '14px 16px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '14px',
+                  opacity: pkg.visible ? 1 : 0.65,
+                }}
+              >
+                <div style={{ width: '28px', height: '28px', borderRadius: '8px', background: pkg.visible ? '#eff6ff' : '#f8fafc', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px', fontWeight: 700, color: pkg.visible ? '#3b82f6' : '#94a3b8', flexShrink: 0 }}>
+                  {index + 1}
+                </div>
+                <img
+                  src={pkg.images?.[0] || 'https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=120&q=60'}
+                  alt={pkg.title}
+                  style={{ width: '56px', height: '42px', objectFit: 'cover', borderRadius: '8px', flexShrink: 0 }}
+                />
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ fontSize: '14px', fontWeight: 700, color: '#01132d', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{pkg.title}</div>
+                  <div style={{ fontSize: '11px', color: '#64748b', marginTop: '2px' }}>{pkg.duration} · ₹{pkg.price?.toLocaleString('en-IN')}</div>
+                </div>
+                {pkg.badge && (
+                  <span style={{ fontSize: '11px', fontWeight: 600, padding: '3px 8px', borderRadius: '6px', background: '#ecfdf5', color: '#10b981', border: '1px solid #a7f3d0', flexShrink: 0 }}>
+                    {pkg.badge}
+                  </span>
+                )}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '2px', flexShrink: 0 }}>
+                  <button
+                    type="button"
+                    onClick={() => moveUp(index)}
+                    disabled={index === 0}
+                    style={{ background: 'none', border: '1px solid #e2e8f0', borderRadius: '6px', width: '26px', height: '22px', cursor: index === 0 ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: index === 0 ? '#cbd5e1' : '#475569' }}
+                  >
+                    <FaArrowUp size={10} />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => moveDown(index)}
+                    disabled={index === orderedPackages.length - 1}
+                    style={{ background: 'none', border: '1px solid #e2e8f0', borderRadius: '6px', width: '26px', height: '22px', cursor: index === orderedPackages.length - 1 ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: index === orderedPackages.length - 1 ? '#cbd5e1' : '#475569' }}
+                  >
+                    <FaArrowDown size={10} />
+                  </button>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => toggleVisibility(pkg.id)}
+                  title={pkg.visible ? 'Hide from Trending' : 'Show in Trending'}
+                  style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '4px', flexShrink: 0, color: pkg.visible ? '#3b82f6' : '#cbd5e1', fontSize: '26px', display: 'flex', alignItems: 'center' }}
+                >
+                  {pkg.visible ? <FaToggleOn /> : <FaToggleOff />}
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* ======================================================== */}
+      {/* 2. VIDEO BANNER SECTION TAB */}
+      {/* ======================================================== */}
+      {activeSubTab === 'video' && (
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '20px' }}>
+          {/* Settings Form */}
+          <div style={{ background: '#fff', borderRadius: '16px', padding: '24px', border: '1px solid #e2e8f0' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '18px' }}>
+              <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#01132d', margin: 0 }}>Video Banner Settings</h3>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ fontSize: '12px', fontWeight: 600, color: videoConfig.enabled ? '#10b981' : '#64748b' }}>
+                  {videoConfig.enabled ? 'Enabled' : 'Disabled'}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => handleVideoFieldChange('enabled', !videoConfig.enabled)}
+                  style={{ background: 'none', border: 'none', cursor: 'pointer', color: videoConfig.enabled ? '#10b981' : '#cbd5e1', fontSize: '26px', display: 'flex' }}
+                >
+                  {videoConfig.enabled ? <FaToggleOn /> : <FaToggleOff />}
+                </button>
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+              <div>
+                <label style={{ fontSize: '12px', fontWeight: 700, color: '#334155', display: 'block', marginBottom: '4px' }}>
+                  Video URL (Direct MP4 / WebM Link)
+                </label>
+                <input
+                  type="text"
+                  value={videoConfig.videoUrl || ''}
+                  onChange={(e) => handleVideoFieldChange('videoUrl', e.target.value)}
+                  placeholder="https://img.avianexperiences.com/video/..."
+                  style={{ width: '100%', padding: '10px 12px', borderRadius: '10px', border: '1px solid #cbd5e1', fontSize: '13px', boxSizing: 'border-box' }}
+                />
+              </div>
+
+              <div>
+                <label style={{ fontSize: '12px', fontWeight: 700, color: '#334155', display: 'block', marginBottom: '4px' }}>
+                  Poster / Thumbnail Image URL
+                </label>
+                <input
+                  type="text"
+                  value={videoConfig.posterUrl || ''}
+                  onChange={(e) => handleVideoFieldChange('posterUrl', e.target.value)}
+                  placeholder="https://img.avianexperiences.com/assets/..."
+                  style={{ width: '100%', padding: '10px 12px', borderRadius: '10px', border: '1px solid #cbd5e1', fontSize: '13px', boxSizing: 'border-box' }}
+                />
+              </div>
+
+              <div>
+                <label style={{ fontSize: '12px', fontWeight: 700, color: '#334155', display: 'block', marginBottom: '4px' }}>
+                  Overlay Badge Text
+                </label>
+                <input
+                  type="text"
+                  value={videoConfig.badge || ''}
+                  onChange={(e) => handleVideoFieldChange('badge', e.target.value)}
+                  placeholder="Creator Expedition / Trending Now"
+                  style={{ width: '100%', padding: '10px 12px', borderRadius: '10px', border: '1px solid #cbd5e1', fontSize: '13px', boxSizing: 'border-box' }}
+                />
+              </div>
+
+              <div>
+                <label style={{ fontSize: '12px', fontWeight: 700, color: '#334155', display: 'block', marginBottom: '4px' }}>
+                  Main Heading / Title
+                </label>
+                <input
+                  type="text"
+                  value={videoConfig.title || ''}
+                  onChange={(e) => handleVideoFieldChange('title', e.target.value)}
+                  placeholder="Kashmir in Winter with Aditi Raval"
+                  style={{ width: '100%', padding: '10px 12px', borderRadius: '10px', border: '1px solid #cbd5e1', fontSize: '13px', boxSizing: 'border-box' }}
+                />
+              </div>
+
+              <div>
+                <label style={{ fontSize: '12px', fontWeight: 700, color: '#334155', display: 'block', marginBottom: '4px' }}>
+                  Subtitle / Description
+                </label>
+                <textarea
+                  rows={2}
+                  value={videoConfig.subtitle || ''}
+                  onChange={(e) => handleVideoFieldChange('subtitle', e.target.value)}
+                  placeholder="Experience snow-capped peaks, frozen lakes, and raw Himalayan magic..."
+                  style={{ width: '100%', padding: '10px 12px', borderRadius: '10px', border: '1px solid #cbd5e1', fontSize: '13px', boxSizing: 'border-box', resize: 'vertical' }}
+                />
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                <div>
+                  <label style={{ fontSize: '12px', fontWeight: 700, color: '#334155', display: 'block', marginBottom: '4px' }}>
+                    Button Text
+                  </label>
+                  <input
+                    type="text"
+                    value={videoConfig.buttonText || ''}
+                    onChange={(e) => handleVideoFieldChange('buttonText', e.target.value)}
+                    placeholder="Watch Experience ↗"
+                    style={{ width: '100%', padding: '10px 12px', borderRadius: '10px', border: '1px solid #cbd5e1', fontSize: '13px', boxSizing: 'border-box' }}
+                  />
+                </div>
+                <div>
+                  <label style={{ fontSize: '12px', fontWeight: 700, color: '#334155', display: 'block', marginBottom: '4px' }}>
+                    Target Link
+                  </label>
+                  <input
+                    type="text"
+                    value={videoConfig.targetUrl || ''}
+                    onChange={(e) => handleVideoFieldChange('targetUrl', e.target.value)}
+                    placeholder="/creator/aditiraval/kashmir-in-winter"
+                    style={{ width: '100%', padding: '10px 12px', borderRadius: '10px', border: '1px solid #cbd5e1', fontSize: '13px', boxSizing: 'border-box' }}
+                  />
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
+                <button
+                  type="button"
+                  onClick={resetVideoSettings}
+                  style={{ flex: 1, padding: '10px', borderRadius: '10px', border: '1px solid #e2e8f0', background: '#f8fafc', color: '#64748b', fontWeight: 700, fontSize: '13px', cursor: 'pointer' }}
+                >
+                  Reset Default
+                </button>
+                <button
+                  type="button"
+                  onClick={saveVideoSettings}
+                  style={{
+                    flex: 2, padding: '10px', borderRadius: '10px', border: 'none',
+                    background: savedVideo ? '#10b981' : '#01132d', color: '#fff',
+                    fontWeight: 700, fontSize: '13px', cursor: 'pointer',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px'
+                  }}
+                >
+                  {savedVideo ? <><FaCircleCheck size={14} /> Saved to Homepage!</> : 'Save Video Banner'}
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Live Video Preview Box */}
+          <div style={{ background: '#0f172a', borderRadius: '16px', padding: '20px', border: '1px solid #1e293b', display: 'flex', flexDirection: 'column' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
+              <span style={{ fontSize: '13px', fontWeight: 800, color: '#f8fafc', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#ef4444', display: 'inline-block' }} />
+                Live Video Preview
+              </span>
+              <span style={{ fontSize: '11px', color: '#94a3b8' }}>Shows exactly as seen on homepage</span>
+            </div>
+
+            <div style={{ position: 'relative', width: '100%', height: '240px', borderRadius: '14px', overflow: 'hidden', background: '#000', border: '1px solid rgba(255,255,255,0.1)' }}>
+              <video
+                src={videoConfig.videoUrl}
+                poster={videoConfig.posterUrl}
+                autoPlay
+                loop
+                muted
+                playsInline
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+              />
+              <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.8), transparent)' }} />
+              <div style={{ position: 'absolute', top: '10px', left: '10px' }}>
+                {videoConfig.badge && (
+                  <span style={{ fontSize: '10px', fontWeight: 700, color: '#fff', background: 'rgba(0,0,0,0.5)', padding: '2px 8px', borderRadius: '20px', border: '1px solid rgba(255,255,255,0.2)' }}>
+                    {videoConfig.badge}
+                  </span>
+                )}
+              </div>
+              <div style={{ position: 'absolute', bottom: '12px', left: '12px', right: '12px' }}>
+                <div style={{ color: '#fff', fontWeight: 800, fontSize: '14px', textShadow: '0 2px 4px rgba(0,0,0,0.6)' }}>{videoConfig.title}</div>
+                <div style={{ color: '#cbd5e1', fontSize: '11px', marginTop: '2px', textShadow: '0 1px 3px rgba(0,0,0,0.6)' }}>{videoConfig.subtitle}</div>
+              </div>
+            </div>
+
+            <div style={{ marginTop: '16px', background: 'rgba(255,255,255,0.05)', borderRadius: '10px', padding: '12px', color: '#94a3b8', fontSize: '12px', lineHeight: 1.5 }}>
+              💡 <strong>Tip:</strong> You can paste any direct video URL from YouTube CDN, CloudFront, S3, or your own hosting server. When saved, the homepage updates instantly!
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ======================================================== */}
+      {/* 3. INTERNATIONAL DESTINATIONS TAB */}
+      {/* ======================================================== */}
+      {activeSubTab === 'international' && (
+        <div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px', flexWrap: 'wrap', gap: '10px' }}>
+            <span style={{ fontSize: '13px', color: '#64748b' }}>
+              Showing {intlList.length} International Destinations from Avian Experiences
+            </span>
+            <div style={{ display: 'flex', gap: '8px' }}>
+              <button
+                type="button"
+                onClick={resetIntlSettings}
+                style={{ fontSize: '12px', fontWeight: 600, color: '#64748b', background: '#f1f5f9', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '7px 14px', cursor: 'pointer' }}
+              >
+                Reset Default
+              </button>
+              <button
+                type="button"
+                onClick={saveIntlSettings}
+                style={{
+                  fontSize: '13px', fontWeight: 700, color: '#fff',
+                  background: savedIntl ? '#10b981' : '#01132d',
+                  border: 'none', borderRadius: '10px', padding: '9px 20px',
+                  cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '7px'
+                }}
+              >
+                {savedIntl ? <><FaCircleCheck size={13} /> Saved!</> : 'Save Destinations'}
+              </button>
+            </div>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: '14px' }}>
+            {intlList.map((dest, i) => (
+              <div
+                key={i}
+                style={{
+                  background: '#fff',
+                  borderRadius: '14px',
+                  border: '1px solid #e2e8f0',
+                  overflow: 'hidden',
+                  display: 'flex',
+                  flexDirection: 'column'
+                }}
+              >
+                <div style={{ height: '140px', position: 'relative' }}>
+                  <img
+                    src={dest.image}
+                    alt={dest.name}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                  />
+                  <div style={{ position: 'absolute', bottom: '8px', left: '8px', background: 'rgba(0,0,0,0.6)', color: '#fff', fontSize: '12px', fontWeight: 700, padding: '2px 8px', borderRadius: '6px' }}>
+                    {dest.price}
+                  </div>
+                </div>
+                <div style={{ padding: '12px' }}>
+                  <div style={{ fontSize: '14px', fontWeight: 800, color: '#01132d' }}>{dest.name}</div>
+                  <div style={{ fontSize: '11px', color: '#64748b', marginTop: '2px' }}>{dest.duration}</div>
+                  <input
+                    type="text"
+                    value={dest.price || ''}
+                    onChange={(e) => {
+                      const updated = [...intlList];
+                      updated[i].price = e.target.value;
+                      setIntlList(updated);
+                      setSavedIntl(false);
+                    }}
+                    placeholder="Price (e.g. ₹25,800)"
+                    style={{ width: '100%', marginTop: '8px', padding: '6px 8px', fontSize: '12px', borderRadius: '6px', border: '1px solid #cbd5e1', boxSizing: 'border-box' }}
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
 
 // Comprehensive Package Catalog Merger
 function getMergedPackageCatalog(backendPkgs = []) {
@@ -295,7 +864,7 @@ export default function AdminDashboard({ onExitAdmin }) {
     formHeading: 'Plan Your Next Trip',
     buttonText: 'Connect with Expert',
     buttonColor: '#e52b2b',
-    whatsappNumber: '+919099599331'
+    whatsappNumber: '+919548436762'
   };
 
   const [popupSettings, setPopupSettings] = useState(() => {
@@ -1552,6 +2121,21 @@ export default function AdminDashboard({ onExitAdmin }) {
 
             <button
               type="button"
+              className={`adm-nav-item ${activeTab === 'section-mgmt' ? 'active' : ''}`}
+              onClick={() => {
+                setActiveTab('section-mgmt');
+                setIsMobileMenuOpen(false);
+              }}
+              title="Section Management"
+            >
+              <span className="adm-nav-icon"><FaLayerGroup /></span>
+              {!isSidebarCollapsed && (
+                <span className="adm-nav-label">Section Management</span>
+              )}
+            </button>
+
+            <button
+              type="button"
               className={`adm-nav-item ${activeTab === 'testimonials' ? 'active' : ''}`}
               onClick={() => {
                 setActiveTab('testimonials');
@@ -2367,6 +2951,13 @@ export default function AdminDashboard({ onExitAdmin }) {
                 />
               </div>
             </div>
+          )}
+
+          {/* ==================================================================
+              TAB: SECTION MANAGEMENT
+              ================================================================== */}
+          {activeTab === 'section-mgmt' && (
+            <SectionManagementTab />
           )}
 
           {/* ==================================================================

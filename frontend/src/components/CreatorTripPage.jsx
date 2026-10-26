@@ -2,30 +2,30 @@ import React, { useState } from 'react';
 import { API_BASE } from '../config/api';
 import LazyImage from './LazyImage';
 
-// Curated Photos matching the 5-photo mosaic grid in screenshot
+// Curated Photos matching the 5-photo mosaic grid (High-speed CloudFront CDN WebP)
 const CREATOR_PHOTOS = [
   {
-    url: 'https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?auto=format&fit=crop&w=1200&q=85',
+    url: 'https://img.avianexperiences.com/trek/a2199543-ae66-4cd1-8013-4632f393a1b8/Winter_Spiti_01.webp',
     title: 'Frozen Waterfall at Spiti Valley',
     caption: 'Majestic ice formations and frozen cascades near Kaza'
   },
   {
-    url: 'https://images.unsplash.com/photo-1581793745862-99fde7fa73d2?auto=format&fit=crop&w=800&q=80',
+    url: 'https://img.avianexperiences.com/trek/987f7011-6106-4c6f-a526-a46d706497dc/Winter_Spiti_02.webp',
     title: 'Langza Buddha Statue',
     caption: 'Golden statue of Lord Buddha overlooking snow-clad peaks'
   },
   {
-    url: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=800&q=80',
+    url: 'https://img.avianexperiences.com/trek/ba5e9d18-6e69-4a7d-a44c-bcfa38c79844/Winter_Spiti_04.webp',
     title: 'Himalayan Snowscape',
     caption: 'Breathtaking white horizon across Kinnaur and Spiti'
   },
   {
-    url: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80',
+    url: 'https://img.avianexperiences.com/trek/03722d76-bdc1-41db-8b36-25e76e4dbd1b/Winter_Spiti_05.webp',
     title: 'Tibetan Prayer Flags on Ridge',
     caption: 'Wind-blown colorful flags at Kunzum Pass'
   },
   {
-    url: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800&q=80',
+    url: 'https://img.avianexperiences.com/trek/bcd7ce32-bbbc-418b-86e9-17a69b595477/Winter_Spiti_03.webp',
     title: 'High-Altitude Pass Summit',
     caption: 'Standing on top of the world at 14,500 ft'
   }
@@ -33,27 +33,27 @@ const CREATOR_PHOTOS = [
 
 const HIGHLIGHT_CARDS = [
   {
-    img: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80',
+    img: 'https://img.avianexperiences.com/trek/a2199543-ae66-4cd1-8013-4632f393a1b8/Winter_Spiti_01.webp',
     title: 'Kunzum Pass Prayer Flags',
     subtitle: 'Gateway to Spiti'
   },
   {
-    img: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=600&q=80',
+    img: 'https://img.avianexperiences.com/trek/987f7011-6106-4c6f-a526-a46d706497dc/Winter_Spiti_02.webp',
     title: 'Frozen Spiti River Bed',
     subtitle: 'Winter Silence'
   },
   {
-    img: 'https://images.unsplash.com/photo-1581793745862-99fde7fa73d2?auto=format&fit=crop&w=600&q=80',
+    img: 'https://img.avianexperiences.com/trek/ba5e9d18-6e69-4a7d-a44c-bcfa38c79844/Winter_Spiti_04.webp',
     title: 'Key Monastery in Snow',
     subtitle: '1000-Year Heritage'
   },
   {
-    img: 'https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?auto=format&fit=crop&w=600&q=80',
+    img: 'https://img.avianexperiences.com/trek/03722d76-bdc1-41db-8b36-25e76e4dbd1b/Winter_Spiti_05.webp',
     title: 'Langza Ancient Village',
     subtitle: 'Fossil Hunting'
   },
   {
-    img: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=600&q=80',
+    img: 'https://img.avianexperiences.com/trek/bcd7ce32-bbbc-418b-86e9-17a69b595477/Winter_Spiti_03.webp',
     title: 'Hikkim Highest Post Office',
     subtitle: 'Letter to Loved Ones'
   }
@@ -493,7 +493,7 @@ export default function CreatorTripPage() {
                 <div className="flex space-x-4 sm:space-x-5 items-center">
                   <LazyImage
                     src="/creator-profile.jpg"
-                    fallbackSrc="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80"
+                    fallbackSrc="/hero-buddha.jpg"
                     alt="Ananya Sharma"
                     className="w-16 h-16 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-full object-cover flex-shrink-0"
                   />
@@ -895,7 +895,7 @@ export default function CreatorTripPage() {
                     Thank you! Our expedition coordinator will connect with you on WhatsApp shortly to confirm your slot.
                   </p>
                   <a
-                    href="https://wa.me/919099599331?text=Hello,%20I%20am%20interested%20in%20the%20Spiti%20in%20Winter%20trip%20with%20Aditi%20Raval."
+                    href="https://wa.me/919548436762?text=Hello,%20I%20am%20interested%20in%20the%20Spiti%20in%20Winter%20trip%20with%20Aditi%20Raval."
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-block mt-2 px-4 py-2 rounded-xl bg-emerald-600 text-white text-xs font-bold shadow-md hover:bg-emerald-700 transition"

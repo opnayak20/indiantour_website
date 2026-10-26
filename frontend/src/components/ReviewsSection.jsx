@@ -281,7 +281,7 @@ export default function ReviewsSection({ onViewAllReviews }) {
 
                 {/* WhatsApp Action to Book Same Trip */}
                 <a
-                  href={`https://wa.me/919099599331?text=${encodeURIComponent(
+                  href={`https://wa.me/919548436762?text=${encodeURIComponent(
                     `Hi India Tour! I loved ${selectedReview.name}'s review of the ${selectedReview.trip}. Can you share package details for this?`
                   )}`}
                   target="_blank"

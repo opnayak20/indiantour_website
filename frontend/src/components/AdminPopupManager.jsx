@@ -112,7 +112,7 @@ export default function AdminPopupManager({
       formHeading: 'Plan Your Next Trip',
       buttonText: 'Connect with Expert',
       buttonColor: '#e52b2b',
-      whatsappNumber: '+919099599331'
+      whatsappNumber: '+919548436762'
     };
     setFormState(defaults);
     onSave(defaults);
@@ -810,7 +810,7 @@ export default function AdminPopupManager({
                   type="text"
                   value={formState.whatsappNumber}
                   onChange={(e) => handleChange('whatsappNumber', e.target.value)}
-                  placeholder="+919099599331"
+                  placeholder="+919548436762"
                   className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs sm:text-sm text-gray-900 focus:outline-none focus:border-[#fd5b01]"
                 />
                 <span className="text-[11px] text-gray-400 mt-1 block">

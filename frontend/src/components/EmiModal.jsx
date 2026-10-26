@@ -58,7 +58,7 @@ export default function EmiModal({ isOpen, onClose }) {
 
         <div className="flex flex-col sm:flex-row gap-2.5 sm:gap-3 pt-2">
           <a
-            href="https://wa.me/919099599331?text=Hello,%20I%20would%20like%20to%20know%20more%20about%20the%20No%20Cost%20EMI%20plan."
+            href="https://wa.me/919548436762?text=Hello,%20I%20would%20like%20to%20know%20more%20about%20the%20No%20Cost%20EMI%20plan."
             target="_blank"
             rel="noopener noreferrer"
             className="flex-1 bg-primary hover:bg-[#d0181e] text-white font-bold py-3 px-4 rounded-xl text-center text-xs sm:text-sm transition-colors shadow-md flex items-center justify-center gap-2"

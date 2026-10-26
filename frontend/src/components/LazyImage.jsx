@@ -5,8 +5,8 @@ import React, { useState, useRef, useEffect } from 'react';
  * - Employs native browser loading="lazy" + decoding="async"
  * - Progressive IntersectionObserver pre-warm
  * - Lightweight skeleton placeholder while loading to eliminate Layout Shift (CLS = 0)
- * - Smooth opacity transition on load
- * - Fallback placeholder on error
+ * - Immediate display for eager or cached images
+ * - Local fallback placeholder on error
  */
 export default function LazyImage({
   src,
@@ -15,7 +15,7 @@ export default function LazyImage({
   style = {},
   aspectRatio,
   placeholderColor = '#f3f4f6',
-  fallbackSrc = 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80',
+  fallbackSrc = '/hero-buddha.jpg',
   fetchPriority = 'auto',
   eager = false,
   onClick,
@@ -24,6 +24,7 @@ export default function LazyImage({
   const [isLoaded, setIsLoaded] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [inView, setInView] = useState(eager);
+  const containerRef = useRef(null);
   const imgRef = useRef(null);
 
   useEffect(() => {
@@ -32,7 +33,7 @@ export default function LazyImage({
       return;
     }
 
-    if (!imgRef.current) return;
+    if (!containerRef.current) return;
 
     if ('IntersectionObserver' in window) {
       const observer = new IntersectionObserver(
@@ -46,37 +47,44 @@ export default function LazyImage({
         },
         { rootMargin: '300px 0px 300px 0px' } // Pre-load 300px before scrolling into viewport
       );
-      observer.observe(imgRef.current);
+      observer.observe(containerRef.current);
       return () => observer.disconnect();
     } else {
       setInView(true);
     }
   }, [eager]);
 
-  const currentSrc = hasError ? fallbackSrc : src;
+  // Synchronously check if image is already loaded from cache upon mount/update
+  useEffect(() => {
+    if (imgRef.current && imgRef.current.complete && imgRef.current.naturalWidth > 0) {
+      setIsLoaded(true);
+    }
+  }, [inView, src, hasError]);
+
+  const currentSrc = hasError ? (fallbackSrc || '/hero-buddha.jpg') : (src || fallbackSrc || '/hero-buddha.jpg');
 
   return (
     <div
-      ref={imgRef}
+      ref={containerRef}
       onClick={onClick}
       className={`relative overflow-hidden ${className}`}
       style={{
         backgroundColor: placeholderColor,
         aspectRatio: aspectRatio || undefined,
-        contain: 'paint layout',
         ...style
       }}
     >
-      {/* Subtle pulsing skeleton shimmer until loaded */}
-      {!isLoaded && (
+      {/* Subtle pulsing skeleton shimmer only until image loads and not in eager mode */}
+      {!isLoaded && !eager && (
         <div
-          className="absolute inset-0 bg-gradient-to-r from-gray-100 via-gray-200/60 to-gray-100 animate-pulse pointer-events-none"
+          className="absolute inset-0 bg-gradient-to-r from-gray-100 via-gray-200/50 to-gray-100 animate-pulse pointer-events-none"
           aria-hidden="true"
         />
       )}
 
       {inView && (
         <img
+          ref={imgRef}
           src={currentSrc}
           alt={alt}
           loading={eager ? 'eager' : 'lazy'}
@@ -91,7 +99,7 @@ export default function LazyImage({
             }
           }}
           className={`w-full h-full object-cover transition-opacity duration-300 ${
-            isLoaded ? 'opacity-100' : 'opacity-0'
+            isLoaded || eager ? 'opacity-100' : 'opacity-90'
           }`}
           {...rest}
         />

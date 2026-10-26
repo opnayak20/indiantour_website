@@ -5,6 +5,7 @@ import MobilePillNav from './components/MobilePillNav';
 import CategorySlider from './components/CategorySlider';
 import HeroCarousel from './components/HeroCarousel';
 import TrendingSection from './components/TrendingSection';
+import VideoBannerSection from './components/VideoBannerSection';
 import PromoBannerSale from './components/PromoBannerSale';
 import InternationalDestinations from './components/InternationalDestinations';
 import DomesticDestinations from './components/DomesticDestinations';
@@ -23,11 +24,19 @@ import TourPackagesPage from './components/TourPackagesPage';
 import TripLeadModal from './components/TripLeadModal';
 import SearchBar from './components/SearchBar';
 import WhyChooseUs from './components/WhyChooseUs';
+import DestinationPage from './components/DestinationPage';
 import { groupTripsList } from './data/groupTripsData';
 import { allTourPackages } from './data/tourPackagesData';
+import { DESTINATIONS_DATA } from './data/destinationsData';
 import { API_BASE } from './config/api';
 
-const allAvailableTours = [...groupTripsList, ...allTourPackages];
+const allDestinationPackages = [
+  ...(DESTINATIONS_DATA.kashmir?.allPackages || []),
+  ...(DESTINATIONS_DATA.thailand?.allPackages || []),
+  ...(DESTINATIONS_DATA.meghalaya?.allPackages || [])
+];
+
+const allAvailableTours = [...groupTripsList, ...allTourPackages, ...allDestinationPackages];
 
 const DEFAULT_POPUP_CONFIG = {
   enabled: true,
@@ -45,33 +54,98 @@ const DEFAULT_POPUP_CONFIG = {
   formHeading: 'Plan Your Next Trip',
   buttonText: 'Connect with Expert',
   buttonColor: '#e52b2b',
-  whatsappNumber: '+919099599331'
+  whatsappNumber: '+919548436762'
 };
 
-export default function App() {
-  const [activeTab, setActiveTab] = useState(() => {
-    if (typeof window !== 'undefined') {
-      const params = new URLSearchParams(window.location.search);
-      const tabParam = params.get('tab');
-      if (tabParam === 'group-trips' || tabParam === 'group') return 'group';
-      if (tabParam === 'creator' || tabParam === 'creator-trips') return 'creator';
+function parseRouteFromLocation() {
+  if (typeof window === 'undefined') {
+    return {
+      isAdmin: false,
+      tab: 'packages',
+      destination: null,
+      tourId: null
+    };
+  }
+
+  const pathname = window.location.pathname.toLowerCase();
+  const cleanPath = pathname.replace(/^\/|\/$/g, '');
+  const params = new URLSearchParams(window.location.search);
+  const hash = window.location.hash.toLowerCase();
+
+  // 1. Admin check (/admin or #admin)
+  if (cleanPath === 'admin' || cleanPath.startsWith('admin/') || hash.includes('admin')) {
+    return { isAdmin: true, tab: 'packages', destination: null, tourId: null };
+  }
+
+  // 2. Tour check (/tours/:slug or ?tour=:slug)
+  let tourId = params.get('tour');
+  if (!tourId) {
+    if (cleanPath.startsWith('tours/') || cleanPath.startsWith('tour/')) {
+      const parts = cleanPath.split('/');
+      tourId = parts[1] || null;
     }
-    return 'packages';
+  }
+
+  // 3. Destination check (/kashmir, /thailand, /meghalaya or ?dest=)
+  let destination = null;
+  if (DESTINATIONS_DATA[cleanPath]) {
+    destination = cleanPath;
+  } else {
+    const destParam = (params.get('dest') || params.get('destination') || '').toLowerCase();
+    if (destParam && DESTINATIONS_DATA[destParam]) {
+      destination = destParam;
+    }
+  }
+
+  // 4. Tab check (/group-trips, /creator-trips, /tour-packages or ?tab=)
+  let tab = 'packages';
+  const tabParam = (params.get('tab') || '').toLowerCase();
+  if (
+    cleanPath === 'group-trips' ||
+    cleanPath === 'group' ||
+    cleanPath.startsWith('group-trips/') ||
+    tabParam === 'group-trips' ||
+    tabParam === 'group'
+  ) {
+    tab = 'group';
+  } else if (
+    cleanPath === 'creator-trips' ||
+    cleanPath === 'creator' ||
+    cleanPath.startsWith('creator-trips/') ||
+    cleanPath.startsWith('creator/') ||
+    tabParam === 'creator-trips' ||
+    tabParam === 'creator'
+  ) {
+    tab = 'creator';
+  }
+
+  return {
+    isAdmin: false,
+    tab,
+    destination,
+    tourId
+  };
+}
+
+export default function App() {
+  const initialRoute = parseRouteFromLocation();
+
+  const [isAdminView, setIsAdminView] = useState(initialRoute.isAdmin);
+  const [activeTab, setActiveTab] = useState(initialRoute.tab);
+  const [selectedDestination, setSelectedDestination] = useState(initialRoute.destination);
+  const [selectedTour, setSelectedTour] = useState(() => {
+    if (initialRoute.tourId) {
+      return allAvailableTours.find(
+        (t) => t.id === initialRoute.tourId || t.slug === initialRoute.tourId
+      ) || null;
+    }
+    return null;
   });
+
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [isEmiModalOpen, setIsEmiModalOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
-  const [selectedTour, setSelectedTour] = useState(() => {
-    if (typeof window !== 'undefined') {
-      const params = new URLSearchParams(window.location.search);
-      const tourParam = params.get('tour');
-      if (tourParam) {
-        return allAvailableTours.find((t) => t.id === tourParam || t.slug === tourParam) || null;
-      }
-    }
-    return null;
-  });
 
   const handleQuickSearch = (query) => {
     setSearchQuery(query);
@@ -79,7 +153,6 @@ export default function App() {
     const elem = document.getElementById('trending-section');
     if (elem) elem.scrollIntoView({ behavior: 'smooth' });
   };
-
 
   // Dynamic Trip Lead Popup States
   const [popupSettings, setPopupSettings] = useState(() => {
@@ -91,23 +164,6 @@ export default function App() {
   });
   const [isLeadModalOpen, setIsLeadModalOpen] = useState(false);
   const [leadModalTour, setLeadModalTour] = useState(null);
-  
-  // Clean path-based routing (HTML5 History API)
-  const [isAdminView, setIsAdminView] = useState(() => {
-    if (typeof window !== 'undefined') {
-      // If user arrives with a legacy #admin hash, strip it and normalize to clean /admin
-      if (window.location.hash.toLowerCase().includes('admin')) {
-        window.history.replaceState(null, '', '/admin');
-        return true;
-      }
-      if (window.location.hash) {
-        window.history.replaceState(null, '', window.location.pathname || '/');
-      }
-      const path = window.location.pathname.toLowerCase();
-      return path === '/admin' || path.startsWith('/admin/') || path.startsWith('/admin');
-    }
-    return false;
-  });
 
   const [currentUser, setCurrentUser] = useState(() => {
     try {
@@ -119,7 +175,7 @@ export default function App() {
 
   // Listen to standard browser popstate (back/forward history navigation)
   useEffect(() => {
-    // Strip any lingering hash on initial mount
+    // Strip hash if present
     if (typeof window !== 'undefined' && window.location.hash) {
       if (window.location.hash.toLowerCase().includes('admin')) {
         window.history.replaceState(null, '', '/admin');
@@ -128,52 +184,58 @@ export default function App() {
       }
     }
 
-    const handleLocationChange = () => {
-      const path = window.location.pathname.toLowerCase();
-      setIsAdminView(path === '/admin' || path.startsWith('/admin/') || path.startsWith('/admin'));
-      const params = new URLSearchParams(window.location.search);
-      const tourParam = params.get('tour');
-      if (!tourParam) {
+    const syncRoute = () => {
+      const route = parseRouteFromLocation();
+      setIsAdminView(route.isAdmin);
+      setSelectedDestination(route.destination);
+      setActiveTab(route.tab);
+
+      if (route.tourId) {
+        const found = allAvailableTours.find(
+          (t) => t.id === route.tourId || t.slug === route.tourId
+        );
+        setSelectedTour(found || null);
+      } else {
         setSelectedTour(null);
-      } else {
-        const found = allAvailableTours.find((t) => t.id === tourParam || t.slug === tourParam);
-        if (found) setSelectedTour(found);
-      }
-      const tabParam = params.get('tab');
-      if (tabParam === 'group-trips' || tabParam === 'group') {
-        setActiveTab('group');
-      } else if (tabParam === 'creator' || tabParam === 'creator-trips') {
-        setActiveTab('creator');
-      } else {
-        setActiveTab('packages');
       }
     };
 
-    window.addEventListener('popstate', handleLocationChange);
+    window.addEventListener('popstate', syncRoute);
     return () => {
-      window.removeEventListener('popstate', handleLocationChange);
+      window.removeEventListener('popstate', syncRoute);
     };
   }, []);
 
   const handleOpenAdmin = () => {
-    window.history.pushState(null, '', '/admin');
+    setSelectedTour(null);
+    setSelectedDestination(null);
     setIsAdminView(true);
     window.scrollTo({ top: 0, behavior: 'smooth' });
+    try {
+      window.history.pushState({ admin: true }, '', '/admin');
+    } catch {}
   };
 
   const handleExitAdmin = () => {
-    window.history.pushState(null, '', '/');
     setIsAdminView(false);
+    setSelectedTour(null);
+    setSelectedDestination(null);
+    setActiveTab('packages');
     window.scrollTo({ top: 0, behavior: 'smooth' });
+    try {
+      window.history.pushState(null, '', '/');
+    } catch {}
   };
 
   const handleTabChange = (tab) => {
     setSelectedTour(null);
+    setSelectedDestination(null);
+    setIsAdminView(false);
     setActiveTab(tab);
     window.scrollTo({ top: 0, behavior: 'smooth' });
     try {
-      const tabParam = tab === 'group' ? '?tab=group-trips' : tab === 'creator' ? '?tab=creator-trips' : window.location.pathname;
-      window.history.pushState(null, '', tabParam);
+      const url = tab === 'group' ? '/group-trips' : tab === 'creator' ? '/creator-trips' : '/';
+      window.history.pushState({ tab }, '', url);
     } catch {}
   };
 
@@ -181,9 +243,7 @@ export default function App() {
     setCurrentUser(user);
     try {
       localStorage.setItem('india_tour_user', JSON.stringify(user));
-    } catch {
-      // ignore
-    }
+    } catch {}
     if (user?.role === 'admin') {
       handleOpenAdmin();
     }
@@ -197,13 +257,57 @@ export default function App() {
     localStorage.removeItem('admin_token');
   };
 
-  const handleCategorySelect = (slug) => {
-    setSelectedCategory(slug === selectedCategory ? null : slug);
-    // Smooth scroll to trending or packages section
-    const elem = document.getElementById('trending-section');
-    if (elem) {
-      elem.scrollIntoView({ behavior: 'smooth' });
+  const handleSelectDestination = (destSlug) => {
+    const slug = (destSlug || '').toLowerCase();
+    if (DESTINATIONS_DATA[slug]) {
+      setSelectedTour(null);
+      setSelectedDestination(slug);
+      setIsAdminView(false);
+      window.scrollTo({ top: 0, behavior: 'instant' });
+      try {
+        window.history.pushState({ dest: slug }, '', `/${slug}`);
+      } catch {}
     }
+  };
+
+  const handleNavigateHome = () => {
+    setSelectedTour(null);
+    setSelectedDestination(null);
+    setActiveTab('packages');
+    setIsAdminView(false);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    try {
+      window.history.pushState(null, '', '/');
+    } catch {}
+  };
+
+  const handleCategorySelect = (slug) => {
+    const lower = (slug || '').toLowerCase();
+    if (DESTINATIONS_DATA[lower]) {
+      handleSelectDestination(lower);
+      return;
+    }
+    const nextCategory = slug === selectedCategory ? null : slug;
+    setSelectedCategory(nextCategory);
+
+    // If currently viewing another page (Tour details, Destination page, Creator or Group trips),
+    // navigate to the main packages view so the user sees the filtered packages
+    if (selectedTour || selectedDestination || activeTab !== 'packages') {
+      setSelectedTour(null);
+      setSelectedDestination(null);
+      setActiveTab('packages');
+      try {
+        window.history.pushState(null, '', '/');
+      } catch {}
+    }
+
+    // Smooth scroll to trending or packages section
+    setTimeout(() => {
+      const elem = document.getElementById('trending-section');
+      if (elem) {
+        elem.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 80);
   };
 
   // Sync popup settings with backend & localStorage
@@ -265,6 +369,13 @@ export default function App() {
 
   // When user clicks/opens any package or group trip -> Opens as full dedicated page!
   const handleTourSelect = (tour) => {
+    if (!tour) return;
+    const destKey = (tour.slug || tour.name || '').toLowerCase();
+    if (DESTINATIONS_DATA[destKey]) {
+      handleSelectDestination(destKey);
+      return;
+    }
+
     setSelectedTour(tour);
     window.scrollTo({ top: 0, behavior: 'instant' });
     try {
@@ -277,8 +388,12 @@ export default function App() {
     setSelectedTour(null);
     window.scrollTo({ top: 0, behavior: 'smooth' });
     try {
-      const tabParam = activeTab === 'group' ? '?tab=group-trips' : activeTab === 'creator' ? '?tab=creator-trips' : window.location.pathname;
-      window.history.pushState(null, '', tabParam);
+      if (selectedDestination) {
+        window.history.pushState({ dest: selectedDestination }, '', `/${selectedDestination}`);
+      } else {
+        const url = activeTab === 'group' ? '/group-trips' : activeTab === 'creator' ? '/creator-trips' : '/';
+        window.history.pushState({ tab: activeTab }, '', url);
+      }
     } catch {}
   };
 
@@ -300,6 +415,7 @@ export default function App() {
         onOpenAdmin={handleOpenAdmin}
         activeTab={activeTab}
         setActiveTab={handleTabChange}
+        onNavigateHome={handleNavigateHome}
       />
 
       {/* 3. Mobile Segmented Nav Pills (Mobile-Only) */}
@@ -308,11 +424,25 @@ export default function App() {
         setActiveTab={handleTabChange}
       />
 
+      {/* 4. Avian-Style Destination & Category Icons Slider (Persistent across EVERY page) */}
+      <CategorySlider
+        selectedCategory={selectedCategory || selectedDestination}
+        onSelectCategory={handleCategorySelect}
+      />
+
       <main className="flex-1">
         {selectedTour ? (
           <TourDetailsModal
             tour={selectedTour}
             onClose={handleCloseTour}
+          />
+        ) : selectedDestination && DESTINATIONS_DATA[selectedDestination] ? (
+          <DestinationPage
+            destinationData={DESTINATIONS_DATA[selectedDestination]}
+            onSelectPackage={handleTourSelect}
+            onNavigateHome={handleNavigateHome}
+            onNavigateDestination={handleSelectDestination}
+            onOpenEmiModal={() => setIsEmiModalOpen(true)}
           />
         ) : activeTab === 'creator' ? (
           <CreatorTripPage />
@@ -322,12 +452,6 @@ export default function App() {
           />
         ) : (
           <>
-            {/* 4. Quick Destination / Category Filters */}
-            <CategorySlider
-              selectedCategory={selectedCategory}
-              onSelectCategory={handleCategorySelect}
-            />
-
             {/* 5. Hero Carousel with Dynamic Typography & Buddha Statue */}
             <HeroCarousel
               onCtaClick={() => setIsEmiModalOpen(true)}
@@ -353,10 +477,8 @@ export default function App() {
               />
             </div>
 
-            {/* 8. Mid-Page Overlapping Banner: Sale of the Season */}
-            <PromoBannerSale
-              onBannerClick={() => setIsEmiModalOpen(true)}
-            />
+            {/* 8. Avian Experience Travel Video Banner */}
+            <VideoBannerSection onBannerClick={handleTourSelect} />
 
             {/* 9. International Destinations Carousel */}
             <div id="international-section">

@@ -31,7 +31,7 @@ export default function TripLeadModal({
     defaultDuration: popupSettings?.defaultDuration || '6 Days 5 Nights',
     defaultSubtitle: popupSettings?.defaultSubtitle || 'Krem Chympe, Waterfalls & Root Bridges',
     defaultImage: popupSettings?.defaultImage || '/meghalaya_root_bridge.jpg',
-    whatsappNumber: popupSettings?.whatsappNumber || '+919099599331'
+    whatsappNumber: popupSettings?.whatsappNumber || '+919548436762'
   };
 
   // Look for trip-specific override if tour has an ID or slug

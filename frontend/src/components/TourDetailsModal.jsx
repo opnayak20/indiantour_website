@@ -766,7 +766,7 @@ export default function TourDetailsModal({ tour, onClose }) {
   const whatsappMessage = encodeURIComponent(
     `Hello India Tour! I'm interested in ${data.title} (${currentSharingObj.name}) starting from ₹${displayPrice.toLocaleString('en-IN')}. Please share upcoming dates and batch details.`
   );
-  const whatsappUrl = `https://wa.me/919099599331?text=${whatsappMessage}`;
+  const whatsappUrl = `https://wa.me/919548436762?text=${whatsappMessage}`;
 
   return (
     <div className="md:bg-[#f3f3f6] min-h-screen text-gray-900 pb-28 md:pb-16 font-productsans antialiased">

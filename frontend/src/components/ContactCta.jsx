@@ -9,7 +9,7 @@ import {
 } from 'react-icons/fa6';
 
 export default function ContactCta() {
-  const whatsappUrl = "https://wa.me/919099599331?text=Hello,%20I%20want%20details%20about%20upcoming%20experiences.";
+  const whatsappUrl = "https://wa.me/919548436762?text=Hello,%20I%20want%20details%20about%20upcoming%20experiences.";
 
   return (
     <div className="contact-cta-wrapper">
@@ -33,7 +33,7 @@ export default function ContactCta() {
                 Don't wait any longer, Contact us!
               </p>
               <h3 className="text-xl sm:text-3xl md:text-4xl font-extrabold productSansBold text-gray-900 group-hover:text-primary transition-colors tracking-tight">
-                90 99 599 331
+                95 48 436 762
               </h3>
             </div>
           </a>

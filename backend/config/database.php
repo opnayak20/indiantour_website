@@ -173,6 +173,91 @@ class Database {
               `updated_at` DATETIME NOT NULL,
               INDEX (`action_type`, `identifier`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+            CREATE TABLE IF NOT EXISTS `destinations` (
+              `id` VARCHAR(100) PRIMARY KEY,
+              `name` VARCHAR(255) NOT NULL,
+              `type` VARCHAR(50) NOT NULL,
+              `region` VARCHAR(100) DEFAULT NULL,
+              `count` VARCHAR(100) DEFAULT NULL,
+              `tag` VARCHAR(150) DEFAULT NULL,
+              `badge` VARCHAR(100) DEFAULT NULL,
+              `image` TEXT DEFAULT NULL,
+              `description` TEXT DEFAULT NULL,
+              `price` VARCHAR(100) DEFAULT '₹14,999',
+              `priceOriginal` VARCHAR(100) DEFAULT '₹18,500',
+              `basePriceNum` INT DEFAULT 14999,
+              `duration` VARCHAR(100) DEFAULT '5 Days / 4 Nights',
+              `altitude` VARCHAR(100) DEFAULT 'Scenic Region',
+              `rating` DECIMAL(3,2) DEFAULT 4.92,
+              `reviewsCount` INT DEFAULT 88,
+              `overview` TEXT DEFAULT NULL,
+              `quickInfo` TEXT DEFAULT NULL,
+              `accommodationData` TEXT DEFAULT NULL,
+              `activities` TEXT DEFAULT NULL,
+              `itinerary` TEXT DEFAULT NULL,
+              `inclusions` TEXT DEFAULT NULL,
+              `exclusions` TEXT DEFAULT NULL,
+              `faqs` TEXT DEFAULT NULL,
+              `reviews` TEXT DEFAULT NULL,
+              `highlights` TEXT DEFAULT NULL,
+              `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+              `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+            CREATE TABLE IF NOT EXISTS `packages` (
+              `id` VARCHAR(100) PRIMARY KEY,
+              `slug` VARCHAR(100) DEFAULT NULL,
+              `title` VARCHAR(255) NOT NULL,
+              `category` VARCHAR(100) DEFAULT NULL,
+              `badge` VARCHAR(100) DEFAULT NULL,
+              `duration` VARCHAR(100) DEFAULT NULL,
+              `altitude` VARCHAR(100) DEFAULT NULL,
+              `difficulty` VARCHAR(100) DEFAULT NULL,
+              `location` VARCHAR(200) DEFAULT NULL,
+              `price` VARCHAR(100) DEFAULT NULL,
+              `priceOriginal` VARCHAR(100) DEFAULT NULL,
+              `basePriceNum` INT DEFAULT 0,
+              `pricePerPerson` VARCHAR(100) DEFAULT NULL,
+              `season` VARCHAR(100) DEFAULT NULL,
+              `rating` DECIMAL(3,2) DEFAULT 4.90,
+              `reviewsCount` INT DEFAULT 120,
+              `image` TEXT DEFAULT NULL,
+              `gallery` TEXT DEFAULT NULL,
+              `overview` TEXT DEFAULT NULL,
+              `featured` TINYINT(1) DEFAULT 0,
+              `quickInfo` TEXT DEFAULT NULL,
+              `accommodationData` TEXT DEFAULT NULL,
+              `activities` TEXT DEFAULT NULL,
+              `itinerary` TEXT DEFAULT NULL,
+              `inclusions` TEXT DEFAULT NULL,
+              `exclusions` TEXT DEFAULT NULL,
+              `faqs` TEXT DEFAULT NULL,
+              `reviews` TEXT DEFAULT NULL,
+              `highlights` TEXT DEFAULT NULL,
+              `batches` TEXT DEFAULT NULL,
+              `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+              `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+            CREATE TABLE IF NOT EXISTS `testimonials` (
+              `id` VARCHAR(100) PRIMARY KEY,
+              `name` VARCHAR(255) NOT NULL,
+              `from_location` VARCHAR(255) DEFAULT NULL,
+              `trip` VARCHAR(255) DEFAULT NULL,
+              `rating` INT DEFAULT 5,
+              `avatar` VARCHAR(50) DEFAULT NULL,
+              `quote` TEXT DEFAULT NULL,
+              `is_active` TINYINT(1) DEFAULT 1,
+              `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+              `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+            CREATE TABLE IF NOT EXISTS `settings` (
+              `setting_key` VARCHAR(100) PRIMARY KEY,
+              `setting_value` LONGTEXT NOT NULL,
+              `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
         ";
         $this->conn->exec($schema);
 
@@ -253,6 +338,91 @@ class Database {
               attempts INT DEFAULT 1,
               created_at DATETIME NOT NULL,
               updated_at DATETIME NOT NULL
+            );
+
+            CREATE TABLE IF NOT EXISTS destinations (
+              id TEXT PRIMARY KEY,
+              name TEXT NOT NULL,
+              type TEXT NOT NULL,
+              region TEXT DEFAULT NULL,
+              count TEXT DEFAULT NULL,
+              tag TEXT DEFAULT NULL,
+              badge TEXT DEFAULT NULL,
+              image TEXT DEFAULT NULL,
+              description TEXT DEFAULT NULL,
+              price TEXT DEFAULT '₹14,999',
+              priceOriginal TEXT DEFAULT '₹18,500',
+              basePriceNum INTEGER DEFAULT 14999,
+              duration TEXT DEFAULT '5 Days / 4 Nights',
+              altitude TEXT DEFAULT 'Scenic Region',
+              rating REAL DEFAULT 4.92,
+              reviewsCount INTEGER DEFAULT 88,
+              overview TEXT DEFAULT NULL,
+              quickInfo TEXT DEFAULT NULL,
+              accommodationData TEXT DEFAULT NULL,
+              activities TEXT DEFAULT NULL,
+              itinerary TEXT DEFAULT NULL,
+              inclusions TEXT DEFAULT NULL,
+              exclusions TEXT DEFAULT NULL,
+              faqs TEXT DEFAULT NULL,
+              reviews TEXT DEFAULT NULL,
+              highlights TEXT DEFAULT NULL,
+              created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+              updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+            );
+
+            CREATE TABLE IF NOT EXISTS packages (
+              id TEXT PRIMARY KEY,
+              slug TEXT DEFAULT NULL,
+              title TEXT NOT NULL,
+              category TEXT DEFAULT NULL,
+              badge TEXT DEFAULT NULL,
+              duration TEXT DEFAULT NULL,
+              altitude TEXT DEFAULT NULL,
+              difficulty TEXT DEFAULT NULL,
+              location TEXT DEFAULT NULL,
+              price TEXT DEFAULT NULL,
+              priceOriginal TEXT DEFAULT NULL,
+              basePriceNum INTEGER DEFAULT 0,
+              pricePerPerson TEXT DEFAULT NULL,
+              season TEXT DEFAULT NULL,
+              rating REAL DEFAULT 4.90,
+              reviewsCount INTEGER DEFAULT 120,
+              image TEXT DEFAULT NULL,
+              gallery TEXT DEFAULT NULL,
+              overview TEXT DEFAULT NULL,
+              featured INTEGER DEFAULT 0,
+              quickInfo TEXT DEFAULT NULL,
+              accommodationData TEXT DEFAULT NULL,
+              activities TEXT DEFAULT NULL,
+              itinerary TEXT DEFAULT NULL,
+              inclusions TEXT DEFAULT NULL,
+              exclusions TEXT DEFAULT NULL,
+              faqs TEXT DEFAULT NULL,
+              reviews TEXT DEFAULT NULL,
+              highlights TEXT DEFAULT NULL,
+              batches TEXT DEFAULT NULL,
+              created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+              updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+            );
+
+            CREATE TABLE IF NOT EXISTS testimonials (
+              id TEXT PRIMARY KEY,
+              name TEXT NOT NULL,
+              from_location TEXT DEFAULT NULL,
+              trip TEXT DEFAULT NULL,
+              rating INTEGER DEFAULT 5,
+              avatar TEXT DEFAULT NULL,
+              quote TEXT DEFAULT NULL,
+              is_active INTEGER DEFAULT 1,
+              created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+              updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+            );
+
+            CREATE TABLE IF NOT EXISTS settings (
+              setting_key TEXT PRIMARY KEY,
+              setting_value TEXT NOT NULL,
+              updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
             );
         ";
         $this->conn->exec($schema);

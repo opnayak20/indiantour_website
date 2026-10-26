@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { trendingPackages } from '../data/websiteData';
+import { allTrendingPackages, defaultTrendingIds } from '../data/websiteData';
 import { API_BASE } from '../config/api';
 
 function PackageCard({ pkg, onCardClick }) {
@@ -151,46 +151,48 @@ export default function TrendingSection({ onPackageSelect, searchQuery = '', sel
   const scrollRef = useRef(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
-  const [packagesList, setPackagesList] = useState(trendingPackages);
 
+  // Read visible IDs and order from localStorage (set by admin Section Management)
+  const getPackages = () => {
+    try {
+      const storedOrder = localStorage.getItem('trendingPackagesOrder');
+      const storedVisible = localStorage.getItem('trendingVisibleIds');
+      const visibleIdsList = storedVisible ? JSON.parse(storedVisible) : defaultTrendingIds;
+
+      let baseList = allTrendingPackages;
+      if (storedOrder) {
+        const orderIds = JSON.parse(storedOrder);
+        const map = new Map(allTrendingPackages.map(p => [p.id, p]));
+        const ordered = [];
+        orderIds.forEach(id => {
+          if (map.has(id)) {
+            ordered.push(map.get(id));
+            map.delete(id);
+          }
+        });
+        map.forEach(val => ordered.push(val));
+        baseList = ordered;
+      }
+
+      return baseList.filter(p => visibleIdsList.includes(p.id));
+    } catch (e) {
+      return allTrendingPackages.filter(p => defaultTrendingIds.includes(p.id));
+    }
+  };
+
+  const [packagesList, setPackagesList] = useState(getPackages);
+
+  // Re-sync when admin changes section management settings
   useEffect(() => {
-    fetch(`${API_BASE}/admin/packages.php`)
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.status && Array.isArray(data.data?.packages) && data.data.packages.length > 0) {
-          const mapped = data.data.packages.map((p, index) => {
-            const rawImages = Array.isArray(p.gallery) && p.gallery.length > 0
-              ? p.gallery
-              : (p.image ? [p.image] : []);
-            
-            const fallbackImages = [
-              'https://images.unsplash.com/photo-1653844573020-71f77a0ccb8c?auto=format&fit=crop&w=800&q=80',
-              'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80',
-              'https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?auto=format&fit=crop&w=800&q=80'
-            ];
-
-            const numPrice = p.basePriceNum || parseInt(String(p.price || '').replace(/[^0-9]/g, '')) || 19999;
-            const numOriginal = parseInt(String(p.priceOriginal || '').replace(/[^0-9]/g, '')) || (numPrice + 4000);
-
-            return {
-              id: p.id || index + 1,
-              title: p.title,
-              route: p.location || p.overview?.slice(0, 60) || 'Scenic adventure & tour route',
-              duration: p.duration || '6 Days 5 Nights',
-              price: numPrice,
-              originalPrice: numOriginal,
-              badge: p.badge || (p.featured ? 'Featured' : 'Trending'),
-              secondaryBadge: p.featured ? 'Save 4,000' : null,
-              images: rawImages.length > 0 ? rawImages : fallbackImages
-            };
-          });
-          setPackagesList(mapped);
-        }
-      })
-      .catch(() => {
-        // Fall back to static dataset if backend is unreachable
-      });
+    const onStorage = (e) => {
+      if (e.key === 'trendingVisibleIds' || e.key === 'trendingPackagesOrder') {
+        setPackagesList(getPackages());
+      }
+    };
+    window.addEventListener('storage', onStorage);
+    return () => window.removeEventListener('storage', onStorage);
   }, []);
+
 
   // Filter packages based on active search query or category
   const filteredPackages = packagesList.filter((pkg) => {

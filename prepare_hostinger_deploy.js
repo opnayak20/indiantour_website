@@ -44,7 +44,7 @@ copyRecursiveSync(backendSrc, backendDest);
 // Explicitly write production .env for Hostinger MySQL
 const prodEnvContent = `APP_ENV=production
 APP_SECRET=india_tour_secure_production_secret_key_2026_qubnix
-ALLOWED_ORIGINS=https://antiquewhite-seal-759506.hostingersite.com,http://antiquewhite-seal-759506.hostingersite.com,http://localhost:5173,http://localhost:3000,http://127.0.0.1:5173
+ALLOWED_ORIGINS=https://indiatourismlive.com,http://indiatourismlive.com,https://www.indiatourismlive.com,http://www.indiatourismlive.com,https://antiquewhite-seal-759506.hostingersite.com,http://antiquewhite-seal-759506.hostingersite.com,http://localhost:5173,http://localhost:3000,http://127.0.0.1:5173
 
 # Hostinger MySQL Database Credentials
 DB_DRIVER=mysql
@@ -54,7 +54,7 @@ DB_USER=u276796116_india_tour
 DB_PASS=Qubnix@123
 
 # Target Deployment Domain
-DEPLOY_DOMAIN=antiquewhite-seal-759506.hostingersite.com
+DEPLOY_DOMAIN=indiatourismlive.com
 `;
 
 fs.writeFileSync(path.join(backendDest, '.env'), prodEnvContent, 'utf8');
@@ -65,8 +65,8 @@ if (fs.existsSync(backendHtaccess)) {
   fs.copyFileSync(backendHtaccess, path.join(backendDest, '.htaccess'));
 }
 
-// Copy api, helpers, and config to deployDir root for fail-safe relative paths
-console.log('4. Creating root /api, /helpers, and /config mapping...');
+// Copy api, helpers, config, data, and uploads to deployDir root for fail-safe relative paths
+console.log('4. Creating root /api, /helpers, /config, /data, and /uploads mapping...');
 const apiSrc = path.join(backendSrc, 'api');
 const apiDest = path.join(deployDir, 'api');
 copyRecursiveSync(apiSrc, apiDest);
@@ -79,18 +79,37 @@ const configSrc = path.join(backendSrc, 'config');
 const configDest = path.join(deployDir, 'config');
 copyRecursiveSync(configSrc, configDest);
 
+const dataSrc = path.join(backendSrc, 'data');
+const dataDest = path.join(deployDir, 'data');
+copyRecursiveSync(dataSrc, dataDest);
 
-console.log('5. Packaging into deploy_hostinger.zip...');
+const uploadsSrc = path.join(backendSrc, 'uploads');
+const uploadsDest = path.join(deployDir, 'uploads');
+if (!fs.existsSync(uploadsDest)) fs.mkdirSync(uploadsDest, { recursive: true });
+if (fs.existsSync(uploadsSrc)) copyRecursiveSync(uploadsSrc, uploadsDest);
+
+// Copy schema.sql to root as well for convenience
+const schemaSrc = path.join(backendSrc, 'schema.sql');
+if (fs.existsSync(schemaSrc)) {
+  fs.copyFileSync(schemaSrc, path.join(deployDir, 'schema.sql'));
+}
+
+
+console.log('5. Packaging into deploy_hostinger.zip with forward-slash POSIX paths...');
 if (fs.existsSync(zipPath)) {
   fs.unlinkSync(zipPath);
 }
 
 try {
-  execSync(`powershell -Command "Add-Type -AssemblyName System.IO.Compression.FileSystem; [System.IO.Compression.ZipFile]::CreateFromDirectory('${deployDir}', '${zipPath}')"`);
+  // Use tar.exe which is native in Windows 10/11 and strictly preserves standard POSIX forward slashes '/'
+  // so Linux servers (Hostinger) unpack subdirectories correctly (e.g. assets/, fonts/, api/)
+  const items = fs.readdirSync(deployDir).map(f => `"${f}"`).join(' ');
+  execSync(`tar.exe -a -c -f "${zipPath}" -C "${deployDir}" ${items}`);
   const sizeMb = (fs.statSync(zipPath).size / (1024 * 1024)).toFixed(2);
-  console.log(`Success! deploy_hostinger.zip generated (${sizeMb} MB).`);
+  console.log(`Success! deploy_hostinger.zip generated (${sizeMb} MB) with standard forward slashes.`);
 } catch (err) {
-  console.log('Compression note:', err.message);
+  console.log('tar.exe note:', err.message, '- falling back to PowerShell zip archive');
+  execSync(`powershell -Command "Add-Type -AssemblyName System.IO.Compression.FileSystem; [System.IO.Compression.ZipFile]::CreateFromDirectory('${deployDir}', '${zipPath}')"`);
 }
 
 console.log('All deployment files ready in hostinger_deploy/ and deploy_hostinger.zip');

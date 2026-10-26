@@ -32,7 +32,7 @@ export default function Footer({ onNavigateTab, onOpenEmiModal, onOpenAdmin }) {
 
             {/* Office Address (Clean, modern redesign with ProductSans) */}
             <a
-              href="https://maps.app.goo.gl/rLe19A7kZH4jWVYw8"
+              href="https://maps.google.com/?q=W35P%2BM9P,+Alipur+Ibrahimpur+Urf+Ikk,+Haridwar,+Uttarakhand+249402"
               target="_blank"
               rel="noopener noreferrer"
               className="site-footer-address-card group"
@@ -54,9 +54,9 @@ export default function Footer({ onNavigateTab, onOpenEmiModal, onOpenAdmin }) {
                   </svg>
                 </div>
                 <p className="site-footer-address-lines">
-                  508, 3rd Eye Vision,<br />
-                  IIM Road, Ahmedabad<br />
-                  Gujarat 380015
+                  W35P+M9P, Road, Alipur<br />
+                  Ibrahimpur Urf Ikk, Haridwar<br />
+                  Uttarakhand 249402
                 </p>
               </div>
             </a>

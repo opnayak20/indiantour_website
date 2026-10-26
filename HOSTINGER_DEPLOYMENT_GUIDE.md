@@ -1,13 +1,13 @@
 # Hostinger Deployment Guide
 
-This guide walks you through deploying the **India Tour Website** (React Frontend + PHP/MySQL Backend) to your Hostinger temporary domain:
-**`https://antiquewhite-seal-759506.hostingersite.com`**
+This guide walks you through deploying the **India Tour Website** (React Frontend + PHP/MySQL Backend) to your Hostinger domain:
+**`https://indiatourismlive.com`** (or temporary: `https://antiquewhite-seal-759506.hostingersite.com`)
 
 ---
 
 ## 1. Database Configuration (Configured)
 
-The following MySQL database credentials have been configured across [backend/.env](file:///c:/Users/dhane/Desktop/Qubnix%20Technology/Indian%20Tour%20Website/backend/.env), [backend/config/database.php](file:///c:/Users/dhane/Desktop/Qubnix%20Technology/Indian%20Tour%20Website/backend/config/database.php), and [.env](file:///c:/Users/dhane/Desktop/Qubnix%20Technology/Indian%20Tour%20Website/.env):
+The following MySQL database credentials have been configured across [backend/.env](file:///c:/Users/ASUS/Desktop/Qubnix%20Technology/indiantour_website-main/backend/.env), [backend/config/database.php](file:///c:/Users/ASUS/Desktop/Qubnix%20Technology/indiantour_website-main/backend/config/database.php), and [.env](file:///c:/Users/ASUS/Desktop/Qubnix%20Technology/indiantour_website-main/.env):
 
 | Setting | Value |
 | :--- | :--- |
@@ -15,7 +15,7 @@ The following MySQL database credentials have been configured across [backend/.e
 | **Database Name** | `u276796116_india_tour` |
 | **Database User** | `u276796116_india_tour` |
 | **Database Password** | `Qubnix@123` |
-| **Deployment Domain** | `antiquewhite-seal-759506.hostingersite.com` |
+| **Deployment Domain** | `indiatourismlive.com` |
 
 ---
 
@@ -24,7 +24,7 @@ The following MySQL database credentials have been configured across [backend/.e
 1. Log in to your **Hostinger hPanel**.
 2. Navigate to **Databases** > **phpMyAdmin** and click **Enter phpMyAdmin** next to `u276796116_india_tour`.
 3. Click on the **Import** tab at the top.
-4. Select and upload [backend/schema.sql](file:///c:/Users/dhane/Desktop/Qubnix%20Technology/Indian%20Tour%20Website/backend/schema.sql) (or from `hostinger_deploy/backend/schema.sql`).
+4. Select and upload [backend/schema.sql](file:///c:/Users/ASUS/Desktop/Qubnix%20Technology/indiantour_website-main/backend/schema.sql) (or from `hostinger_deploy/schema.sql`).
 5. Click **Go** / **Import**.
 6. This will create all tables (`users`, `destinations`, `packages`, `enquiries`, `bookings`, `testimonials`, `email_otps`, `auth_throttle`) and seed the default administrator.
 
@@ -38,17 +38,18 @@ A ready-to-deploy archive has been built:
 📁 **`deploy_hostinger.zip`** (located at the root of this project)
 
 ### Step-by-Step Upload:
-1. In Hostinger hPanel, go to **Websites** > **antiquewhite-seal-759506.hostingersite.com** > **File Manager**.
+1. In Hostinger hPanel, go to **Websites** > **indiatourismlive.com** > **File Manager**.
 2. Open the **`public_html`** folder.
-3. If there is a default `default.php` or placeholder `index.html` from Hostinger, delete or back it up.
-4. Click the **Upload** button at the top right and upload **`deploy_hostinger.zip`**.
+3. **Important**: Delete any old extracted files or files containing backslashes in their names (select all -> Delete, or clean `public_html`).
+4. Click the **Upload** button at the top right and upload the newly generated **`deploy_hostinger.zip`**.
 5. Right-click **`deploy_hostinger.zip`** in File Manager and select **Extract**.
    - Choose `public_html` as the target directory.
-6. Verify that your `public_html` directory contains:
+6. Verify that your `public_html` directory contains clean folders:
    - `index.html` (React entry point)
-   - `.htaccess` (SPA routing & API rewrite rule)
-   - `assets/` (Vite JS & CSS bundles)
-   - `icons/` (Landmark category SVG vector icons)
+   - `.htaccess` (SPA routing, modern MIME types, & API rewrite rule)
+   - `assets/` (Folder containing Vite JS & CSS bundles)
+   - `icons/` (Folder containing category SVG vector icons)
+   - `fonts/` (Folder containing custom web fonts)
    - `backend/` (PHP backend with `.env`, `config/`, `helpers/`)
    - `api/` (API endpoints accessible at `/api/*`)
 7. Delete the uploaded `.zip` file from `public_html` to save storage.

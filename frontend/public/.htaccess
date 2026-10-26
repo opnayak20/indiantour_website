@@ -1,3 +1,14 @@
+# 1. Ensure modern web MIME types are recognized (strict MIME check fix)
+<IfModule mod_mime.c>
+  AddType application/javascript .js .mjs
+  AddType text/css .css
+  AddType font/woff2 .woff2
+  AddType font/woff .woff
+  AddType font/ttf .ttf
+  AddType image/svg+xml .svg
+  AddType image/webp .webp
+</IfModule>
+
 <IfModule mod_rewrite.c>
   RewriteEngine On
   RewriteBase /
@@ -10,6 +21,12 @@
   # Allow direct pass-through for backend API and upload requests
   RewriteRule ^api/ - [L]
   RewriteRule ^backend/ - [L]
+  RewriteRule ^uploads/ - [L]
+
+  # Route /uploads/(.*) to backend/uploads/$1 if present there
+  RewriteCond %{REQUEST_URI} ^/uploads/(.*)$ [NC]
+  RewriteCond %{DOCUMENT_ROOT}/backend/uploads/%1 -f
+  RewriteRule ^uploads/(.*)$ backend/uploads/$1 [L]
 
   # Serve existing static files and directories directly
   RewriteCond %{REQUEST_FILENAME} -f [OR]
